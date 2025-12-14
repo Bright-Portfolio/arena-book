@@ -11,6 +11,7 @@ export async function testConnection() {
     const result = await client.query("SELECT NOW()");
     console.log("database connection successfully");
     console.log("server time", result.rows[0].now);
+    client.release();
 
     return true;
   } catch (error) {

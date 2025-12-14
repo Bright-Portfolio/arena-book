@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { testConnection } from "../lib/db";
 import "./globals.css";
 
 const inter = Inter({
@@ -20,6 +21,9 @@ export const metadata: Metadata = {
     "sports venue",
   ],
 };
+
+//test database connection
+testConnection();
 
 export default function RootLayout({
   children,
