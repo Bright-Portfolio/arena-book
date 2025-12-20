@@ -1,6 +1,7 @@
 import { hash, compare } from "bcryptjs";
 import { createUser, findUserByEmail } from "../lib/repositories/user.repo";
 import type {
+  LoginInput,
   RegisterInput,
   RegisterOutput,
 } from "../lib/validators/auth.schema";
@@ -13,7 +14,7 @@ export async function registerUser(
   const exist = await findUserByEmail(input.email);
 
   if (!exist) {
-    throw new Error("This email already registeres");
+    throw new Error("This email already registered");
   }
 
   // Hash password
@@ -32,4 +33,31 @@ export async function registerUser(
     email: user.email,
     name: user.name,
   };
+}
+
+// ----- SIGNIN (for NextAuth) -----
+export async function validateCredentials(
+  input: LoginInput
+): Promise<RegisterOutput | null> {
+  const user = await findUserByEmail(input.email);
+
+  if (!user || !user.password) return null;
+
+  const isValidPassword = await compare(input.password, user.password);
+  if (!isValidPassword) return null;
+
+  return {
+    id: user.id.toString(),
+    email: user.email,
+    name: user.name,
+  };
+}
+
+// ---- GOOGLE OAUTH -----
+export async function handleGoogleUser(email: string, name: string) {
+  const existing = await findUserByEmail(email);
+
+  if (!existing) {
+    await createUser({ email, name, authProvider: "google" });
+  }
 }
