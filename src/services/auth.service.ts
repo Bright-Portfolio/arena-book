@@ -14,7 +14,7 @@ export async function registerUser(
   const exist = await findUserByEmail(input.email);
 
   if (!exist) {
-    throw new Error("This email already registered");
+    throw new Error("Email already registered");
   }
 
   // Hash password
