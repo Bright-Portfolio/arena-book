@@ -7,7 +7,7 @@ export interface UserRow {
   id: number;
   email: string;
   password: string | null;
-  name: string | null;
+  name: string;
   role: UserRole;
   auth_provider: AuthProviderType;
 }
