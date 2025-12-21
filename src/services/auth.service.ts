@@ -13,7 +13,7 @@ export async function registerUser(
   // Check if exists
   const exist = await findUserByEmail(input.email);
 
-  if (!exist) {
+  if (exist) {
     throw new Error("Email already registered");
   }
 

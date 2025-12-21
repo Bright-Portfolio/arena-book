@@ -151,7 +151,7 @@ export const AuthForm: FC<AuthFormProps> = ({ onSuccess }) => {
             isSubmitting ? "bg-gray-900" : "bg-black"
           }`}
         >
-          Sign In
+          {isSignUp ? "Sign Up" : "Sign In"}
         </button>
       </form>
       {/* Devided Line */}
