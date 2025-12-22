@@ -2,6 +2,7 @@
 
 import { FC } from "react";
 import { useSession } from "next-auth/react";
+import { AvatarButton } from "./AvatarButton";
 
 interface NavbarProps {
   onSignIn: () => void;
@@ -24,7 +25,7 @@ const Navbar: FC<NavbarProps> = ({ onSignIn }) => {
       {/* Right side navigation */}
       <div className="flex justify-end items-center w-full">
         {session ? (
-          <div>{session.user?.name}</div>
+          <AvatarButton />
         ) : (
           <button
             type="button"

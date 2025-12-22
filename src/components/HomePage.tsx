@@ -4,7 +4,7 @@ import { useState } from "react";
 import { ArrowUpRightIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 // import SearchBox from "./searchBox";
-import Navbar from "./navbar";
+import Navbar from "./Navbar";
 import { AuthModal } from "./auth/AuthModal";
 
 const HomePage = () => {
