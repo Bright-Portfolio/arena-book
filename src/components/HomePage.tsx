@@ -13,7 +13,7 @@ const HomePage = () => {
     <div className="relative flex flex-col items-center justify-between w-full h-screen pt-14 pb-4 pr-4 pl-4">
       <Navbar onSignIn={() => setShowAuthModal(true)} />
       {/* Slide Banner Background image */}
-      <div className="relative z-10 w-full h-[600px] rounded-lg overflow-hidden bg-red-100">
+      <div className="relative z-10 mt-10 w-full h-[600px] rounded-lg overflow-hidden bg-red-100">
         <Image
           src="/images/tennis-banner-bg.jpg"
           alt="Tennis court background"
