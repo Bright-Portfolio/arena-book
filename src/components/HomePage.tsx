@@ -1,8 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import { ArrowUpRightIcon } from "@heroicons/react/24/outline";
-import Image from "next/image";
+import { BannerSlider } from "./BannerSlider";
 // import SearchBox from "./searchBox";
 import Navbar from "./Navbar";
 import { AuthModal } from "./auth/AuthModal";
@@ -10,21 +11,11 @@ import { AuthModal } from "./auth/AuthModal";
 const HomePage = () => {
   const [showAuthModal, setShowAuthModal] = useState(false);
   return (
-    <div className="relative flex flex-col items-center justify-between w-full h-screen pt-14 pb-4 pr-4 pl-4">
+    <div className="relative flex flex-col items-center justify-between w-full h-screen pt-20 pb-4 pr-4 pl-4">
       <Navbar onSignIn={() => setShowAuthModal(true)} />
       {/* Slide Banner Background image */}
-      <div className="relative z-10 mt-10 w-full h-full min-h-10 rounded-lg overflow-hidden bg-red-100">
-        <Image
-          src="/images/tennis-banner.jpg"
-          alt="Tennis court background"
-          fill
-          priority
-          quality={90}
-          className="object-contain"
-        />
-      </div>
+      <BannerSlider />
       {/* Temp booking button */}
-
       <button
         type="button"
         onClick={() => setShowAuthModal(true)}

@@ -12,7 +12,7 @@ const Navbar: FC<NavbarProps> = ({ onSignIn }) => {
   const { data: session } = useSession();
 
   return (
-    <nav className="fixed top-0 z-50 flex flex-row mx-auto px-4 py-3 w-full bg-transparent items-center justify-between">
+    <nav className="fixed top-0 z-50 flex flex-row mx-auto p-4 w-full bg-transparent items-center justify-between">
       {/* Left side navigation */}
       <div className="flex justify-start items-center gap-2 w-full text-black">
         <button className="px-1.5 py-1 border border-gray-300 rounded-full text-sm text-nowrap cursor-pointer hover:bg-white transition">
