@@ -64,7 +64,6 @@ export const BannerSlider = () => {
               alt={slider.alt}
               fill
               priority
-              quality={90}
               className="object-cover"
             />
           </div>

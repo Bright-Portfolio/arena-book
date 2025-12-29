@@ -7,24 +7,11 @@ import { AvatarButton } from "./AvatarButton";
 
 interface NavbarProps {
   onSignIn: () => void;
+  onClickPost: () => void;
 }
 
-const Navbar: FC<NavbarProps> = ({ onSignIn }) => {
-  const { data: session } = useSession();
-
-  const handleClickPost = () => {
-    if (!session) {
-      onSignIn()
-    }
-
-    if (session && session.user.role !== 'owner') {
-      // open owner register form
-    }
-
-    if (session && session.user.role === 'owner') {
-      // open arena post page
-    }
-  }
+const Navbar: FC<NavbarProps> = ({ onSignIn, onClickPost }) => {
+  const session = useSession();
 
   return (
     <nav className="fixed top-0 z-50 flex flex-row mx-auto p-4 w-full bg-transparent items-center justify-between">
@@ -40,7 +27,10 @@ const Navbar: FC<NavbarProps> = ({ onSignIn }) => {
       {/* Right side navigation */}
       <div className="flex justify-end items-center gap-2 w-full text-sm">
         {/* Arena Listing */}
-        <button onClick={handleClickPost} className="flex flex-row justify-center items-center  gap-1 px-2 py-1.5 border border-gray-300 rounded-full text-sm cursor-pointer">
+        <button
+          onClick={onClickPost}
+          className="flex flex-row justify-center items-center  gap-1 px-2 py-1.5 border border-gray-300 rounded-full text-sm cursor-pointer"
+        >
           <PlusIcon className="w-5 h-5 stroke-2" />
           Post your arena
         </button>

@@ -3,13 +3,15 @@
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { ArrowUpRightIcon } from "@heroicons/react/24/outline";
-import { BannerSlider } from "./BannerSlider";
+import { BannerSlider } from "../BannerSlider";
 // import SearchBox from "./searchBox";
-import Navbar from "./Navbar";
-import { AuthModal } from "./auth/AuthModal";
+import Navbar from "../Navbar";
+import { AuthModal } from "../auth/AuthModal";
+import { CompanyRegisterModal } from "../company-register/CompanyRegisterModal";
 
 const HomePage = () => {
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showRegisterModal, setShowRegisterModal] = useState(false);
   const { data: session } = useSession();
 
   const handleBookClick = () => {
@@ -17,9 +19,27 @@ const HomePage = () => {
       setShowAuthModal(true);
     }
   };
+
+  const handlePostClick = () => {
+    if (!session) {
+      setShowAuthModal(true);
+    }
+
+    if (session && session.user.role !== "owner") {
+      // open owner register form
+    }
+
+    if (session && session.user.role === "owner") {
+      // open arena post page
+    }
+  };
+  
   return (
     <div className="relative flex flex-col items-center justify-between w-full h-screen pt-20 pb-4 pr-4 pl-4">
-      <Navbar onSignIn={() => setShowAuthModal(true)} />
+      <Navbar
+        onSignIn={() => setShowAuthModal(true)}
+        onClickPost={handlePostClick}
+      />
       {/* Slide Banner Background image */}
       <BannerSlider />
       {/* Temp booking button */}
@@ -39,6 +59,10 @@ const HomePage = () => {
       <AuthModal
         isOpen={showAuthModal}
         onClose={() => setShowAuthModal(false)}
+      />
+      <CompanyRegisterModal
+        isOpen={showRegisterModal}
+        onClose={() => setShowRegisterModal(false)}
       />
     </div>
   );

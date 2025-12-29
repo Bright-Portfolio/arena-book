@@ -14,6 +14,7 @@ export const AvatarButton = () => {
             src={session.user.image}
             alt="profile-avatar"
             fill
+            sizes="24px"
             className="object-cover"
           />
         ) : (

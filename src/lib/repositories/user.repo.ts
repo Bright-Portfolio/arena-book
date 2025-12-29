@@ -27,13 +27,21 @@ export async function createUser(data: {
   email: string;
   password?: string;
   name?: string;
+  image_url?: string;
   authProvider: AuthProviderType;
 }): Promise<UserRow> {
   const result = await pool.query(
-    `INSERT INTO users (email, password, name, role, auth_provider)
-    VALUES ($1, $2, $3, $4, $5)
+    `INSERT INTO users (email, password, name, image_url, role, auth_provider)
+    VALUES ($1, $2, $3, $4, $5, $6)
     RETURNING *`,
-    [data.email, data.password, data.name, "user", data.authProvider]
+    [
+      data.email,
+      data.password,
+      data.name,
+      data.image_url,
+      "user",
+      data.authProvider,
+    ]
   );
 
   return result.rows[0];
