@@ -6,6 +6,8 @@ import {
   validateCredentials,
 } from "./src/services/auth.service";
 import { LoginSchema } from "./src/lib/validators/auth.schema";
+import type { Session } from "next-auth";
+import type { JWT } from "next-auth/jwt";
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
@@ -49,15 +51,19 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
     async jwt({ token, user }) {
       if (user) {
-        console.log("JWT:", token);
         token.id = user.id;
+        token.role = user.role;
       }
       return token;
     },
 
-    async session({ session, token }) {
+    async session({ session, token }: { session: Session; token: JWT }) {
       if (token?.id) {
         session.user.id = String(token.id);
+      }
+
+      if (session.user) {
+        session.user.role = token.role;
       }
       return session;
     },

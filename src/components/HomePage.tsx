@@ -1,7 +1,7 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
+import { useSession } from "next-auth/react";
 import { ArrowUpRightIcon } from "@heroicons/react/24/outline";
 import { BannerSlider } from "./BannerSlider";
 // import SearchBox from "./searchBox";
@@ -10,6 +10,13 @@ import { AuthModal } from "./auth/AuthModal";
 
 const HomePage = () => {
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const { data: session } = useSession();
+
+  const handleBookClick = () => {
+    if (!session) {
+      setShowAuthModal(true);
+    }
+  };
   return (
     <div className="relative flex flex-col items-center justify-between w-full h-screen pt-20 pb-4 pr-4 pl-4">
       <Navbar onSignIn={() => setShowAuthModal(true)} />
@@ -18,7 +25,7 @@ const HomePage = () => {
       {/* Temp booking button */}
       <button
         type="button"
-        onClick={() => setShowAuthModal(true)}
+        onClick={handleBookClick}
         className="inline-flex flex-row items-center gap-2 px-2 py-1.5 border border-gray-300 rounded-full text-white bg-black cursor-pointer"
       >
         Book Now
