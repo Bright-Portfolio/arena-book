@@ -21,19 +21,19 @@ const HomePage = () => {
   };
 
   const handlePostClick = () => {
-    if (!session) {
-      setShowAuthModal(true);
-    }
+    // if (!session) {
+    // }
+    setShowRegisterModal(true);
 
-    if (session && session.user.role !== "owner") {
-      // open owner register form
-    }
+    // if (session && session.user.role !== "owner") {
+    //   // open owner register form
+    // }
 
-    if (session && session.user.role === "owner") {
-      // open arena post page
-    }
+    // if (session && session.user.role === "owner") {
+    //   // open arena post page
+    // }
   };
-  
+
   return (
     <div className="relative flex flex-col items-center justify-between w-full h-screen pt-20 pb-4 pr-4 pl-4">
       <Navbar

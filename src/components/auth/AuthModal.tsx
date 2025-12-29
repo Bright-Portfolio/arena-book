@@ -17,7 +17,7 @@ export const AuthModal: FC<AuthModalProps> = ({ isOpen, onClose }) => {
   return (
     <Dialog open={isOpen} onClose={onClose} className="relative z-50">
       {/* Backdrop */}
-      <div className="fixed inset-0 flex justify-center items-center w-screen px-4 bg-gray-50/30 backdrop-blur-md">
+      <div className="fixed inset-0 flex justify-center items-center w-screen px-4 bg-white/30 backdrop-blur-xs">
         <DialogPanel className=" space-y-4 w-full max-w-lg px-4 py-6 border border-gray-200 rounded-lg bg-white">
           {/* Form */}
           <AuthForm onSuccess={onSuccess} />
