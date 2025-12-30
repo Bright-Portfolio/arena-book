@@ -37,7 +37,7 @@ export const CompanyRegisterModal: FC<CompanyRegisterModalProps> = ({
               <input
                 id="company-name-input"
                 type="text"
-                placeholder="Company name"
+                placeholder="Enter your company name"
                 className="px-2 py-1 w-full border border-gray-300 rounded-lg outline-none focus:border-black"
               />
             </div>
@@ -48,7 +48,7 @@ export const CompanyRegisterModal: FC<CompanyRegisterModalProps> = ({
               </label>
               <textarea
                 id="address-input"
-                placeholder="address"
+                placeholder="Enter your company address"
                 className="px-2 py-1 w-full border border-gray-300 rounded-lg  focus:border-black resize-none outline-none"
               />
             </div>

@@ -16,6 +16,7 @@
     "country-flag-icons": "^1.6.4",
     "dotenv": "^17.2.3",
     "jsonwebtoken": "^9.0.3",
+    "libphonenumber-js": "^1.12.33",
     "next": "^16.0.7",
     "next-auth": "^5.0.0-beta.30",
     "pg": "^8.16.3",
