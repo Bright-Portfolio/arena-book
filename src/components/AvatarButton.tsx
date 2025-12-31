@@ -8,7 +8,7 @@ export const AvatarButton = () => {
   return (
     <button className="flex flex-row justify-center items-center gap-1 px-1.5 py-1 border border-gray-300 rounded-full cursor-pointer">
       <span className="text-sm">{session?.user?.name}</span>
-      <div className="relative flex justify-center items-center w-6 h-6 border rounded-full overflow-hidden">
+      <div className="relative flex justify-center items-center w-6 h-6 border border-gray-300 rounded-full overflow-hidden">
         {session?.user?.image ? (
           <Image
             src={session.user.image}
