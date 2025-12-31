@@ -5,6 +5,7 @@ import {
   DialogTitle,
   DialogBackdrop,
 } from "@headlessui/react";
+import { PhoneInput } from "./PhoneInput";
 
 interface CompanyRegisterModalProps {
   isOpen: boolean;
@@ -41,7 +42,9 @@ export const CompanyRegisterModal: FC<CompanyRegisterModalProps> = ({
                 className="px-2 py-1 w-full border border-gray-300 rounded-lg outline-none focus:border-black"
               />
             </div>
-         
+
+            <PhoneInput label="company phone number" />
+
             <div className="w-full">
               <label htmlFor="address-input" className="text-xs text-black">
                 address
