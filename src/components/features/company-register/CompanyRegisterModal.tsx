@@ -16,6 +16,7 @@ export const CompanyRegisterModal: FC<CompanyRegisterModalProps> = ({
   isOpen,
   onClose,
 }) => {
+
   return (
     <Dialog open={isOpen} onClose={onClose} className="relative z-50">
       <DialogBackdrop

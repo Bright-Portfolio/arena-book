@@ -1,4 +1,4 @@
-import pool from "@/src/lib/db";
+import pool from "@/lib/db";
 
 type UserRole = "user" | "owner";
 type AuthProviderType = "credentials" | "google";

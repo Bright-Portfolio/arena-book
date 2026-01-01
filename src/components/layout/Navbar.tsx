@@ -3,14 +3,14 @@
 import { FC } from "react";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import { useSession } from "next-auth/react";
-import { AvatarButton } from "./AvatarButton";
+import { AvatarButton } from "../ui/AvatarButton";
 
 interface NavbarProps {
   onSignIn: () => void;
   onClickPost: () => void;
 }
 
-const Navbar: FC<NavbarProps> = ({ onSignIn, onClickPost }) => {
+export const Navbar: FC<NavbarProps> = ({ onSignIn, onClickPost }) => {
   const session = useSession();
 
   return (
@@ -49,5 +49,3 @@ const Navbar: FC<NavbarProps> = ({ onSignIn, onClickPost }) => {
     </nav>
   );
 };
-
-export default Navbar;

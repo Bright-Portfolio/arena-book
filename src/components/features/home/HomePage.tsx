@@ -3,9 +3,9 @@
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { ArrowUpRightIcon } from "@heroicons/react/24/outline";
-import { BannerSlider } from "../BannerSlider";
+import { BannerSlider } from "./BannerSlider";
 // import SearchBox from "./searchBox";
-import Navbar from "../Navbar";
+import Navbar from "../../layout/Navbar";
 import { AuthModal } from "../auth/AuthModal";
 import { CompanyRegisterModal } from "../company-register/CompanyRegisterModal";
 
@@ -21,17 +21,19 @@ const HomePage = () => {
   };
 
   const handlePostClick = () => {
-    // if (!session) {
-    // }
-    setShowRegisterModal(true);
+    if (!session) {
+      setShowAuthModal(true);
 
-    // if (session && session.user.role !== "owner") {
-    //   // open owner register form
-    // }
+      return;
+    }
 
-    // if (session && session.user.role === "owner") {
-    //   // open arena post page
-    // }
+    if (session && session.user.role !== "owner") {
+      setShowRegisterModal(true);
+    }
+
+    if (session && session.user.role === "owner") {
+      // open arena post page
+    }
   };
 
   return (

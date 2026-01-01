@@ -9,7 +9,7 @@ import {
   RegisterInput,
   LoginSchema,
   LoginInput,
-} from "@/src/lib/validators/auth.schema";
+} from "@/lib/validators/auth.schema";
 
 export interface AuthFormProps {
   onSuccess: () => void;

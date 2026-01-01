@@ -1,6 +1,6 @@
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 
-const SearchBox = () => {
+export const SearchBox = () => {
   return (
     <div className="flex flex-row justify-between items-center gap-2 w-full h-12 max-w-4xl px-5 py-2 border border-gray-300 rounded-full text-base text-white bg-gray-300/40">
       <input
@@ -13,4 +13,3 @@ const SearchBox = () => {
   );
 };
 
-export default SearchBox;
