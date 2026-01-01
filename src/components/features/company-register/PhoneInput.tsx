@@ -114,7 +114,11 @@ export const PhoneInput: FC<PhoneInputProps> = ({
       )}
 
       <div className="flex flex-row">
-        <Combobox value={selected} onChange={handleCountryChange}>
+        <Combobox
+          value={selected}
+          onChange={handleCountryChange}
+          onClose={() => setQuery("")}
+        >
           <div className="relative">
             <ComboboxButton className="flex justify-between items-center gap-1 px-2 py-1 border border-gray-300 border-r-0 text-sm text-nowrap rounded-lg rounded-r-none outline-none cursor-pointer data-focus:border-black data-focus:border-r data-active:shadow-inner transition-all duration-75">
               {selected.flag && <selected.flag className="w-6 h-6" />}
@@ -140,7 +144,9 @@ export const PhoneInput: FC<PhoneInputProps> = ({
               </div>
             </div>
             {filteredCountries.length === 0 ? (
-              <div className="text-sm text-gray-400">No countries found</div>
+              <div className="px-2 py-1 text-center text-sm text-gray-400">
+                No countries found
+              </div>
             ) : (
               filteredCountries.map((country) => (
                 <ComboboxOption

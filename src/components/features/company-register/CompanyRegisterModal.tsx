@@ -16,7 +16,6 @@ export const CompanyRegisterModal: FC<CompanyRegisterModalProps> = ({
   isOpen,
   onClose,
 }) => {
-
   return (
     <Dialog open={isOpen} onClose={onClose} className="relative z-50">
       <DialogBackdrop
@@ -56,6 +55,13 @@ export const CompanyRegisterModal: FC<CompanyRegisterModalProps> = ({
                 className="px-2 py-1 w-full border border-gray-300 rounded-lg  focus:border-black resize-none outline-none"
               />
             </div>
+
+            <button
+              type="submit"
+              className="mx-auto px-2 py-1 rounded-lg text-white bg-black cursor-pointer"
+            >
+              Register
+            </button>
           </form>
         </DialogPanel>
       </div>
