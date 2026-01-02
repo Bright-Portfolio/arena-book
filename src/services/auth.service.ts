@@ -1,5 +1,5 @@
 import { hash, compare } from "bcryptjs";
-import { createUser, findUserByEmail } from "../lib/repositories/user.repo";
+import { createUser, findUserByEmail } from "@/lib/repositories/user.repo";
 import type {
   LoginInput,
   RegisterInput,
