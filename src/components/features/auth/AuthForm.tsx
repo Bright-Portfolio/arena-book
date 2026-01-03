@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { signIn } from "next-auth/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  RegisterSchema,
+  RegisterInputSchema,
   RegisterInput,
   LoginSchema,
   LoginInput,
@@ -26,7 +26,7 @@ export const AuthForm: FC<AuthFormProps> = ({ onSuccess }) => {
     setError,
     reset,
   } = useForm<RegisterInput | LoginInput>({
-    resolver: zodResolver(isSignUp ? RegisterSchema : LoginSchema),
+    resolver: zodResolver(isSignUp ? RegisterInputSchema : LoginSchema),
   });
 
   const toggleMode = () => {

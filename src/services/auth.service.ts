@@ -29,7 +29,7 @@ export async function registerUser(
   });
 
   return {
-    id: user.id.toString(),
+    id: user.id,
     email: user.email,
     name: user.name,
   };
@@ -47,7 +47,7 @@ export async function validateCredentials(
   if (!isValidPassword) return null;
 
   return {
-    id: user.id.toString(),
+    id: user.id,
     email: user.email,
     name: user.name,
   };

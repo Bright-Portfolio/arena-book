@@ -1,23 +1,31 @@
 import { NextResponse } from "next/server";
 import { registerUser } from "@/services/auth.service";
+import {
+  RegisterInputSchema,
+  RegisterOutputSchema,
+} from "@/lib/validators/auth.schema";
 
 export async function POST(req: Request) {
   try {
-    const { email, password, name } = await req.json();
+    const body = await req.json();
 
-    if (!email || !password) {
+    const result = RegisterInputSchema.safeParse(body);
+
+    if (!result.success) {
       return NextResponse.json(
         {
-          error: "Email and password required",
+          error: result.error.issues,
         },
         { status: 400 }
       );
     }
+    const validatedInput = result.data;
 
-    // Call service
-    const user = await registerUser({ email, password, name });
+    const user = await registerUser(validatedInput);
 
-    return NextResponse.json({ user }, { status: 201 });
+    const validatedUser = RegisterOutputSchema.parse(user);
+
+    return NextResponse.json({ user: validatedUser }, { status: 201 });
   } catch (error) {
     // Handle known errors
     if (error instanceof Error) {

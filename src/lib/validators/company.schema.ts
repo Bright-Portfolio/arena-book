@@ -8,3 +8,4 @@ export const CreateCompanyschema = z.object({
 });
 
 export type CreateCompanyInput = z.infer<typeof CreateCompanyschema>;
+
