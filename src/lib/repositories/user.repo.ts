@@ -1,44 +1,54 @@
 import pool from "@/lib/db";
+import type {
+  CreateUserInput,
+  CreateUserOutput,
+  UserWithPassword,
+} from "../validators/user.schema";
 
-type UserRole = "user" | "owner";
-type AuthProviderType = "credentials" | "google";
-
-export interface UserRow {
-  id: number;
-  email: string;
-  password: string | null;
-  name: string;
-  role: UserRole;
-  auth_provider: AuthProviderType;
-}
-
-export async function findUserByEmail(email: string): Promise<UserRow | null> {
+// For authentication  - includes password
+export async function findUserByEmail(
+  email: string
+): Promise<CreateUserOutput | null> {
   // Find existing user
   const result = await pool.query("SELECT * FROM users WHERE email = $1", [
     email,
   ]);
 
-  if (!result) return null;
+  if (result.rows.length === 0) return null;
 
   return result.rows[0];
 }
 
-export async function createUser(data: {
-  email: string;
-  password?: string;
-  name?: string;
-  image_url?: string;
-  authProvider: AuthProviderType;
-}): Promise<UserRow> {
+// For public use - excludes password
+export async function getUserByEmail(
+  email: string
+): Promise<UserWithPassword | null> {
+  const result = await pool.query(
+    `
+    SELECT id, email, name, image_url, role, auth_provider
+    FROM users
+    WHERE email = $1
+    `,
+    [email]
+  );
+
+  if (result.rows.length === 0) return null;
+
+  return result.rows[0];
+}
+
+export async function createUser(
+  data: CreateUserInput
+): Promise<CreateUserOutput> {
   const result = await pool.query(
     `INSERT INTO users (email, password, name, image_url, role, auth_provider)
     VALUES ($1, $2, $3, $4, $5, $6)
-    RETURNING *`,
+    RETURNING id, email, name, image_url, role, auth_provider`,
     [
       data.email,
       data.password,
       data.name,
-      data.image_url,
+      data.imageUrl,
       "user",
       data.authProvider,
     ]
