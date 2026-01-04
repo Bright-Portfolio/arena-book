@@ -3,21 +3,27 @@
 import { FC } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { PhoneInput } from "./PhoneInput";
-import { CreateCompanyInput } from "@/lib/validators/company.schema";
+import {
+  CreateCompanyInput,
+  CreateCompanyInputschema,
+} from "@/lib/validators/company.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 interface CompanyRegisterFormProps {
-  onSubmit;
+  onSuccess: () => void;
 }
 
-export const CompanyRegisterForm = () => {
+export const CompanyRegisterForm: FC<CompanyRegisterFormProps> = ({
+  onSuccess,
+}) => {
   const {
     handleSubmit,
     register,
     setError,
-    reset,
     control,
     formState: { errors, isSubmitting },
   } = useForm<CreateCompanyInput>({
+    resolver: zodResolver(CreateCompanyInputschema),
     defaultValues: {
       name: "",
       countryCode: "+66",
@@ -26,8 +32,20 @@ export const CompanyRegisterForm = () => {
     },
   });
 
+  const onSubmit = async (data: CreateCompanyInput) => {
+    try {
+      onSuccess();
+    } catch (error) {}
+  };
+
   return (
-    <form className="flex flex-col justify-center items-start gap-3 w-full">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="flex flex-col justify-center items-start gap-3 w-full"
+    >
+      {errors.root && (
+        <h3 className="text-sm text-red-500">{errors.root.message}</h3>
+      )}
       <div className="w-full">
         <label htmlFor="company-name-input" className="text-xs text-black">
           company name
@@ -75,7 +93,8 @@ export const CompanyRegisterForm = () => {
 
       <button
         type="submit"
-        className="mx-auto px-2 py-1 rounded-lg text-white bg-black cursor-pointer"
+        disabled={isSubmitting}
+        className={`mx-auto px-2 py-1 rounded-lg text-white bg-black cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed`}
       >
         Register
       </button>

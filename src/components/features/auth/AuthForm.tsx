@@ -11,7 +11,7 @@ import {
   LoginInput,
 } from "@/lib/validators/auth.schema";
 
-export interface AuthFormProps {
+interface AuthFormProps {
   onSuccess: () => void;
 }
 

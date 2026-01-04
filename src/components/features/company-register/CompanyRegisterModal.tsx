@@ -16,6 +16,10 @@ export const CompanyRegisterModal: FC<CompanyRegisterModalProps> = ({
   isOpen,
   onClose,
 }) => {
+  const onSuccess = () => {
+    onClose();
+  };
+
   return (
     <Dialog open={isOpen} onClose={onClose} className="relative z-50">
       <DialogBackdrop
@@ -28,7 +32,7 @@ export const CompanyRegisterModal: FC<CompanyRegisterModalProps> = ({
             Company Register Form
           </DialogTitle>
           {/* Form */}
-          <CompanyRegisterForm />
+          <CompanyRegisterForm onSuccess={onSuccess} />
         </DialogPanel>
       </div>
     </Dialog>
