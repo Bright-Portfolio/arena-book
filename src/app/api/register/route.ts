@@ -40,6 +40,7 @@ export async function POST(req: Request) {
     }
 
     console.error("Register failed:", error);
+
     return NextResponse.json(
       {
         error: "Internal server error",

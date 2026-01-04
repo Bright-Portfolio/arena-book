@@ -21,6 +21,19 @@ export async function findUserByEmail(
   return result.rows[0];
 }
 
+export async function findUserById(userId: number) {
+  const result = await pool.query(
+    `
+    SELECT id
+    FROM users
+    WHERE id = $1`,
+    [userId]
+  );
+  if (result.rows.length === 0) return null;
+
+  return result.rows[0];
+}
+
 export async function createUser(
   data: CreateUserInput
 ): Promise<CreateUserOutput> {

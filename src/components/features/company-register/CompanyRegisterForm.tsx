@@ -5,7 +5,7 @@ import { useForm, Controller } from "react-hook-form";
 import { PhoneInput } from "./PhoneInput";
 import {
   CreateCompanyInput,
-  CreateCompanyInputschema,
+  CreateCompanyInputSchema,
 } from "@/lib/validators/company.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -23,7 +23,7 @@ export const CompanyRegisterForm: FC<CompanyRegisterFormProps> = ({
     control,
     formState: { errors, isSubmitting },
   } = useForm<CreateCompanyInput>({
-    resolver: zodResolver(CreateCompanyInputschema),
+    resolver: zodResolver(CreateCompanyInputSchema),
     defaultValues: {
       name: "",
       countryCode: "+66",
