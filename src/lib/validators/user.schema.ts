@@ -3,7 +3,7 @@ import { z } from "zod";
 export type UserRole = "user" | "owner";
 export type AuthProviderType = "credentials" | "google";
 
-export const CreateUserSchema = z.object({
+export const CreateUserInputSchema = z.object({
   email: z.string(),
   password: z.string().optional(),
   name: z.string().optional(),
@@ -11,7 +11,7 @@ export const CreateUserSchema = z.object({
   authProvider: z.enum(["credentials", "google"]),
 });
 
-export type CreateUserInput = z.infer<typeof CreateUserSchema>;
+export type CreateUserInput = z.infer<typeof CreateUserInputSchema>;
 
 export type CreateUserOutput = {
   id: number;
@@ -23,4 +23,3 @@ export type CreateUserOutput = {
   authProvider: AuthProviderType;
 };
 
-export type UserWithPassword = CreateUserOutput & { password: string | null };
