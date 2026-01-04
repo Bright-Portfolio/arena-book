@@ -3,7 +3,6 @@
 import { FC } from "react";
 import {
   Combobox,
-  ComboboxInput,
   ComboboxButton,
   ComboboxOption,
   ComboboxOptions,
@@ -20,6 +19,7 @@ import {
   type CountryCode,
 } from "libphonenumber-js";
 import { useMemo, useState } from "react";
+import { on } from "events";
 
 interface Country {
   code: CountryCode;
@@ -30,8 +30,10 @@ interface Country {
 
 interface PhoneInputProps {
   label?: string;
-  value?: string;
-  onChange?: (value: string) => void;
+  countryCode: string;
+  phoneNo: string;
+  onCountryCodeChange: (code: string) => void;
+  onPhoneNoChange?: (phoneNo: string) => void;
   error?: string;
 }
 
@@ -53,8 +55,10 @@ const getCountryFlag = (code: CountryCode) => {
 
 export const PhoneInput: FC<PhoneInputProps> = ({
   label,
-  value,
-  onChange,
+  countryCode = "+66",
+  phoneNo = "",
+  onCountryCodeChange,
+  onPhoneNoChange,
   error,
 }) => {
   const countries: Country[] = useMemo(() => {
@@ -69,8 +73,12 @@ export const PhoneInput: FC<PhoneInputProps> = ({
   }, []);
 
   const [query, setQuery] = useState("");
-  const [selected, setSelected] = useState<Country>(countries[0]);
-  const [phoneNo, setPhoneNo] = useState("");
+  // Find selected country from countryCode props
+  const selected = useMemo(() => {
+    return (
+      countries.find((c) => `+${c.callingCode}` === countryCode) || countries[0]
+    );
+  }, [countries, countryCode]);
 
   const filteredCountries = useMemo(() => {
     if (query === "") return countries;
@@ -87,22 +95,12 @@ export const PhoneInput: FC<PhoneInputProps> = ({
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newPhone = e.target.value;
-    setPhoneNo(newPhone);
-
-    // Combine country code + phone number
-    if (onChange) {
-      onChange(`+${selected.callingCode}${newPhone}`);
-    }
+    onPhoneNoChange?.(newPhone);
   };
 
   const handleCountryChange = (country: Country | null) => {
     if (!country) return;
-
-    setSelected(country);
-
-    if (onChange) {
-      onChange(`+${country.callingCode}${phoneNo}`);
-    }
+    onCountryCodeChange(`+${country.callingCode}`);
   };
 
   return (

@@ -5,7 +5,7 @@ import {
   DialogTitle,
   DialogBackdrop,
 } from "@headlessui/react";
-import { PhoneInput } from "./PhoneInput";
+import { CompanyRegisterForm } from "./CompanyRegisterForm";
 
 interface CompanyRegisterModalProps {
   isOpen: boolean;
@@ -27,42 +27,8 @@ export const CompanyRegisterModal: FC<CompanyRegisterModalProps> = ({
           <DialogTitle className="text-center text-lg font-semibold">
             Company Register Form
           </DialogTitle>
-          <form className="flex flex-col justify-center items-start gap-3 w-full">
-            <div className="w-full">
-              <label
-                htmlFor="company-name-input"
-                className="text-xs text-black"
-              >
-                company name
-              </label>
-              <input
-                id="company-name-input"
-                type="text"
-                placeholder="Enter your company name"
-                className="px-2 py-1 w-full border border-gray-300 rounded-lg outline-none focus:border-black"
-              />
-            </div>
-
-            <PhoneInput label="company phone number" />
-
-            <div className="w-full">
-              <label htmlFor="address-input" className="text-xs text-black">
-                address
-              </label>
-              <textarea
-                id="address-input"
-                placeholder="Enter your company address"
-                className="px-2 py-1 w-full border border-gray-300 rounded-lg  focus:border-black resize-none outline-none"
-              />
-            </div>
-
-            <button
-              type="submit"
-              className="mx-auto px-2 py-1 rounded-lg text-white bg-black cursor-pointer"
-            >
-              Register
-            </button>
-          </form>
+          {/* Form */}
+          <CompanyRegisterForm />
         </DialogPanel>
       </div>
     </Dialog>

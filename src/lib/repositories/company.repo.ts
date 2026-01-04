@@ -1,15 +1,15 @@
 import pool from "@/lib/db";
-import { CreateCompanyInput } from "../validators/company.schema";
+import { CreateCompanyInput, CreateCompanyOutput } from "../validators/company.schema";
 
 /**
  * Insert company info if not exist
  *
  * @param userId
  */
-export async function createCompany(
+export async function upsertCompany(
   userId: number,
   data: CreateCompanyInput
-): Promise<> {
+): Promise<CreateCompanyOutput> {
     await pool.query(`
-        INSERT r`)
+        INSERT `)
 }

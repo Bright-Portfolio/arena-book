@@ -7,7 +7,7 @@ import { BannerSlider } from "./BannerSlider";
 // import SearchBox from "./searchBox";
 import Navbar from "../../layout/Navbar";
 import { AuthModal } from "../auth/AuthModal";
-import { CompanyRegisterModal } from "../company-register/CompanyRegisterModal";
+import { CompanyRegisterModal } from "../company-register/CompanyRegisterForm";
 
 const HomePage = () => {
   const [showAuthModal, setShowAuthModal] = useState(false);

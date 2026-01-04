@@ -1,0 +1,84 @@
+"use client";
+
+import { FC } from "react";
+import { useForm, Controller } from "react-hook-form";
+import { PhoneInput } from "./PhoneInput";
+import { CreateCompanyInput } from "@/lib/validators/company.schema";
+
+interface CompanyRegisterFormProps {
+  onSubmit;
+}
+
+export const CompanyRegisterForm = () => {
+  const {
+    handleSubmit,
+    register,
+    setError,
+    reset,
+    control,
+    formState: { errors, isSubmitting },
+  } = useForm<CreateCompanyInput>({
+    defaultValues: {
+      name: "",
+      countryCode: "+66",
+      phoneNo: "",
+      address: "",
+    },
+  });
+
+  return (
+    <form className="flex flex-col justify-center items-start gap-3 w-full">
+      <div className="w-full">
+        <label htmlFor="company-name-input" className="text-xs text-black">
+          company name
+        </label>
+        <input
+          id="company-name-input"
+          type="text"
+          placeholder="Enter your company name"
+          {...register("name")}
+          className="px-2 py-1 w-full border border-gray-300 rounded-lg outline-none focus:border-black"
+        />
+      </div>
+
+      <Controller
+        name="countryCode"
+        control={control}
+        render={({ field: countryField }) => (
+          <Controller
+            name="phoneNo"
+            control={control}
+            render={({ field: phoneField }) => (
+              <PhoneInput
+                label="company phone number"
+                countryCode={countryField.value}
+                phoneNo={phoneField.value}
+                onCountryCodeChange={countryField.onChange}
+                onPhoneNoChange={phoneField.onChange}
+              />
+            )}
+          />
+        )}
+      />
+
+      <div className="w-full">
+        <label htmlFor="address-input" className="text-xs text-black">
+          address
+        </label>
+        <textarea
+          id="address-input"
+          placeholder="Enter your company address"
+          {...register("address")}
+          className="px-2 py-1 w-full border border-gray-300 rounded-lg  focus:border-black resize-none outline-none"
+        />
+      </div>
+
+      <button
+        type="submit"
+        className="mx-auto px-2 py-1 rounded-lg text-white bg-black cursor-pointer"
+      >
+        Register
+      </button>
+    </form>
+  );
+};

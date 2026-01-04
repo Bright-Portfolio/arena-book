@@ -1,11 +1,17 @@
 import { z } from "zod";
 
-export const CreateCompanyschema = z.object({
+export const CreateCompanyInputschema = z.object({
   ownerId: z.number(),
   name: z.string("company name is required"),
-  country_code: z.string().default("+66"),
-  phoneNo: z.string().min(2, "phone number is required"),
-  adress: z.string().min(2, "address is required"),
+  countryCode: z.string().default("+66"),
+  phoneNo: z.string().min(1, "phone number is required"),
+  address: z.string().min(1, "address is required"),
 });
 
-export type CreateCompanyInput = z.infer<typeof CreateCompanyschema>;
+export type CreateCompanyInput = z.infer<typeof CreateCompanyInputschema>;
+
+export const CreateCompanyOutputschema = CreateCompanyInputschema.extend({
+  id: z.number(),
+});
+
+export type CreateCompanyOutput = z.infer<typeof CreateCompanyOutputschema>;
