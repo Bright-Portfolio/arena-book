@@ -8,6 +8,7 @@ import {
 import { LoginSchema } from "./src/lib/validators/auth.schema";
 import type { Session } from "next-auth";
 import type { JWT } from "next-auth/jwt";
+import { findUserByEmail } from "@/lib/repositories/user.repo";
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
@@ -25,7 +26,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         password: { label: "Passsword", type: "password" },
       },
 
-      //2. The aithorize function
+      //2. The authorize function
       async authorize(credentials) {
         if (!credentials?.email || !credentials.password) {
           return null;
@@ -50,8 +51,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
 
     async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id;
+      if (user && user.email) {
+        // Get the actaul database ID
+        const dbUser = await findUserByEmail(user.email)
+        token.id = String(dbUser?.id);
         token.role = user.role;
       }
       return token;

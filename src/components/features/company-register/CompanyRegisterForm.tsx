@@ -4,10 +4,11 @@ import { FC } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { PhoneInput } from "./PhoneInput";
 import {
-  CreateCompanyInput,
-  CreateCompanyInputSchema,
+  CompanyFormSchema,
+  CompanyFormData,
 } from "@/lib/validators/company.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useSession } from "next-auth/react";
 
 interface CompanyRegisterFormProps {
   onSuccess: () => void;
@@ -22,8 +23,8 @@ export const CompanyRegisterForm: FC<CompanyRegisterFormProps> = ({
     setError,
     control,
     formState: { errors, isSubmitting },
-  } = useForm<CreateCompanyInput>({
-    resolver: zodResolver(CreateCompanyInputSchema),
+  } = useForm<CompanyFormData>({
+    resolver: zodResolver(CompanyFormSchema),
     defaultValues: {
       name: "",
       countryCode: "+66",
@@ -31,11 +32,34 @@ export const CompanyRegisterForm: FC<CompanyRegisterFormProps> = ({
       address: "",
     },
   });
+  const {data: session} = useSession()
 
-  const onSubmit = async (data: CreateCompanyInput) => {
-    try {
+  const onSubmit = async (data: CompanyFormData) => {
+      const userId = session?.user.id
+     console.log("userId from session:", userId, typeof userId);
+    
+      if (!userId) {
+        console.error("User not authenticated");
+        return;
+      }
+
+      try {
+      const response = await fetch(`http://localhost:3000/api/company/${userId}`, {
+        method: "POST",
+        headers: {"Content-type": "application/json"},
+        body: JSON.stringify(data)
+      })
+      if (!response.ok) {
+        const result = await response.json() 
+        setError("root", {message:result.error || "Something went wrong"})
+        return;
+      } 
+      
       onSuccess();
-    } catch (error) {}
+    } catch (error) {
+      console.error("error:", error);
+      setError("root", {message: "Network error. Please try again."})
+    } 
   };
 
   return (
@@ -44,7 +68,7 @@ export const CompanyRegisterForm: FC<CompanyRegisterFormProps> = ({
       className="flex flex-col justify-center items-start gap-3 w-full"
     >
       {errors.root && (
-        <h3 className="text-sm text-red-500">{errors.root.message}</h3>
+        <h3 className="w-full text-center text-sm text-red-500">{errors.root.message}</h3>
       )}
       <div className="w-full">
         <label htmlFor="company-name-input" className="text-xs text-black">
