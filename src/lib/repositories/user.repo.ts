@@ -64,7 +64,7 @@ export async function updateUserRole(userId: number, role: "user" | "owner"): Pr
       role, userId
     ])
 
-    if (result.rows.length === 0) {
+    if (result.rowCount === 0) {
       throw new Error(`User with id ${userId} not found`)
     }
 }

@@ -3,7 +3,9 @@
 export const PostArenaForm = () => {
   return (
     <div>
-      <form>Post Arena Form</form>
+      <form>
+        <input type="text" placeholder=""/>
+      </form>
     </div>
   );
 };
