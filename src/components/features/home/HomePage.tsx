@@ -5,14 +5,15 @@ import { useSession } from "next-auth/react";
 import { ArrowUpRightIcon } from "@heroicons/react/24/outline";
 import { BannerSlider } from "./BannerSlider";
 // import SearchBox from "./searchBox";
-import {Navbar} from "@/components/layout/Navbar";
+import { Navbar } from "@/components/layout/Navbar";
 import { AuthModal } from "../auth/AuthModal";
 import { CompanyRegisterModal } from "@/components/features/company-register/CompanyRegisterModal";
-import {PostArenaModal} from "@/components/features/post-arena/PostArenaModal"
+import { PostArenaModal } from "@/components/features/post-arena/PostArenaModal";
 
 const HomePage = () => {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
+  const [showPostArenaModal, setShowPostArenaModal] = useState(false);
   const { data: session } = useSession();
 
   const handleBookClick = () => {
@@ -33,7 +34,7 @@ const HomePage = () => {
     }
 
     if (session && session.user.role === "owner") {
-      // open arena post page
+      setShowPostArenaModal(true);
     }
   };
 
@@ -67,7 +68,10 @@ const HomePage = () => {
         isOpen={showRegisterModal}
         onClose={() => setShowRegisterModal(false)}
       />
-      <PostArenaModal/>
+      <PostArenaModal
+        isOpen={showPostArenaModal}
+        onClose={() => setShowPostArenaModal(false)}
+      />
     </div>
   );
 };

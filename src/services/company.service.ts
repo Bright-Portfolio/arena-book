@@ -1,5 +1,5 @@
 import { upsertCompany } from "@/lib/repositories/company.repo";
-import { findUserById } from "@/lib/repositories/user.repo";
+import { findUserById, updateUserRole } from "@/lib/repositories/user.repo";
 import type {
   CreateCompanyInput,
   CreateCompanyOutput,
@@ -16,6 +16,11 @@ export async function registerOrUpdateCompany({
   if (!user) {
     throw new Error("User not found");
   }
+ const company = await upsertCompany(userId, data);
+    // Update user role id not owner
+    if (user.role !== "owner") {
+      await updateUserRole(userId, "owner")
+    }
 
-  return await upsertCompany(userId, data);
+  return company
 }

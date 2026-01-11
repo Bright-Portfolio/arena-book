@@ -24,9 +24,10 @@ export async function findUserByEmail(
 export async function findUserById(userId: number) {
   const result = await pool.query(
     `
-    SELECT id
+    SELECT id, role
     FROM users
-    WHERE id = $1`,
+    WHERE id = $1`
+    ,
     [userId]
   );
   if (result.rows.length === 0) return null;
@@ -52,4 +53,18 @@ export async function createUser(
   );
 
   return result.rows[0];
+}
+
+export async function updateUserRole(userId: number, role: "user" | "owner"): Promise<void> {
+ const result = await pool.query(`
+      UPDATE users
+      SET role = $1
+      WHERE id = $2
+    `, [
+      role, userId
+    ])
+
+    if (result.rows.length === 0) {
+      throw new Error(`User with id ${userId} not found`)
+    }
 }
