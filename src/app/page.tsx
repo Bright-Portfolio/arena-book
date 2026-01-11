@@ -2,13 +2,13 @@
 
 import { useState } from "react";
 import { useSession } from "next-auth/react";
-import { Navbar } from "@/components/layout/Navbar";
+import { Navbar } from "@/components/layout";
 import { BannerSlider } from "@/components/features/home";
 import { ArrowUpRightIcon } from "@heroicons/react/24/outline";
 import { AuthForm } from "@/components/features/auth";
-import { CompanyRegisterForm } from "@/components/features/company-register/CompanyRegisterForm";
-import { Modal } from "@/components/ui/Modal";
-import { PostArenaForm } from "@/components/features/post-arena/PostArenaForm";
+import { CompanyRegisterForm } from "@/components/features/company-register/company-register-form";
+import { Modal } from "@/components/ui/modal";
+import { PostArenaForm } from "@/components/features/post-arena/post-arena-form";
 
 export default function Home() {
   const [showAuthModal, setShowAuthModal] = useState(false);

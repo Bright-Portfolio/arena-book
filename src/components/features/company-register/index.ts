@@ -1,2 +1,1 @@
-export { CompanyRegisterModal } from "./CompanyRegisterModal";
-export { PhoneInput } from "./PhoneInput";
+export { PhoneInput } from "./phone-input";

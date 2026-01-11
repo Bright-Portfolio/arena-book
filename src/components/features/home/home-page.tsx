@@ -3,12 +3,9 @@
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { ArrowUpRightIcon } from "@heroicons/react/24/outline";
-import { BannerSlider } from "./BannerSlider";
+import { BannerSlider } from "./banner-slider";
 // import SearchBox from "./searchBox";
-import { Navbar } from "@/components/layout/Navbar";
-import { AuthModal } from "../auth/AuthModal";
-import { CompanyRegisterModal } from "@/components/features/company-register/CompanyRegisterModal";
-import { PostArenaModal } from "@/components/features/post-arena/PostArenaModal";
+import { Navbar } from "@/components/layout";
 
 const HomePage = () => {
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -60,18 +57,6 @@ const HomePage = () => {
 
       {/* <SearchBox /> */}
       <div>Search result here</div>
-      <AuthModal
-        isOpen={showAuthModal}
-        onClose={() => setShowAuthModal(false)}
-      />
-      <CompanyRegisterModal
-        isOpen={showRegisterModal}
-        onClose={() => setShowRegisterModal(false)}
-      />
-      <PostArenaModal
-        isOpen={showPostArenaModal}
-        onClose={() => setShowPostArenaModal(false)}
-      />
     </div>
   );
 };

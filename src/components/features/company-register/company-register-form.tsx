@@ -2,7 +2,7 @@
 
 import { FC } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { PhoneInput } from "./PhoneInput";
+import { PhoneInput } from "./phone-input";
 import {
   CompanyFormSchema,
   CompanyFormData,

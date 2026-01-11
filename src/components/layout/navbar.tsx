@@ -3,7 +3,7 @@
 import { FC } from "react";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import { useSession } from "next-auth/react";
-import { AvatarButton } from "../ui/AvatarButton";
+import { AvatarButton } from "../ui/avatar-button";
 
 interface NavbarProps {
   onSignIn: () => void;

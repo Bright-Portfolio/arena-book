@@ -1,2 +1,2 @@
-export {BannerSlider} from "./BannerSlider"
-export {SearchBox} from "./SearchBox"
+export {BannerSlider} from "./banner-slider"
+export {SearchBox} from "./search-box"
