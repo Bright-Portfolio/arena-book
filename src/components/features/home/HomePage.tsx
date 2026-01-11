@@ -5,9 +5,10 @@ import { useSession } from "next-auth/react";
 import { ArrowUpRightIcon } from "@heroicons/react/24/outline";
 import { BannerSlider } from "./BannerSlider";
 // import SearchBox from "./searchBox";
-import Navbar from "../../layout/Navbar";
+import {Navbar} from "@/components/layout/Navbar";
 import { AuthModal } from "../auth/AuthModal";
-import { CompanyRegisterModal } from "../company-register/CompanyRegisterForm";
+import { CompanyRegisterModal } from "@/components/features/company-register/CompanyRegisterModal";
+import {PostArenaModal} from "@/components/features/post-arena/PostArenaModal"
 
 const HomePage = () => {
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -66,6 +67,7 @@ const HomePage = () => {
         isOpen={showRegisterModal}
         onClose={() => setShowRegisterModal(false)}
       />
+      <PostArenaModal/>
     </div>
   );
 };

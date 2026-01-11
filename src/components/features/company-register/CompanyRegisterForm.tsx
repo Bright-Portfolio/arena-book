@@ -32,34 +32,36 @@ export const CompanyRegisterForm: FC<CompanyRegisterFormProps> = ({
       address: "",
     },
   });
-  const {data: session} = useSession()
+  const { data: session } = useSession();
 
   const onSubmit = async (data: CompanyFormData) => {
-      const userId = session?.user.id
-     console.log("userId from session:", userId, typeof userId);
-    
-      if (!userId) {
-        console.error("User not authenticated");
+    const userId = session?.user.id;
+
+    if (!userId) {
+      console.error("User not authenticated");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/company/${userId}`,
+        {
+          method: "POST",
+          headers: { "Content-type": "application/json" },
+          body: JSON.stringify(data),
+        }
+      );
+      if (!response.ok) {
+        const result = await response.json();
+        setError("root", { message: result.error || "Something went wrong" });
         return;
       }
 
-      try {
-      const response = await fetch(`http://localhost:3000/api/company/${userId}`, {
-        method: "POST",
-        headers: {"Content-type": "application/json"},
-        body: JSON.stringify(data)
-      })
-      if (!response.ok) {
-        const result = await response.json() 
-        setError("root", {message:result.error || "Something went wrong"})
-        return;
-      } 
-      
       onSuccess();
     } catch (error) {
       console.error("error:", error);
-      setError("root", {message: "Network error. Please try again."})
-    } 
+      setError("root", { message: "Network error. Please try again." });
+    }
   };
 
   return (
@@ -68,7 +70,9 @@ export const CompanyRegisterForm: FC<CompanyRegisterFormProps> = ({
       className="flex flex-col justify-center items-start gap-3 w-full"
     >
       {errors.root && (
-        <h3 className="w-full text-center text-sm text-red-500">{errors.root.message}</h3>
+        <h3 className="w-full text-center text-sm text-red-500">
+          {errors.root.message}
+        </h3>
       )}
       <div className="w-full">
         <label htmlFor="company-name-input" className="text-xs text-black">
