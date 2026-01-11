@@ -32,7 +32,7 @@ export const CompanyRegisterForm: FC<CompanyRegisterFormProps> = ({
       address: "",
     },
   });
-  const { data: session } = useSession();
+  const { data: session, update } = useSession();
 
   const onSubmit = async (data: CompanyFormData) => {
     const userId = session?.user.id;
@@ -57,6 +57,7 @@ export const CompanyRegisterForm: FC<CompanyRegisterFormProps> = ({
         return;
       }
 
+      await update({});
       onSuccess();
     } catch (error) {
       console.error("error:", error);

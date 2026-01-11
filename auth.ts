@@ -50,13 +50,25 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return true;
     },
 
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger }) {
       if (user && user.email) {
-        // Get the actaul database ID
-        const dbUser = await findUserByEmail(user.email)
-        token.id = String(dbUser?.id);
-        token.role = user.role;
+        // Get the actual database ID on initial sign-in
+        const dbUser = await findUserByEmail(user.email);
+        if (dbUser) {
+          token.id = String(dbUser.id);
+          token.role = dbUser.role;
+          token.email = dbUser.email;
+        }
       }
+
+      // Refresh role from database when session is updated
+      if (trigger === "update" && token.email) {
+        const dbUser = await findUserByEmail(token.email as string);
+        if (dbUser) {
+          token.role = dbUser.role;
+        }
+      }
+
       return token;
     },
 

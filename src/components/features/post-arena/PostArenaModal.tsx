@@ -22,7 +22,7 @@ export const PostArenaModal: FC<PostArenaModalProps> = ({
 
   return (
     <Dialog open={isOpen} onClose={onClose}>
-      <DialogPanel>
+      <DialogPanel className="w-full h-screen">
         <DialogTitle>
           <PostArenaForm />
         </DialogTitle>
