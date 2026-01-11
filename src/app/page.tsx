@@ -5,12 +5,15 @@ import { useSession } from "next-auth/react";
 import { Navbar } from "@/components/layout/Navbar";
 import { BannerSlider } from "@/components/features/home";
 import { ArrowUpRightIcon } from "@heroicons/react/24/outline";
-import { AuthModal } from "@/components/features/auth";
-import { CompanyRegisterModal } from "@/components/features/company-register";
+import { AuthForm } from "@/components/features/auth";
+import { CompanyRegisterForm } from "@/components/features/company-register/CompanyRegisterForm";
+import { Modal } from "@/components/ui/Modal";
+import { PostArenaForm } from "@/components/features/post-arena/PostArenaForm";
 
 export default function Home() {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
+  const [showPostArenaModal, setShowPostArenaModal] = useState(false);
   const { data: session } = useSession();
 
   const handleBookClick = () => {
@@ -22,17 +25,17 @@ export default function Home() {
   const handlePostClick = () => {
     if (!session) {
       setShowAuthModal(true);
-
       return;
     }
 
-    if (session && session.user.role !== "owner") {
+    if (session.user.role !== "owner") {
+      setShowPostArenaModal(false);
       setShowRegisterModal(true);
+      return;
     }
 
-    if (session && session.user.role === "owner") {
-      // open arena post page
-    }
+    setShowRegisterModal(false);
+    setShowPostArenaModal(true);
   };
   return (
     <div className="flex min-h-screen items-center justify-center">
@@ -58,14 +61,23 @@ export default function Home() {
 
           {/* <SearchBox /> */}
           <div>Search result here</div>
-          <AuthModal
-            isOpen={showAuthModal}
-            onClose={() => setShowAuthModal(false)}
-          />
-          <CompanyRegisterModal
+          <Modal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)}>
+            <AuthForm onSuccess={() => setShowAuthModal(false)} />
+          </Modal>
+          <Modal
             isOpen={showRegisterModal}
             onClose={() => setShowRegisterModal(false)}
-          />
+            title="Company Register Form"
+          >
+            <CompanyRegisterForm onSuccess={() => setShowRegisterModal(true)} />
+          </Modal>
+          <Modal
+            isOpen={showPostArenaModal}
+            onClose={() => setShowPostArenaModal(false)}
+            title="Arena Information"
+          >
+            <PostArenaForm />
+          </Modal>
         </div>
       </main>
     </div>

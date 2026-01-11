@@ -1,25 +1,21 @@
-import { FC } from "react";
+"use client";
+
+import { FC, ReactNode } from "react";
 import {
   Dialog,
   DialogPanel,
   DialogTitle,
   DialogBackdrop,
 } from "@headlessui/react";
-import { CompanyRegisterForm } from "./CompanyRegisterForm";
 
-interface CompanyRegisterModalProps {
+interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
+  title?: string;
+  children: ReactNode;
 }
 
-export const CompanyRegisterModal: FC<CompanyRegisterModalProps> = ({
-  isOpen,
-  onClose,
-}) => {
-  const onSuccess = () => {
-    onClose();
-  };
-
+export const Modal: FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
   return (
     <Dialog open={isOpen} onClose={onClose} className="relative z-50">
       <DialogBackdrop
@@ -29,10 +25,10 @@ export const CompanyRegisterModal: FC<CompanyRegisterModalProps> = ({
       <div className="fixed inset-0 flex flex-row w-screen items-center justify-center p-4">
         <DialogPanel className="max-w-lg w-full rounded-lg bg-white p-4 ease-out transition-all data-closed:opacity-0 data-closed:scale-95">
           <DialogTitle className="text-center text-lg font-semibold">
-            Company Register Form
+            {title}
           </DialogTitle>
           {/* Form */}
-          <CompanyRegisterForm onSuccess={onSuccess} />
+          {children}
         </DialogPanel>
       </div>
     </Dialog>

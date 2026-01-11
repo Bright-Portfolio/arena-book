@@ -25,17 +25,17 @@ const HomePage = () => {
   const handlePostClick = () => {
     if (!session) {
       setShowAuthModal(true);
-
       return;
     }
 
-    if (session && session.user.role !== "owner") {
+    if (session.user.role !== "owner") {
+      setShowPostArenaModal(false);
       setShowRegisterModal(true);
+      return;
     }
 
-    if (session && session.user.role === "owner") {
-      setShowPostArenaModal(true);
-    }
+    setShowRegisterModal(false);
+    setShowPostArenaModal(true);
   };
 
   return (

@@ -11,7 +11,7 @@ interface NavbarProps {
 }
 
 export const Navbar: FC<NavbarProps> = ({ onSignIn, onClickPost }) => {
-  const {data:session} = useSession();
+  const { data: session } = useSession();
 
   return (
     <nav className="fixed top-0 z-50 flex flex-row mx-auto p-4 w-full bg-transparent items-center justify-between">
