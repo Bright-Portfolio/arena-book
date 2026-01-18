@@ -1,3 +1,4 @@
+import pool from "@/lib/db";
 import { upsertCompany } from "@/lib/repositories/company.repo";
 import { findUserById, updateUserRole } from "@/lib/repositories/user.repo";
 import type {
@@ -16,11 +17,25 @@ export async function registerOrUpdateCompany({
   if (!user) {
     throw new Error("User not found");
   }
- const company = await upsertCompany(userId, data);
+
+  const client = await pool.connect();
+
+  try {
+    await client.query("BEGIN");
+
+    const company = await upsertCompany(userId, data, client);
     // Update user role id not owner
     if (user.role !== "owner") {
-      await updateUserRole(userId, "owner")
+      await updateUserRole(userId, "owner", client);
     }
 
-  return company
+    await client.query("COMMIT");
+
+    return company;
+  } catch (error) {
+    await client.query("ROLLBACK");
+    throw error;
+  } finally {
+    client.release();
+  }
 }

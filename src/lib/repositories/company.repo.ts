@@ -1,4 +1,5 @@
 import pool from "@/lib/db";
+import { Pool, PoolClient } from "pg";
 import {
   CreateCompanyInput,
   CreateCompanyOutput,
@@ -11,9 +12,10 @@ import {
  */
 export async function upsertCompany(
   userId: number,
-  data: CreateCompanyInput
+  data: CreateCompanyInput,
+  client: Pool | PoolClient = pool,
 ): Promise<CreateCompanyOutput> {
-  const result = await pool.query(
+  const result = await client.query(
     `
         INSERT INTO companies (
         owner_id,
@@ -30,7 +32,7 @@ export async function upsertCompany(
       address = EXCLUDED.address
       RETURNING id, owner_id as "ownerId", name, country_code as "countryCode", phone_no as "phoneNo", address
       `,
-    [userId, data.name, data.countryCode, data.phoneNo, data.address]
+    [userId, data.name, data.countryCode, data.phoneNo, data.address],
   );
 
   return result.rows[0];

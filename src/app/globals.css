@@ -125,3 +125,8 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* Hide native time picker icon */
+/* .time-hide-default::-webkit-calendar-picker-indicator {
+  display: none;
+} */

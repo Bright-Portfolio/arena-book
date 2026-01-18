@@ -1,4 +1,5 @@
 import pool from "@/lib/db";
+import { Pool, PoolClient } from "pg";
 import type {
   CreateUserInput,
   CreateUserOutput,
@@ -6,14 +7,14 @@ import type {
 
 // For authentication  - includes password
 export async function findUserByEmail(
-  email: string
+  email: string,
 ): Promise<CreateUserOutput | null> {
   // Find existing user
   const result = await pool.query(
     `SELECT  id, email, password, name, image_url, role, auth_provider 
     FROM users 
     WHERE email = $1`,
-    [email]
+    [email],
   );
 
   if (result.rows.length === 0) return null;
@@ -26,9 +27,8 @@ export async function findUserById(userId: number) {
     `
     SELECT id, role
     FROM users
-    WHERE id = $1`
-    ,
-    [userId]
+    WHERE id = $1`,
+    [userId],
   );
   if (result.rows.length === 0) return null;
 
@@ -36,7 +36,7 @@ export async function findUserById(userId: number) {
 }
 
 export async function createUser(
-  data: CreateUserInput
+  data: CreateUserInput,
 ): Promise<CreateUserOutput> {
   const result = await pool.query(
     `INSERT INTO users (email, password, name, image_url, role, auth_provider)
@@ -49,22 +49,27 @@ export async function createUser(
       data.imageUrl,
       "user",
       data.authProvider,
-    ]
+    ],
   );
 
   return result.rows[0];
 }
 
-export async function updateUserRole(userId: number, role: "user" | "owner"): Promise<void> {
- const result = await pool.query(`
+export async function updateUserRole(
+  userId: number,
+  role: "user" | "owner",
+  client: Pool | PoolClient = pool,
+): Promise<void> {
+  const result = await client.query(
+    `
       UPDATE users
       SET role = $1
       WHERE id = $2
-    `, [
-      role, userId
-    ])
+    `,
+    [role, userId],
+  );
 
-    if (result.rowCount === 0) {
-      throw new Error(`User with id ${userId} not found`)
-    }
+  if (result.rowCount === 0) {
+    throw new Error(`User with id ${userId} not found`);
+  }
 }
