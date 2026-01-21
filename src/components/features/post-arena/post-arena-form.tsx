@@ -9,6 +9,7 @@ import {
 } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { FormField } from "@/components/ui/form-field";
+import { TextareaField } from "@/components/ui/textarea-field";
 import { useState } from "react";
 
 const SPORT_CATEGORIES = [
@@ -47,7 +48,7 @@ export const PostArenaForm = () => {
 
   return (
     <div className="w-full p-4  bg-white">
-      <form className="space-y-4">
+      <form className="flex flex-col justify-center items-stretch w-full space-y-4">
         <FormField label="Name" />
         <FormField label="Description" />
         <FormField label="Price" />
@@ -75,14 +76,17 @@ export const PostArenaForm = () => {
               <div className="flex flex-row justify-between items-center px-3 py-1 w-full h-9 border border-input rounded-md transition-shadow focus-within:ring-[1px] focus-within:ring-ring/50">
                 <ComboboxInput
                   onChange={(e) => setQuery(e.target.value)}
-                  className="w-full outline-none"
+                  className="w-full outline-none text-sm"
                   placeholder="Select a sport"
                 />
                 <ComboboxButton className="p-1 cursor-pointer group">
                   <ChevronDownIcon className="w-4 h-4 transition-transform group-data-open:rotate-180" />
                 </ComboboxButton>
               </div>
-              <ComboboxOptions className="absolute top-full left-0 mt-1 space-y-1 w-full h-40 p-2 bg-white border rounded-md shadow-lg z-10 overflow-y-auto">
+              <ComboboxOptions
+                transition
+                className="absolute top-full left-0 mt-1 space-y-1 w-full h-40 p-2 bg-white border rounded-md shadow-lg z-10 overflow-y-auto transition duration-300 origin-top data-closed:scale-y-95 data-closed:opacity-0"
+              >
                 {sportFiltered.map((group) =>
                   group.items.length > 0 ? (
                     <div key={group.category} className="flex flex-col gap-1">
@@ -106,6 +110,15 @@ export const PostArenaForm = () => {
             </div>
           </div>
         </Combobox>
+
+        {/* Address */}
+        <TextareaField label="Address" placeholder="Enter you areana address" />
+        <button
+          type="submit"
+          className="mx-auto px-2 py-1 rounded-lg text-white bg-black cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          Post
+        </button>
       </form>
     </div>
   );
