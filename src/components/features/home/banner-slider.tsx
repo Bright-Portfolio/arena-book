@@ -50,7 +50,7 @@ export const BannerSlider = () => {
   return (
     <div className="relative w-full max-w-7xl aspect-[16/9] rounded-xl overflow-hidden group">
       {/* Slider container */}
-      <div className="flex flex-row h-full transition-transform duration-500 ease-in-out">
+      <div className="flex flex-row h-full transition-all duration-500 ease-in-out">
         {bannerSlides.map((slider) => (
           <div
             key={slider.id}

@@ -51,7 +51,7 @@ export const PostArenaForm = () => {
       <form className="flex flex-col justify-center items-stretch w-full space-y-4">
         <FormField label="Name" />
         <FormField label="Description" />
-        <FormField label="Price" />
+        <FormField label="Price" type="number" />
         {/* Time picker */}
         <div className="flex flex-row justify-between items-center gap-2">
           <div className="flex flex-1 flex-col gap-2">
@@ -113,11 +113,13 @@ export const PostArenaForm = () => {
 
         {/* Address */}
         <TextareaField label="Address" placeholder="Enter you areana address" />
+
+        {/* Save Button */}
         <button
           type="submit"
           className="mx-auto px-2 py-1 rounded-lg text-white bg-black cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Post
+          Save
         </button>
       </form>
     </div>
