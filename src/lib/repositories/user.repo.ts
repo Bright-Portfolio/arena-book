@@ -54,22 +54,3 @@ export async function createUser(
 
   return result.rows[0];
 }
-
-export async function updateUserRole(
-  userId: number,
-  role: "user" | "owner",
-  client: Pool | PoolClient = pool,
-): Promise<void> {
-  const result = await client.query(
-    `
-      UPDATE users
-      SET role = $1
-      WHERE id = $2
-    `,
-    [role, userId],
-  );
-
-  if (result.rowCount === 0) {
-    throw new Error(`User with id ${userId} not found`);
-  }
-}

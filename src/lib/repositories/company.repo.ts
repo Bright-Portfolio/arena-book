@@ -1,5 +1,4 @@
 import pool from "@/lib/db";
-import { Pool, PoolClient } from "pg";
 import {
   CreateCompanyInput,
   CreateCompanyOutput,
@@ -13,17 +12,24 @@ import {
 export async function upsertCompany(
   userId: number,
   data: CreateCompanyInput,
-  client: Pool | PoolClient = pool,
 ): Promise<CreateCompanyOutput> {
-  const result = await client.query(
+  const result = await pool.query(
     `
-        INSERT INTO companies (
+    WITH update_role AS (
+      UPDATE users 
+      SET role = 'owner' 
+      WHERE id = $1
+      AND role != 'owner' 
+      RETURNING id
+    )
+    INSERT INTO companies (
         owner_id,
         name,
         country_code,
         phone_no,
         address
-      ) VALUES ($1, $2, $3, $4, $5)
+      ) SELECT $1, $2, $3, $4, $5
+      FROM update_role 
       ON CONFLICT (owner_id)
       DO UPDATE SET
       name = EXCLUDED.name,
