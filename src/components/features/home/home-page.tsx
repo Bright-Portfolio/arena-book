@@ -38,7 +38,7 @@ const HomePage = () => {
   return (
     <div className="relative flex flex-col items-center justify-between w-full h-screen pt-20 pb-4 pr-4 pl-4">
       <Navbar
-        onSignIn={() => setShowAuthModal(true)}
+        onSignUp={() => setShowAuthModal(true)}
         onClickPost={handlePostClick}
       />
       {/* Slide Banner Background image */}

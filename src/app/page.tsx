@@ -8,7 +8,7 @@ import { ArrowUpRightIcon } from "@heroicons/react/24/outline";
 import { AuthForm } from "@/components/features/auth";
 import { CompanyRegisterForm } from "@/components/features/company-register/company-register-form";
 import { Modal } from "@/components/ui/modal";
-import { PostArenaForm } from "@/components/features/post-arena/post-arena-form";
+import { AddArenaForm } from "@/components/features/add-arena/add-arena-form";
 
 export default function Home() {
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -42,7 +42,7 @@ export default function Home() {
       <main className="flex min-h-screen w-full flex-col items-center justify-between">
         <div className="relative flex flex-col items-center justify-between w-full h-screen pt-20 pb-4 pr-4 pl-4">
           <Navbar
-            onSignIn={() => setShowAuthModal(true)}
+            onSignUp={() => setShowAuthModal(true)}
             onClickPost={handlePostClick}
           />
           {/* Slide Banner Background image */}
@@ -76,7 +76,7 @@ export default function Home() {
             onClose={() => setShowPostArenaModal(false)}
             title="Arena Information"
           >
-            <PostArenaForm />
+            <AddArenaForm />
           </Modal>
         </div>
       </main>

@@ -6,11 +6,11 @@ import { useSession } from "next-auth/react";
 import { AvatarButton } from "../ui/avatar-button";
 
 interface NavbarProps {
-  onSignIn: () => void;
+  onSignUp: () => void;
   onClickPost: () => void;
 }
 
-export const Navbar: FC<NavbarProps> = ({ onSignIn, onClickPost }) => {
+export const Navbar: FC<NavbarProps> = ({ onSignUp, onClickPost }) => {
   const { data: session } = useSession();
 
   return (
@@ -18,12 +18,12 @@ export const Navbar: FC<NavbarProps> = ({ onSignIn, onClickPost }) => {
       {/* Left side navigation */}
       <div className="flex justify-start items-center gap-2 w-full text-black">
         {/* considering to implement About us and Favilities section it if have time */}
-        <button className="px-1.5 py-1 border border-gray-300 rounded-full text-sm text-nowrap cursor-pointer hover:bg-white transition">
+        {/* <button className="px-1.5 py-1 border border-gray-300 rounded-full text-sm text-nowrap cursor-pointer hover:bg-white transition">
           About Us
         </button>
         <button className="px-1.5 py-1 border border-gray-300 rounded-full text-sm cursor-pointer hover:bg-white transition">
           Facilities
-        </button>
+        </button> */}
       </div>
       {/* Right side navigation */}
       <div className="flex justify-end items-center gap-2 w-full text-sm">
@@ -33,17 +33,17 @@ export const Navbar: FC<NavbarProps> = ({ onSignIn, onClickPost }) => {
           className="flex flex-row justify-center items-center  gap-1 px-2 py-1.5 border border-gray-300 rounded-full text-sm cursor-pointer"
         >
           <PlusIcon className="w-5 h-5 stroke-2" />
-          Post your arena
+          Add arena
         </button>
         {session ? (
           <AvatarButton />
         ) : (
           <button
             type="button"
-            onClick={onSignIn}
+            onClick={onSignUp}
             className="inline-flex flex-row items-center gap-2 px-2 py-1.5 border border-gray-300 rounded-full text-white bg-black cursor-pointer"
           >
-            Sign In
+            Sign Up
           </button>
         )}
       </div>

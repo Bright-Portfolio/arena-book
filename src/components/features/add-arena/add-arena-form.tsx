@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -7,10 +10,16 @@ import {
   ComboboxOption,
   ComboboxOptions,
 } from "@headlessui/react";
+import {
+  Map,
+  MapTileLayer,
+  MapMarker,
+  MapZoomControl,
+} from "@/components/ui/map";
+import type { LatLngExpression } from "leaflet";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { FormField } from "@/components/ui/form-field";
 import { TextareaField } from "@/components/ui/textarea-field";
-import { useState } from "react";
 
 const SPORT_CATEGORIES = [
   {
@@ -35,9 +44,12 @@ const SPORT_CATEGORIES = [
   },
 ];
 
-export const PostArenaForm = () => {
-  const [selectedSport, setSelectedSport] = useState<string | null>("");
+const BANGKOK_COORIDATES = [13.7563, 100.5018] satisfies LatLngExpression;
+
+export const AddArenaForm = () => {
+  const [selectedSport, setSelectedSport] = useState<string | null>(null);
   const [query, setQuery] = useState("");
+  const [position, setPosition] = useState<LatLngExpression | null>(null);
 
   const sportFiltered = SPORT_CATEGORIES.map((group) => ({
     ...group,
@@ -47,7 +59,7 @@ export const PostArenaForm = () => {
   }));
 
   return (
-    <div className="w-full p-4  bg-white">
+    <div className="w-full p-4  bg-white overflow-y-auto">
       <form className="flex flex-col justify-center items-stretch w-full space-y-4">
         <FormField label="Name" />
         <FormField label="Description" />
@@ -113,6 +125,13 @@ export const PostArenaForm = () => {
 
         {/* Address */}
         <TextareaField label="Address" placeholder="Enter you areana address" />
+
+        {/* Map */}
+        <Map center={BANGKOK_COORIDATES} zoom={14}>
+          <MapTileLayer />
+          <MapZoomControl />
+          {position && <MapMarker position={position} />}
+        </Map>
 
         {/* Save Button */}
         <button
