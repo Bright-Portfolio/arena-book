@@ -12,6 +12,7 @@ export const TextareaField: FC<TextareaFieldProps> = ({
   label,
   placeholder,
   error,
+  ...props
 }) => {
   return (
     <Field className="flex flex-col justify-start items-stretch gap-2">
@@ -20,8 +21,9 @@ export const TextareaField: FC<TextareaFieldProps> = ({
         rows={3}
         placeholder={placeholder}
         className="max-h-20 resize-none overflow-y-auto scrollbar-hide"
+        {...props}
       />
-      <FieldError>{error}</FieldError>
+      {error && <FieldError>{error}</FieldError>}
     </Field>
   );
 };

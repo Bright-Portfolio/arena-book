@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -16,6 +16,7 @@ import {
   MapTileLayer,
   MapMarker,
   MapZoomControl,
+  MapLocateControl,
 } from "@/components/ui/map";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { usePlaceSearch } from "@/components/ui/place-autocomplete";
@@ -23,7 +24,9 @@ import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { FormField } from "@/components/ui/form-field";
 import { TextareaField } from "@/components/ui/textarea-field";
 import type { LatLngExpression } from "leaflet";
-import {ArenaFormSchema} from "@/lib/validators/arena.schema"
+import { ArenaFormSchema } from "@/lib/validators/arena.schema";
+import { useMap } from "react-leaflet";
+import { email } from "zod";
 
 const SPORT_CATEGORIES = [
   {
@@ -53,7 +56,6 @@ const BANGKOK_COORIDATES = [13.7563, 100.5018] satisfies LatLngExpression;
 export const AddArenaForm = () => {
   const [selectedSport, setSelectedSport] = useState<string | null>(null);
   const [query, setQuery] = useState("");
-  const [queryAddress, setQueryAddess] = useState("");
   const [position, setPosition] = useState<LatLngExpression | null>(null);
   const {
     handleSubmit,
@@ -61,12 +63,14 @@ export const AddArenaForm = () => {
     setError,
     control,
     watch,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: zodResolver(ArenaFormSchema),
+    // defaultValue: {},
   });
 
-  const address = watch('adress')
+  const address = watch("address");
 
   const sportFiltered = SPORT_CATEGORIES.map((group) => ({
     ...group,
@@ -75,15 +79,41 @@ export const AddArenaForm = () => {
     ),
   }));
 
-  const { results, isLoading, error, hasSearch } = usePlaceSearch({
-    query: queryAddress,
+  const formatedAdress = (address ?? "").trim().replace(/\s+/g, "");
+
+  const { results, error } = usePlaceSearch({
+    query: formatedAdress ?? "",
     debounceMs: 800,
     limit: 1,
   });
 
+  useEffect(() => {
+    if (results.length > 0) {
+      const [lng, lat] = results[0].geometry.coordinates;
+      setPosition([lat, lng]);
+      setValue("latitude", lat);
+      setValue("longitude", lng);
+    }
+  }, [results, setValue]);
+
+  function MapFlyTo({ position }: { position: LatLngExpression | null }) {
+    const map = useMap();
+
+    useEffect(() => {
+      if (position) {
+        map.flyTo(position, 16);
+      }
+    }, [map, position]);
+
+    return null;
+  }
+
   return (
     <div className="w-full p-4  bg-white overflow-y-auto">
-      <form className="flex flex-col justify-center items-stretch w-full space-y-4">
+      <form
+        // onSubmit={}
+        className="flex flex-col justify-center items-stretch w-full space-y-4"
+      >
         <FormField label="Name" />
         <FormField label="Description" />
         <FormField label="Price" type="number" />
@@ -148,21 +178,43 @@ export const AddArenaForm = () => {
 
         {/* Address */}
         <Controller
-        render={() => ()}
-        >
-          {}
-          <TextareaField
-            label="Address"
-            placeholder="Enter you areana address"
-          />
-        </Controller>
+          name="address"
+          control={control}
+          render={({ field, fieldState }) => (
+            <TextareaField
+              label="Address"
+              placeholder="Enter you areana address"
+              error={fieldState.error?.message}
+              {...field}
+            />
+          )}
+        />
 
         {/* Map */}
-        <Map center={BANGKOK_COORIDATES} zoom={14}>
-          <MapTileLayer />
-          <MapZoomControl />
-          {position && <MapMarker position={position} />}
-        </Map>
+        <div>
+          <Map center={BANGKOK_COORIDATES} zoom={14}>
+            <MapTileLayer />
+            <MapZoomControl />
+            <MapFlyTo position={position} />
+            <MapLocateControl />
+            {position && (
+              <MapMarker
+                position={position}
+                draggable
+                eventHandlers={{
+                  dragend: (e) => {
+                    const marker = e.target;
+                    const newPos = marker.getLatLng();
+                    setPosition([newPos.lat, newPos.lng]);
+                  },
+                }}
+              />
+            )}
+          </Map>
+          {error && (
+            <span className="pt-2 text-sm text-red-500">{error.message}</span>
+          )}
+        </div>
 
         {/* Save Button */}
         <button
