@@ -165,7 +165,7 @@ function useDebounce<T>(value: T, delay: number = 300) {
     return debouncedValue
 }
 
-function usePlaceSearch({
+export function usePlaceSearch({
     debounceMs,
     query,
     ...props

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useForm, Controller } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -16,10 +17,13 @@ import {
   MapMarker,
   MapZoomControl,
 } from "@/components/ui/map";
-import type { LatLngExpression } from "leaflet";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { usePlaceSearch } from "@/components/ui/place-autocomplete";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { FormField } from "@/components/ui/form-field";
 import { TextareaField } from "@/components/ui/textarea-field";
+import type { LatLngExpression } from "leaflet";
+import {ArenaFormSchema} from "@/lib/validators/arena.schema"
 
 const SPORT_CATEGORIES = [
   {
@@ -49,7 +53,20 @@ const BANGKOK_COORIDATES = [13.7563, 100.5018] satisfies LatLngExpression;
 export const AddArenaForm = () => {
   const [selectedSport, setSelectedSport] = useState<string | null>(null);
   const [query, setQuery] = useState("");
+  const [queryAddress, setQueryAddess] = useState("");
   const [position, setPosition] = useState<LatLngExpression | null>(null);
+  const {
+    handleSubmit,
+    register,
+    setError,
+    control,
+    watch,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: zodResolver(ArenaFormSchema),
+  });
+
+  const address = watch('adress')
 
   const sportFiltered = SPORT_CATEGORIES.map((group) => ({
     ...group,
@@ -57,6 +74,12 @@ export const AddArenaForm = () => {
       item.toLocaleLowerCase().includes(query.toLowerCase()),
     ),
   }));
+
+  const { results, isLoading, error, hasSearch } = usePlaceSearch({
+    query: queryAddress,
+    debounceMs: 800,
+    limit: 1,
+  });
 
   return (
     <div className="w-full p-4  bg-white overflow-y-auto">
@@ -97,7 +120,7 @@ export const AddArenaForm = () => {
               </div>
               <ComboboxOptions
                 transition
-                className="absolute top-full left-0 mt-1 space-y-1 w-full h-40 p-2 bg-white border rounded-md shadow-lg z-10 overflow-y-auto transition duration-300 origin-top data-closed:scale-y-95 data-closed:opacity-0"
+                className="absolute z-[60] top-full left-0 mt-1 space-y-1 w-full h-40 p-2 bg-white border rounded-md shadow-lg overflow-y-auto transition duration-300 origin-top data-closed:scale-y-95 data-closed:opacity-0"
               >
                 {sportFiltered.map((group) =>
                   group.items.length > 0 ? (
@@ -124,7 +147,15 @@ export const AddArenaForm = () => {
         </Combobox>
 
         {/* Address */}
-        <TextareaField label="Address" placeholder="Enter you areana address" />
+        <Controller
+        render={() => ()}
+        >
+          {}
+          <TextareaField
+            label="Address"
+            placeholder="Enter you areana address"
+          />
+        </Controller>
 
         {/* Map */}
         <Map center={BANGKOK_COORIDATES} zoom={14}>

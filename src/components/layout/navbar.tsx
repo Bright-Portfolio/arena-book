@@ -4,13 +4,13 @@ import { FC } from "react";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import { useSession } from "next-auth/react";
 import { AvatarButton } from "../ui/avatar-button";
+import Link from "next/link";
 
 interface NavbarProps {
   onSignUp: () => void;
-  onClickPost: () => void;
 }
 
-export const Navbar: FC<NavbarProps> = ({ onSignUp, onClickPost }) => {
+export const Navbar: FC<NavbarProps> = ({ onSignUp }) => {
   const { data: session } = useSession();
 
   return (
@@ -28,13 +28,13 @@ export const Navbar: FC<NavbarProps> = ({ onSignUp, onClickPost }) => {
       {/* Right side navigation */}
       <div className="flex justify-end items-center gap-2 w-full text-sm">
         {/* Arena Listing */}
-        <button
-          onClick={onClickPost}
+        <Link
+          href="/arena/add"
           className="flex flex-row justify-center items-center  gap-1 px-2 py-1.5 border border-gray-300 rounded-full text-sm cursor-pointer"
         >
           <PlusIcon className="w-5 h-5 stroke-2" />
           Add arena
-        </button>
+        </Link>
         {session ? (
           <AvatarButton />
         ) : (
