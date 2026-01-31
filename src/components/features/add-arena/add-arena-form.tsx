@@ -26,6 +26,7 @@ import { TextareaField } from "@/components/ui/textarea-field";
 import type { LatLngExpression } from "leaflet";
 import { ArenaFormSchema } from "@/lib/validators/arena.schema";
 import { useMap } from "react-leaflet";
+import { PhoneInput } from "./phone-input";
 
 const SPORT_CATEGORIES = [
   {
@@ -118,7 +119,7 @@ export const AddArenaForm = () => {
   }
 
   return (
-    <div className="w-full p-4  bg-white overflow-y-auto">
+    <div className="w-full p-4 bg-white">
       <form
         // onSubmit={}
         className="flex flex-col justify-center items-stretch w-full space-y-4"
@@ -200,8 +201,12 @@ export const AddArenaForm = () => {
         />
 
         {/* Map */}
-        <div>
-          <Map center={position ?? [0, 0]} zoom={position ? 14 : 0}>
+        <div className="w-full h-64 border border-gray-200 rounded-md overflow-hidden">
+          <Map
+            center={position ?? [0, 0]}
+            zoom={position ? 14 : 0}
+            className="!min-h-0"
+          >
             <MapTileLayer />
             <MapZoomControl />
             <MapFlyTo position={position} />
@@ -224,6 +229,8 @@ export const AddArenaForm = () => {
             <span className="pt-2 text-sm text-red-500">{error.message}</span>
           )}
         </div>
+
+        <PhoneInput />
 
         {/* Save Button */}
         <button
