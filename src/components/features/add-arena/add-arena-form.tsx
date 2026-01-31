@@ -26,7 +26,6 @@ import { TextareaField } from "@/components/ui/textarea-field";
 import type { LatLngExpression } from "leaflet";
 import { ArenaFormSchema } from "@/lib/validators/arena.schema";
 import { useMap } from "react-leaflet";
-import { email } from "zod";
 
 const SPORT_CATEGORIES = [
   {
@@ -50,8 +49,6 @@ const SPORT_CATEGORIES = [
     items: ["Golf"],
   },
 ];
-
-const BANGKOK_COORIDATES = [13.7563, 100.5018] satisfies LatLngExpression;
 
 export const AddArenaForm = () => {
   const [selectedSport, setSelectedSport] = useState<string | null>(null);
@@ -81,12 +78,14 @@ export const AddArenaForm = () => {
 
   const formatedAdress = (address ?? "").trim().replace(/\s+/g, "");
 
+  // Auto search from address field
   const { results, error } = usePlaceSearch({
     query: formatedAdress ?? "",
     debounceMs: 800,
     limit: 1,
   });
 
+  //
   useEffect(() => {
     if (results.length > 0) {
       const [lng, lat] = results[0].geometry.coordinates;
@@ -96,12 +95,22 @@ export const AddArenaForm = () => {
     }
   }, [results, setValue]);
 
+  // reset map when address field was clear
+  useEffect(() => {
+    if (address === "") {
+      setPosition(null);
+    }
+  }, [address]);
+
+  // Fly to the location when the address field have value
   function MapFlyTo({ position }: { position: LatLngExpression | null }) {
     const map = useMap();
 
     useEffect(() => {
       if (position) {
         map.flyTo(position, 16);
+      } else {
+        map.flyTo([0, 0], 0);
       }
     }, [map, position]);
 
@@ -192,7 +201,7 @@ export const AddArenaForm = () => {
 
         {/* Map */}
         <div>
-          <Map center={BANGKOK_COORIDATES} zoom={14}>
+          <Map center={position ?? [0, 0]} zoom={position ? 14 : 0}>
             <MapTileLayer />
             <MapZoomControl />
             <MapFlyTo position={position} />
