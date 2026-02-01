@@ -7,7 +7,7 @@ import {
   ListboxOptions,
 } from "@headlessui/react";
 import { useState } from "react";
-import { ChevronDownIcon } from "@heroicons/react/24/outline";
+import { ChevronDownIcon, CheckIcon } from "@heroicons/react/24/outline";
 
 const phoneCodes = [
   { id: 1, code: "+1", country: "US" },
@@ -43,22 +43,23 @@ export const PhoneInput = () => {
       <div className=" relative flex flex-row justify-center items-center px-3 py-1 w-full h-9 border border-gray-200 rounded-lg text-sm">
         {/* Phone code list */}
         <Listbox value={selected} onChange={setSelected}>
-          <ListboxButton className="group flex justify-center items-center gap-1 p-1 rounded-lg outline-none">
+          <ListboxButton className="group flex justify-between items-center gap-1 p-1 w-20 rounded-lg outline-none">
             {selected.code}
             <ChevronDownIcon className="w-4 h-4 transition-transform duration-200 group-data-open:rotate-180" />
           </ListboxButton>
 
           <ListboxOptions
             transition
-            className="absolute bottom-full left-0 z-50 mb-1 px-3 py-1 w-20 h-40 border boreder-gray-200 rounded-lg bg-white transition duration-200 ease-in-out origin-top data-closed:scale-y-95 data-closed:opacity-0 overflow-y-auto"
+            className="absolute bottom-full left-0 z-50 space-y-0.5 mb-1 p-1 w-24 h-40 border boreder-gray-200 rounded-lg bg-white transition duration-200 ease-in-out origin-top data-closed:scale-y-95 data-closed:opacity-0 overflow-y-auto outline-none"
           >
             {phoneCodes.map((phoneCode) => (
               <ListboxOption
                 key={phoneCode.id}
                 value={phoneCode}
-                className="cursor-default"
+                className="group flex flex-row justify-between items-center gap-1 p-1 text-black data-selected:bg-black data-selected:text-white hover:bg-gray-200 rounded-lg cursor-pointer"
               >
                 {phoneCode.code}
+                <CheckIcon className="invisible group-data-selected:visible size-4" />
               </ListboxOption>
             ))}
           </ListboxOptions>

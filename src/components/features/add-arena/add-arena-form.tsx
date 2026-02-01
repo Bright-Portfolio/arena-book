@@ -119,7 +119,7 @@ export const AddArenaForm = () => {
   }
 
   return (
-    <div className="w-ful h-full p-4 bg-white">
+    <div className="w-full h-full p-4 bg-white">
       <form
         // onSubmit={}
         className="flex flex-col justify-center items-stretch w-full space-y-4"
