@@ -23,10 +23,15 @@ import { usePlaceSearch } from "@/components/ui/place-autocomplete";
 import { CheckIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 import { FormField } from "@/components/ui/form-field";
 import { TextareaField } from "@/components/ui/textarea-field";
-import type { LatLngExpression } from "leaflet";
 import { ArenaFormSchema } from "@/lib/validators/arena.schema";
 import { useMap } from "react-leaflet";
 import { PhoneInput } from "./phone-input";
+import {
+  CldImage,
+  CldUploadWidget,
+  CloudinaryUploadWidgetResults,
+} from "next-cloudinary";
+import type { LatLngExpression } from "leaflet";
 
 const SPORT_CATEGORIES = [
   {
@@ -55,6 +60,7 @@ export const AddArenaForm = () => {
   const [selectedSport, setSelectedSport] = useState<string | null>(null);
   const [query, setQuery] = useState("");
   const [position, setPosition] = useState<LatLngExpression | null>(null);
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
   const {
     handleSubmit,
     register,
@@ -231,7 +237,59 @@ export const AddArenaForm = () => {
           )}
         </div>
 
+        {/* Phone input */}
         <PhoneInput />
+
+        {/* Upload images */}
+        <div>
+          <Label>Arena Images</Label>
+          {imageUrls.length > 0 && (
+            // Preview images
+            <div>
+              {imageUrls.map((url, index) => (
+                <div key={index}>
+                  <CldImage
+                    alt={`arena ${index + 1}`}
+                    src={url}
+                    width={200}
+                    height={200}
+                    crop="fill"
+                    gravity="auto"
+                    className="w-full h-full object-ceover"
+                  />
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setImageUrls((prev) => prev.filter((_, i) => i !== index))
+                    }
+                    className=""
+                  >
+                    x
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Upload button */}
+          <CldUploadWidget
+            uploadPreset="YOUR_PRESET_NAME"
+            onSuccess={(result) => {
+              const info = result.info as { secure_ur: string };
+              setImageUrls((prev) => [...prev, info.secure_url]);
+            }}
+          >
+            {({ open }) => {
+              <button
+                type="button"
+                onClick={() => open()}
+                className="w-full h-32 border-2 border-dashed border-gray-300"
+              >
+                + Add Image
+              </button>;
+            }}
+          </CldUploadWidget>
+        </div>
 
         {/* Save Button */}
         <button
