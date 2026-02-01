@@ -36,19 +36,39 @@ export const PhoneInput = () => {
   const [selected, setSelected] = useState(phoneCodes[11]);
 
   return (
-    <div>
-      <Listbox value={selected} onChange={setSelected}>
-        <ListboxButton>
-          {selected.code}
-          <ChevronDownIcon />
-        </ListboxButton>
+    <div className="flex flex-col gap-1">
+      <label htmlFor="phone-input" className="text-sm">
+        Phone
+      </label>
+      <div className=" relative flex flex-row justify-center items-center px-3 py-1 w-full h-9 border border-gray-200 rounded-lg text-sm">
+        {/* Phone code list */}
+        <Listbox value={selected} onChange={setSelected}>
+          <ListboxButton className="group flex justify-center items-center gap-1 p-1 rounded-lg outline-none">
+            {selected.code}
+            <ChevronDownIcon className="w-4 h-4 transition-transform duration-200 group-data-open:rotate-180" />
+          </ListboxButton>
 
-        <ListboxOptions>
-          {phoneCodes.map((phoneCode) => (
-            <ListboxOption key={phoneCode.id} value={phoneCode.country}>{phoneCode.code}</ListboxOption>
-          ))}
-        </ListboxOptions>
-      </Listbox>
+          <ListboxOptions
+            transition
+            className="absolute top-full left-0 z-50 mt-1 px-3 py-1 w-20 h-40 border boreder-gray-200 rounded-lg bg-white transition duration-200 ease-in-out origin-top data-closed:scale-y-95 data-closed:opacity-0 overflow-y-auto"
+          >
+            {phoneCodes.map((phoneCode) => (
+              <ListboxOption
+                key={phoneCode.id}
+                value={phoneCode}
+                className="cursor-default"
+              >
+                {phoneCode.code}
+              </ListboxOption>
+            ))}
+          </ListboxOptions>
+        </Listbox>
+
+        <span className="w-px h-6 bg-gray-200 mx-2" />
+
+        {/* Input phone no */}
+        <input id="phone-input" type="phone" className="w-full outline-none" />
+      </div>
     </div>
   );
 };

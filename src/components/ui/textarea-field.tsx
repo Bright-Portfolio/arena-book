@@ -15,7 +15,7 @@ export const TextareaField: FC<TextareaFieldProps> = ({
   ...props
 }) => {
   return (
-    <Field className="flex flex-col justify-start items-stretch gap-2">
+    <Field className="flex flex-col justify-start items-stretch gap-1">
       <FieldLabel>{label}</FieldLabel>
       <Textarea
         rows={3}

@@ -119,7 +119,7 @@ export const AddArenaForm = () => {
   }
 
   return (
-    <div className="w-full p-4 bg-white">
+    <div className="w-ful h-full p-4 bg-white">
       <form
         // onSubmit={}
         className="flex flex-col justify-center items-stretch w-full space-y-4"
@@ -129,11 +129,11 @@ export const AddArenaForm = () => {
         <FormField label="Price" type="number" />
         {/* Time picker */}
         <div className="flex flex-row justify-between items-center gap-2">
-          <div className="flex flex-1 flex-col gap-2">
+          <div className="flex flex-1 flex-col gap-1">
             <Label>Open-time</Label>
             <Input type="time" defaultValue="09:00" className="" />
           </div>
-          <div className="flex flex-1 flex-col gap-2">
+          <div className="flex flex-1 flex-col gap-1">
             <Label>Close-time</Label>
             <Input type="time" defaultValue="18:00" className="" />
           </div>
@@ -145,7 +145,7 @@ export const AddArenaForm = () => {
           onChange={setSelectedSport}
           onClose={() => setQuery("")}
         >
-          <div className="flex flex-col justify-start items-start gap-2">
+          <div className="flex flex-col justify-start items-start gap-1">
             <Label>Categories</Label>
             <div className="relative w-full">
               <div className="flex flex-row justify-between items-center px-3 py-1 w-full h-9 border border-input rounded-md transition-shadow focus-within:ring-[1px] focus-within:ring-ring/50">
