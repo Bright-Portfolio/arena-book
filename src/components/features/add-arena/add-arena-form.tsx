@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/map";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { usePlaceSearch } from "@/components/ui/place-autocomplete";
-import { ChevronDownIcon } from "@heroicons/react/24/outline";
+import { CheckIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 import { FormField } from "@/components/ui/form-field";
 import { TextareaField } from "@/components/ui/textarea-field";
 import type { LatLngExpression } from "leaflet";
@@ -160,7 +160,7 @@ export const AddArenaForm = () => {
               </div>
               <ComboboxOptions
                 transition
-                className="absolute z-[60] top-full left-0 mt-1 space-y-1 w-full h-40 p-2 bg-white border rounded-md shadow-lg overflow-y-auto transition duration-300 origin-top data-closed:scale-y-95 data-closed:opacity-0"
+                className="absolute z-[60] top-full left-0 mt-1 space-y-0.5 w-full h-40 p-1 bg-white border rounded-md shadow-lg overflow-y-auto transition duration-300 origin-top data-closed:scale-y-95 data-closed:opacity-0"
               >
                 {sportFiltered.map((group) =>
                   group.items.length > 0 ? (
@@ -173,9 +173,10 @@ export const AddArenaForm = () => {
                         <ComboboxOption
                           key={item}
                           value={item}
-                          className="p-1 text-sm rounded-md cursor-pointer hover:bg-gray-100 data-selected:bg-gray-200"
+                          className="group flex flex-row justify-between items-center gap-1 p-1 text-sm rounded-md text-black cursor-pointer hover:bg-gray-100 data-selected:bg-gray-200"
                         >
                           {item}
+                          <CheckIcon className="invisible group-data-selected:visible size-4" />
                         </ComboboxOption>
                       ))}
                     </div>

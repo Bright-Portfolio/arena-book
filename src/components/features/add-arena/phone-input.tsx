@@ -56,7 +56,7 @@ export const PhoneInput = () => {
               <ListboxOption
                 key={phoneCode.id}
                 value={phoneCode}
-                className="group flex flex-row justify-between items-center gap-1 p-1 text-black data-selected:bg-black data-selected:text-white hover:bg-gray-200 rounded-lg cursor-pointer"
+                className="group flex flex-row justify-between items-center gap-1 p-1 text-black data-selected:bg-gray-200 hover:bg-gray-100 rounded-md cursor-pointer"
               >
                 {phoneCode.code}
                 <CheckIcon className="invisible group-data-selected:visible size-4" />
