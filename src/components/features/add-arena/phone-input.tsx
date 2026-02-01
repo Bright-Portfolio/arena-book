@@ -37,7 +37,7 @@ export const PhoneInput = () => {
 
   return (
     <div className="flex flex-col gap-1">
-      <label htmlFor="phone-input" className="text-sm">
+      <label htmlFor="phone-input" className="text-sm leading-none">
         Phone
       </label>
       <div className=" relative flex flex-row justify-center items-center px-3 py-1 w-full h-9 border border-gray-200 rounded-lg text-sm">
@@ -50,7 +50,7 @@ export const PhoneInput = () => {
 
           <ListboxOptions
             transition
-            className="absolute top-full left-0 z-50 mt-1 px-3 py-1 w-20 h-40 border boreder-gray-200 rounded-lg bg-white transition duration-200 ease-in-out origin-top data-closed:scale-y-95 data-closed:opacity-0 overflow-y-auto"
+            className="absolute bottom-full left-0 z-50 mb-1 px-3 py-1 w-20 h-40 border boreder-gray-200 rounded-lg bg-white transition duration-200 ease-in-out origin-top data-closed:scale-y-95 data-closed:opacity-0 overflow-y-auto"
           >
             {phoneCodes.map((phoneCode) => (
               <ListboxOption

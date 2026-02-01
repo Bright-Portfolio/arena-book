@@ -24,7 +24,7 @@ export const FormField: FC<FormFieldProps> = ({
   const inputId = id || label.toLowerCase().replace(/\s+/g, "-");
   return (
     <div className={cn("flex flex-col gap-1", containerClassName)}>
-      <Label htmlFor={inputId} className={cn("text-sm")}>
+      <Label htmlFor={inputId} className={cn("text-sm leading-none")}>
         {label}
         {required && <span className="text-destructive ml-1">*</span>}
       </Label>

@@ -16,7 +16,7 @@ export const TextareaField: FC<TextareaFieldProps> = ({
 }) => {
   return (
     <Field className="flex flex-col justify-start items-stretch gap-1">
-      <FieldLabel>{label}</FieldLabel>
+      <FieldLabel className="leading-none">{label}</FieldLabel>
       <Textarea
         rows={3}
         placeholder={placeholder}
