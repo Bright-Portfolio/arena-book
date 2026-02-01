@@ -31,7 +31,7 @@ import { PhoneInput } from "./phone-input";
 const SPORT_CATEGORIES = [
   {
     category: "Team Sports",
-    items: ["Football (Soccer)", "Futsal", "Volleyball", "Basketball"],
+    items: ["Football (Soccer)", "Futsal", "Volleyball", "Basketball"], 
   },
   {
     category: "Combat Sports",
