@@ -241,7 +241,19 @@ export const AddArenaForm = () => {
         </div>
 
         {/* Phone input */}
-        {/* <PhoneInput countryCode={""} phoneNo={""} /> */}
+        <Controller name='countryCode' control={control} render={({field: countryField}) => (
+
+        <Controller 
+        name='phoneNo'
+        control={control}
+        render={({field: phoneField}) => (
+        <PhoneInput label="arena phone number" value={ countryCode: countryField.value,
+                  phoneNo: phoneField.value,} onchange={(newValue) => {}) />
+        )}
+        />
+        )}
+        />
+
 
         {/* Upload images */}
         <div>
