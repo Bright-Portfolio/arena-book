@@ -98,10 +98,14 @@ export const CompanyRegisterForm: FC<CompanyRegisterFormProps> = ({
             render={({ field: phoneField }) => (
               <PhoneInput
                 label="company phone number"
-                countryCode={countryField.value}
-                phoneNo={phoneField.value}
-                onCountryCodeChange={countryField.onChange}
-                onPhoneNoChange={phoneField.onChange}
+                value={{
+                  countryCode: countryField.value,
+                  phoneNo: phoneField.value,
+                }}
+                onChange={(newValue) => {
+                  countryField.onChange(newValue.countryCode);
+                  phoneField.onChange(newValue.phoneNo);
+                }}
               />
             )}
           />

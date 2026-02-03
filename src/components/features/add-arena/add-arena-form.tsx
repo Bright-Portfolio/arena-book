@@ -241,7 +241,7 @@ export const AddArenaForm = () => {
         </div>
 
         {/* Phone input */}
-        <PhoneInput countryCode={""} phoneNo={""} />
+        {/* <PhoneInput countryCode={""} phoneNo={""} /> */}
 
         {/* Upload images */}
         <div>
