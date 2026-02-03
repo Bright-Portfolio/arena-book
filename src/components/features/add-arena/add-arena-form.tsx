@@ -25,7 +25,8 @@ import { FormField } from "@/components/ui/form-field";
 import { TextareaField } from "@/components/ui/textarea-field";
 import { ArenaFormSchema } from "@/lib/validators/arena.schema";
 import { useMap } from "react-leaflet";
-import { PhoneInput } from "./phone-input";
+// import { PhoneInput } from "./phone-input";
+import { PhoneInput } from "@/components/ui/phone-input";
 import {
   CldImage,
   CldUploadWidget,
@@ -123,6 +124,8 @@ export const AddArenaForm = () => {
 
     return null;
   }
+
+  const handlePhoneChange = () => {};
 
   return (
     <div className="w-full h-full p-4 bg-white">
@@ -238,7 +241,7 @@ export const AddArenaForm = () => {
         </div>
 
         {/* Phone input */}
-        <PhoneInput />
+        <PhoneInput countryCode={""} phoneNo={""} />
 
         {/* Upload images */}
         <div>
@@ -272,7 +275,7 @@ export const AddArenaForm = () => {
           )}
 
           {/* Upload button */}
-          <CldUploadWidget
+          {/* <CldUploadWidget
             uploadPreset="YOUR_PRESET_NAME"
             onSuccess={(result) => {
               const info = result.info as { secure_ur: string };
@@ -288,7 +291,7 @@ export const AddArenaForm = () => {
                 + Add Image
               </button>;
             }}
-          </CldUploadWidget>
+          </CldUploadWidget> */}
         </div>
 
         {/* Save Button */}

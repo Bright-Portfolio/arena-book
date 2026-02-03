@@ -8,9 +8,10 @@ import Link from "next/link";
 
 interface NavbarProps {
   onSignUp: () => void;
+  onClickPost: () => void;
 }
 
-export const Navbar: FC<NavbarProps> = ({ onSignUp }) => {
+export const Navbar: FC<NavbarProps> = ({ onSignUp, onClickPost }) => {
   const { data: session } = useSession();
 
   return (
@@ -28,13 +29,14 @@ export const Navbar: FC<NavbarProps> = ({ onSignUp }) => {
       {/* Right side navigation */}
       <div className="flex justify-end items-center gap-2 w-full text-sm">
         {/* Arena Listing */}
-        <Link
-          href="/arena/add"
+        <button
+          type="button"
+          onClick={onClickPost}
           className="flex flex-row justify-center items-center  gap-1 px-2 py-1.5 border border-gray-300 rounded-full text-sm cursor-pointer"
         >
           <PlusIcon className="w-5 h-5 stroke-2" />
           Add arena
-        </Link>
+        </button>
         {session ? (
           <AvatarButton />
         ) : (

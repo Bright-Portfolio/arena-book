@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { Navbar } from "@/components/layout";
 import { BannerSlider } from "@/components/features/home";
 import { ArrowUpRightIcon } from "@heroicons/react/24/outline";
@@ -15,6 +16,7 @@ export default function Home() {
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [showPostArenaModal, setShowPostArenaModal] = useState(false);
   const { data: session } = useSession();
+  const router = useRouter();
 
   const handleBookClick = () => {
     if (!session) {
@@ -34,6 +36,7 @@ export default function Home() {
       return;
     }
 
+    router.push("/arena/add");
     setShowRegisterModal(false);
     setShowPostArenaModal(true);
   };

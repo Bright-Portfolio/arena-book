@@ -2,7 +2,7 @@
 
 import { FC } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { PhoneInput } from "./phone-input";
+import { PhoneInput } from "../../ui/phone-input";
 import {
   CompanyFormSchema,
   CompanyFormData,
@@ -49,7 +49,7 @@ export const CompanyRegisterForm: FC<CompanyRegisterFormProps> = ({
           method: "POST",
           headers: { "Content-type": "application/json" },
           body: JSON.stringify(data),
-        }
+        },
       );
       if (!response.ok) {
         const result = await response.json();

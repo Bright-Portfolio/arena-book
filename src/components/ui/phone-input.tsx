@@ -19,7 +19,6 @@ import {
   type CountryCode,
 } from "libphonenumber-js";
 import { useMemo, useState } from "react";
-import { on } from "events";
 
 interface Country {
   code: CountryCode;
@@ -30,10 +29,8 @@ interface Country {
 
 interface PhoneInputProps {
   label?: string;
-  countryCode: string;
-  phoneNo: string;
-  onCountryCodeChange: (code: string) => void;
-  onPhoneNoChange?: (phoneNo: string) => void;
+  value: { countryCode: string; phoneNo: string };
+  onChange: (value: { countryCode: string; phoneNo: string }) => void;
   error?: string;
 }
 
@@ -55,10 +52,8 @@ const getCountryFlag = (code: CountryCode) => {
 
 export const PhoneInput: FC<PhoneInputProps> = ({
   label,
-  countryCode = "+66",
-  phoneNo = "",
-  onCountryCodeChange,
-  onPhoneNoChange,
+  value,
+  onChange,
   error,
 }) => {
   const countries: Country[] = useMemo(() => {
@@ -76,9 +71,10 @@ export const PhoneInput: FC<PhoneInputProps> = ({
   // Find selected country from countryCode props
   const selected = useMemo(() => {
     return (
-      countries.find((c) => `+${c.callingCode}` === countryCode) || countries[0]
+      countries.find((c) => `+${c.callingCode}` === value.countryCode) ||
+      countries[0]
     );
-  }, [countries, countryCode]);
+  }, [countries, value.countryCode]);
 
   const filteredCountries = useMemo(() => {
     if (query === "") return countries;
@@ -87,7 +83,7 @@ export const PhoneInput: FC<PhoneInputProps> = ({
       const searchStr = query.toLowerCase();
       return (
         country.name.toLowerCase().includes(searchStr) ||
-        country.code.toLocaleLowerCase().includes(searchStr) ||
+        country.code.toLowerCase().includes(searchStr) ||
         country.callingCode.includes(searchStr)
       );
     });
@@ -95,12 +91,12 @@ export const PhoneInput: FC<PhoneInputProps> = ({
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newPhone = e.target.value;
-    onPhoneNoChange?.(newPhone);
+    onChange({ ...value, phoneNo: newPhone });
   };
 
   const handleCountryChange = (country: Country | null) => {
     if (!country) return;
-    onCountryCodeChange(`+${country.callingCode}`);
+    onChange({ ...value, countryCode: `+${country.callingCode}` });
   };
 
   return (
@@ -162,7 +158,7 @@ export const PhoneInput: FC<PhoneInputProps> = ({
                       <span className="text-sm flex-1">
                         ({country.code}) +{country.callingCode}
                       </span>
-                      <CheckIcon className="invisible  w-3 h-3 stroke-2 text-gray-400 group-data-selected:visible" />
+                      <CheckIcon className="invisible  w-3 h-3 stroke-2 text-black group-data-selected:visible" />
                     </ComboboxOption>
                   ))
                 )}
@@ -172,12 +168,14 @@ export const PhoneInput: FC<PhoneInputProps> = ({
         </Combobox>
         <input
           type="tel"
-          value={phoneNo}
+          value={value.phoneNo}
           className="flex-1 px-2 py-1 w-full border border-gray-300 rounded-lg rounded-l-none outline-none focus:border-black"
           placeholder="Enter phone number"
           onChange={handlePhoneChange}
         />
       </div>
+
+      {error && <p className="">{error}</p>}
     </div>
   );
 };
