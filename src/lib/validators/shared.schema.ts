@@ -1,15 +1,25 @@
 import { z } from "zod";
-import { isPossibleNumber } from "libphonenumber-js";
+import { type CountryCode, isPossibleNumber } from "libphonenumber-js";
 
-const phoneSchema = z
+export const phoneSchema = z
   .object({
-    countryCode: z.string().length(2).default("TH"),
+    phoneCountryISO2: z.string().length(2).default("TH"),
     phoneNo: z
       .string()
       .regex(/^\d*$/, { message: "phone number must contain only digits" }),
   })
   .superRefine((data, ctx) => {
-    ctx.addIssue({
-      code: "custom",
-    });
+    if (data.phoneCountryISO2 && data.phoneNo) {
+      const isValid = isPossibleNumber(
+        data.phoneNo,
+        data.phoneCountryISO2 as CountryCode,
+      );
+      if (!isValid) {
+        ctx.addIssue({
+          code: "custom",
+          message: "Invalid phone number length",
+          path: ["phoneNo"],
+        });
+      }
+    }
   });
