@@ -3,21 +3,19 @@ import { phoneFieldSchema, phoneRefinement } from "./shared.schema";
 
 // Form validation schema (user-facing fields)
 export const ArenaFormSchema = phoneFieldSchema
-  .extend(
-    z.object({
-      name: z.string().min(1, "arena name is required"),
-      description: z.string().optional(),
-      price: z.number().min(0, "price must be positive"),
-      openTime: z.string().min(1, "open time is required"), // HH:mm format
-      closeTime: z.string().min(1, "close time is required"), // HH:mm format
-      category: z.string().min(1, "category is required"),
-      address: z.string().optional(),
-      imageUrl: z.url().optional(),
-      latitude: z.number().min(-90).max(90),
-      longitude: z.number().min(-180).max(180),
-      capacity: z.number().int().positive().optional(),
-    }),
-  )
+  .extend({
+    name: z.string().min(1, "arena name is required"),
+    description: z.string().optional(),
+    price: z.number().min(0, "price must be positive"),
+    openTime: z.string().min(1, "open time is required"), // HH:mm format
+    closeTime: z.string().min(1, "close time is required"), // HH:mm format
+    category: z.string().min(1, "category is required"),
+    address: z.string().optional(),
+    imageUrl: z.url().optional(),
+    latitude: z.number().min(-90).max(90),
+    longitude: z.number().min(-180).max(180),
+    capacity: z.number().int().positive().optional(),
+  })
   .superRefine(phoneRefinement);
 
 export type ArenaFormData = z.infer<typeof ArenaFormSchema>;

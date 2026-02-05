@@ -72,7 +72,19 @@ export const AddArenaForm = () => {
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: zodResolver(ArenaFormSchema),
-    // defaultValue: {},
+    defaultValues: {
+      name: "",
+      description: "",
+      price: 0,
+      openTime: "09:00",
+      closeTime: "18:00",
+      category: "",
+      address: "",
+      latitude: 0,
+      longitude: 0,
+      phoneCountryISO2: "TH",
+      phoneNo: "",
+    },
   });
 
   const address = watch("address");
@@ -241,7 +253,7 @@ export const AddArenaForm = () => {
         </div>
 
         {/* Phone input */}
-        <Controller name='countryCode' control={control} render={({field: countryField}) => (
+        <Controller name='phoneCountryISO2' control={control} render={({field: countryField}) => (
 
         <Controller 
         name='phoneNo'
