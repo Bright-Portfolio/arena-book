@@ -25,7 +25,6 @@ import { FormField } from "@/components/ui/form-field";
 import { TextareaField } from "@/components/ui/textarea-field";
 import { ArenaFormSchema } from "@/lib/validators/arena.schema";
 import { useMap } from "react-leaflet";
-// import { PhoneInput } from "./phone-input";
 import { PhoneInput } from "@/components/ui/phone-input";
 import {
   CldImage,
@@ -253,19 +252,29 @@ export const AddArenaForm = () => {
         </div>
 
         {/* Phone input */}
-        <Controller name='phoneCountryISO2' control={control} render={({field: countryField}) => (
-
-        <Controller 
-        name='phoneNo'
-        control={control}
-        render={({field: phoneField}) => (
-        <PhoneInput label="arena phone number" value={{phoneCountryISO2: countryField.value,
-                  phoneNo: phoneField.value}} onChange={(newValue) => {}) />
-        )}
+        <Controller
+          name="phoneCountryISO2"
+          control={control}
+          render={({ field: countryField }) => (
+            <Controller
+              name="phoneNo"
+              control={control}
+              render={({ field: phoneField }) => (
+                <PhoneInput
+                  label="arena phone number"
+                  value={{
+                    phoneCountryISO2: countryField.value,
+                    phoneNo: phoneField.value,
+                  }}
+                  onChange={(newValue) => {
+                    countryField.onChange(newValue.phoneCountryISO2);
+                    phoneField.onChange(newValue.phoneNo);
+                  }}
+                />
+              )}
+            />
+          )}
         />
-        )}
-        />
-
 
         {/* Upload images */}
         <div>

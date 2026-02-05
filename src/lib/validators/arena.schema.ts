@@ -1,33 +1,33 @@
 import { z } from "zod";
 import { phoneFieldSchema, phoneRefinement } from "./shared.schema";
 
-// Form validation schema (user-facing fields)
-export const ArenaFormSchema = phoneFieldSchema
-  .extend({
-    name: z.string().min(1, "arena name is required"),
-    description: z.string().optional(),
-    price: z.number().min(0, "price must be positive"),
-    openTime: z.string().min(1, "open time is required"), // HH:mm format
-    closeTime: z.string().min(1, "close time is required"), // HH:mm format
-    category: z.string().min(1, "category is required"),
-    address: z.string().optional(),
-    imageUrl: z.url().optional(),
-    latitude: z.number().min(-90).max(90),
-    longitude: z.number().min(-180).max(180),
-    capacity: z.number().int().positive().optional(),
-  })
-  .superRefine(phoneRefinement);
+// Base shape
+export const ArenaBaseSchema = phoneFieldSchema.extend({
+  name: z.string().min(1, "arena name is required"),
+  description: z.string().optional(),
+  price: z.number().min(0, "price must be positive"),
+  openTime: z.string().min(1, "open time is required"), // HH:mm format
+  closeTime: z.string().min(1, "close time is required"), // HH:mm format
+  category: z.string().min(1, "category is required"),
+  address: z.string().optional(),
+  imageUrl: z.url().optional(),
+  latitude: z.number().min(-90).max(90),
+  longitude: z.number().min(-180).max(180),
+  capacity: z.number().int().positive().optional(),
+});
 
+// Form schema — superRefine applied last, only for useForm
+export const ArenaFormSchema = ArenaBaseSchema.superRefine(phoneRefinement);
 export type ArenaFormData = z.infer<typeof ArenaFormSchema>;
 
 // Input schema (form + company relation)
-export const CreateArenaInputSchema = ArenaFormSchema.extend({
+export const CreateArenaInputSchema = ArenaBaseSchema.extend({
   companyId: z.number(),
 });
 
 export type CreateArenaInput = z.infer<typeof CreateArenaInputSchema>;
 
-// Output schema (input + db-generated fields)
+// Output schema 
 export const CreateArenaOutputSchema = CreateArenaInputSchema.extend({
   id: z.number(),
   createdAt: z.date(),
