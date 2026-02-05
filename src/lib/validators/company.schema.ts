@@ -1,12 +1,12 @@
 import { z } from "zod";
-import { phoneSchema } from "./shared.schema";
+import { phoneFieldSchema, phoneRefinement } from "./shared.schema";
 
-export const CompanyFormSchema = phoneSchema.safeExtend(
-  z.object({
+export const CompanyFormSchema = phoneFieldSchema
+  .extend({
     name: z.string().min(1, "company name is required"),
     address: z.string().min(1, "address is required"),
-  }),
-);
+  })
+  .superRefine(phoneRefinement);
 
 export type CompanyFormData = z.infer<typeof CompanyFormSchema>;
 

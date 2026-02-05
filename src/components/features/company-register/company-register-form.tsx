@@ -23,11 +23,11 @@ export const CompanyRegisterForm: FC<CompanyRegisterFormProps> = ({
     setError,
     control,
     formState: { errors, isSubmitting },
-  } = useForm<CompanyFormData>({
+  } = useForm({
     resolver: zodResolver(CompanyFormSchema),
     defaultValues: {
       name: "",
-      countryCode: "+66",
+      phoneCountryISO2: "TH",
       phoneNo: "",
       address: "",
     },
@@ -89,7 +89,7 @@ export const CompanyRegisterForm: FC<CompanyRegisterFormProps> = ({
       </div>
 
       <Controller
-        name="countryCode"
+        name="phoneCountryISO2"
         control={control}
         render={({ field: countryField }) => (
           <Controller
@@ -99,11 +99,11 @@ export const CompanyRegisterForm: FC<CompanyRegisterFormProps> = ({
               <PhoneInput
                 label="company phone number"
                 value={{
-                  countryCode: countryField.value,
+                  phoneCountryISO2: countryField.value,
                   phoneNo: phoneField.value,
                 }}
                 onChange={(newValue) => {
-                  countryField.onChange(newValue.countryCode);
+                  countryField.onChange(newValue.phoneCountryISO2);
                   phoneField.onChange(newValue.phoneNo);
                 }}
               />

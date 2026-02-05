@@ -29,8 +29,8 @@ interface Country {
 
 interface PhoneInputProps {
   label?: string;
-  value: { countryCode: string; phoneNo: string };
-  onChange: (value: { countryCode: string; phoneNo: string }) => void;
+  value: { phoneCountryISO2: string; phoneNo: string };
+  onChange: (value: { phoneCountryISO2: string; phoneNo: string }) => void;
   error?: string;
 }
 
@@ -71,10 +71,9 @@ export const PhoneInput: FC<PhoneInputProps> = ({
   // Find selected country from countryCode props
   const selected = useMemo(() => {
     return (
-      countries.find((c) => `+${c.callingCode}` === value.countryCode) ||
-      countries[0]
+      countries.find((c) => c.code === value.phoneCountryISO2) || countries[0]
     );
-  }, [countries, value.countryCode]);
+  }, [countries, value.phoneCountryISO2]);
 
   const filteredCountries = useMemo(() => {
     if (query === "") return countries;
@@ -96,7 +95,7 @@ export const PhoneInput: FC<PhoneInputProps> = ({
 
   const handleCountryChange = (country: Country | null) => {
     if (!country) return;
-    onChange({ ...value, countryCode: `+${country.callingCode}` });
+    onChange({ ...value, phoneCountryISO2: country.code });
   };
 
   return (

@@ -247,8 +247,8 @@ export const AddArenaForm = () => {
         name='phoneNo'
         control={control}
         render={({field: phoneField}) => (
-        <PhoneInput label="arena phone number" value={ countryCode: countryField.value,
-                  phoneNo: phoneField.value,} onchange={(newValue) => {}) />
+        <PhoneInput label="arena phone number" value={{phoneCountryISO2: countryField.value,
+                  phoneNo: phoneField.value}} onChange={(newValue) => {}) />
         )}
         />
         )}
