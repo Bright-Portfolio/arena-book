@@ -139,7 +139,8 @@ export const AddArenaForm = () => {
   const handlePhoneChange = () => {};
 
   return (
-    <div className="w-full h-full p-4 bg-white">
+    <div className="w-full p-4 bg-white">
+      <h3 className="text-center text-lg font-semibold">Create Arena Form</h3>
       <form
         // onSubmit={}
         className="flex flex-col justify-center items-stretch w-full space-y-4"

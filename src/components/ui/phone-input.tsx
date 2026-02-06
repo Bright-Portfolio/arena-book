@@ -124,44 +124,44 @@ export const PhoneInput: FC<PhoneInputProps> = ({
                     }`}
                   />
                 </ComboboxButton>
-              </div>
 
-              <ComboboxOptions className="absolute z-10 mt-9 space-y-1 max-h-48 w-40 overflow-y-auto rounded-lg bg-white border border-gray-300 shadow-lg">
-                <div
-                  className="sticky top-0 bg-white border-b border-gray-200 p-2"
-                  onMouseDown={(e) => e.stopPropagation()}
-                >
-                  <div className="flex flex-row justify-start items-center px-2 py-1 w-full border border-gray-300 rounded-md">
-                    <MagnifyingGlassIcon className="w-4 h-4 stroke-2 text-gray-400" />
-                    <input
-                      type="text"
-                      className="w-full px-2 py-1 outline-none text-sm"
-                      placeholder="Search..."
-                      value={query}
-                      onChange={(e) => setQuery(e.target.value)}
-                    />
+                <ComboboxOptions className="absolute z-50 top-full left-0 mt-1 space-y-1 max-h-48 w-40 overflow-y-auto rounded-lg bg-white border border-gray-300 shadow-lg">
+                  <div
+                    className="sticky top-0 bg-white border-b border-gray-200 p-2"
+                    onMouseDown={(e) => e.stopPropagation()}
+                  >
+                    <div className="flex flex-row justify-start items-center px-2 py-1 w-full border border-gray-300 rounded-md">
+                      <MagnifyingGlassIcon className="w-4 h-4 stroke-2 text-gray-400" />
+                      <input
+                        type="text"
+                        className="w-full px-2 py-1 outline-none text-sm"
+                        placeholder="Search..."
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                      />
+                    </div>
                   </div>
-                </div>
-                {filteredCountries.length === 0 ? (
-                  <div className="px-2 py-1 text-center text-sm text-gray-400">
-                    No countries found
-                  </div>
-                ) : (
-                  filteredCountries.map((country) => (
-                    <ComboboxOption
-                      key={country.code}
-                      value={country}
-                      className="group flex flex-row justify-start items-center gap-2 px-2 py-1 cursor-pointer hover:bg-gray-100 data-focus:bg-gray-100"
-                    >
-                      {country.flag && <country.flag className="w-6 h-4" />}
-                      <span className="text-sm flex-1">
-                        ({country.code}) +{country.callingCode}
-                      </span>
-                      <CheckIcon className="invisible  w-3 h-3 stroke-2 text-black group-data-selected:visible" />
-                    </ComboboxOption>
-                  ))
-                )}
-              </ComboboxOptions>
+                  {filteredCountries.length === 0 ? (
+                    <div className="px-2 py-1 text-center text-sm text-gray-400">
+                      No countries found
+                    </div>
+                  ) : (
+                    filteredCountries.map((country) => (
+                      <ComboboxOption
+                        key={country.code}
+                        value={country}
+                        className="group flex flex-row justify-start items-center gap-2 px-2 py-1 cursor-pointer hover:bg-gray-100 data-focus:bg-gray-100"
+                      >
+                        {country.flag && <country.flag className="w-6 h-4" />}
+                        <span className="text-sm flex-1">
+                          ({country.code}) +{country.callingCode}
+                        </span>
+                        <CheckIcon className="invisible  w-3 h-3 stroke-2 text-black group-data-selected:visible" />
+                      </ComboboxOption>
+                    ))
+                  )}
+                </ComboboxOptions>
+              </div>
             </>
           )}
         </Combobox>

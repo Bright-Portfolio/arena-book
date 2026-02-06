@@ -9,12 +9,10 @@ import { ArrowUpRightIcon } from "@heroicons/react/24/outline";
 import { AuthForm } from "@/components/features/auth";
 import { CompanyRegisterForm } from "@/components/features/company-register/company-register-form";
 import { Modal } from "@/components/ui/modal";
-import { AddArenaForm } from "@/components/features/add-arena/add-arena-form";
 
 export default function Home() {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
-  const [showPostArenaModal, setShowPostArenaModal] = useState(false);
   const { data: session } = useSession();
   const router = useRouter();
 
@@ -31,14 +29,12 @@ export default function Home() {
     }
 
     if (session.user.role !== "owner") {
-      setShowPostArenaModal(false);
       setShowRegisterModal(true);
       return;
     }
 
     router.push("/arena/add");
     setShowRegisterModal(false);
-    setShowPostArenaModal(true);
   };
   return (
     <div className="flex min-h-screen items-center justify-center">
@@ -73,13 +69,6 @@ export default function Home() {
             title="Company Register Form"
           >
             <CompanyRegisterForm onSuccess={() => setShowRegisterModal(true)} />
-          </Modal>
-          <Modal
-            isOpen={showPostArenaModal}
-            onClose={() => setShowPostArenaModal(false)}
-            title="Arena Information"
-          >
-            <AddArenaForm />
           </Modal>
         </div>
       </main>
