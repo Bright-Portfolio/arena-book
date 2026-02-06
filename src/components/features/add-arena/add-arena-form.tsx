@@ -309,23 +309,23 @@ export const AddArenaForm = () => {
           )}
 
           {/* Upload button */}
-          {/* <CldUploadWidget
+          <CldUploadWidget
             uploadPreset="YOUR_PRESET_NAME"
             onSuccess={(result) => {
-              const info = result.info as { secure_ur: string };
+              const info = result.info as { secure_url: string };
               setImageUrls((prev) => [...prev, info.secure_url]);
             }}
           >
-            {({ open }) => {
+            {({ open }) => (
               <button
                 type="button"
                 onClick={() => open()}
                 className="w-full h-32 border-2 border-dashed border-gray-300"
               >
                 + Add Image
-              </button>;
-            }}
-          </CldUploadWidget> */}
+              </button>
+            )}
+          </CldUploadWidget>
         </div>
 
         {/* Save Button */}
