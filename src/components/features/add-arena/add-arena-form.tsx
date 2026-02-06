@@ -311,7 +311,7 @@ export const AddArenaForm = () => {
 
           {/* Upload button */}
           <CldUploadWidget
-            uploadPreset="YOUR_PRESET_NAME"
+            uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET}
             onSuccess={(result) => {
               const info = result.info as { secure_url: string };
               setImageUrls((prev) => [...prev, info.secure_url]);
