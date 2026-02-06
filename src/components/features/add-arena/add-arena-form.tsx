@@ -139,7 +139,7 @@ export const AddArenaForm = () => {
   const handlePhoneChange = () => {};
 
   return (
-    <div className="w-full p-4 bg-white">
+    <div className="mx-auto max-w-2xl p-4 bg-white overflow-y-auto">
       <h3 className="text-center text-lg font-semibold">Create Arena Form</h3>
       <form
         // onSubmit={}
@@ -262,7 +262,8 @@ export const AddArenaForm = () => {
               control={control}
               render={({ field: phoneField }) => (
                 <PhoneInput
-                  label="arena phone number"
+                  label="Arena phone number"
+                  labelClassName="text-sm"
                   value={{
                     phoneCountryISO2: countryField.value,
                     phoneNo: phoneField.value,
@@ -279,7 +280,7 @@ export const AddArenaForm = () => {
 
         {/* Upload images */}
         <div>
-          <Label>Arena Images</Label>
+          <Label className="mb-1">Arena Images</Label>
           {imageUrls.length > 0 && (
             // Preview images
             <div>
@@ -320,7 +321,7 @@ export const AddArenaForm = () => {
               <button
                 type="button"
                 onClick={() => open()}
-                className="w-full h-32 border-2 border-dashed border-gray-300"
+                className="w-full h-32 border border-gray-300 rounded-lg text-sm text-gray-500"
               >
                 + Add Image
               </button>

@@ -1,5 +1,4 @@
 import pool from "@/lib/db";
-import { Pool, PoolClient } from "pg";
 import type {
   CreateUserInput,
   CreateUserOutput,

@@ -19,7 +19,6 @@ export async function upsertCompany(
       UPDATE users 
       SET role = 'owner' 
       WHERE id = $1
-      AND role != 'owner' 
       RETURNING id
     )
     INSERT INTO companies (
@@ -36,9 +35,9 @@ export async function upsertCompany(
       country_code = EXCLUDED.country_code,
       phone_no = EXCLUDED.phone_no,
       address = EXCLUDED.address
-      RETURNING id, owner_id as "ownerId", name, country_code as "countryCode", phone_no as "phoneNo", address
+      RETURNING id, owner_id as "ownerId", name, country_code as "phoneCountryISO2", phone_no as "phoneNo", address
       `,
-    [userId, data.name, data.countryCode, data.phoneNo, data.address],
+    [userId, data.name, data.phoneCountryISO2, data.phoneNo, data.address],
   );
 
   return result.rows[0];

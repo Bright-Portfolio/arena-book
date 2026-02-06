@@ -19,6 +19,7 @@ import {
   type CountryCode,
 } from "libphonenumber-js";
 import { useMemo, useState } from "react";
+import { cn } from "@/lib/utils";
 
 interface Country {
   code: CountryCode;
@@ -32,6 +33,7 @@ interface PhoneInputProps {
   value: { phoneCountryISO2: string; phoneNo: string };
   onChange: (value: { phoneCountryISO2: string; phoneNo: string }) => void;
   error?: string;
+  labelClassName?: string;
 }
 
 const getCountryName = (code: CountryCode): string => {
@@ -55,6 +57,7 @@ export const PhoneInput: FC<PhoneInputProps> = ({
   value,
   onChange,
   error,
+  labelClassName,
 }) => {
   const countries: Country[] = useMemo(() => {
     const allCountries = getCountries();
@@ -101,7 +104,10 @@ export const PhoneInput: FC<PhoneInputProps> = ({
   return (
     <div className="flex- flex-col justify-start items-center w-full">
       {label && (
-        <label htmlFor="phone-input" className="text-xs text-black">
+        <label
+          htmlFor="phone-input"
+          className={cn("text-xs text-black", labelClassName)}
+        >
           {label}
         </label>
       )}
