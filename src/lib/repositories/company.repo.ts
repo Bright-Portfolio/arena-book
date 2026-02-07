@@ -5,7 +5,7 @@ import {
 } from "../validators/company.schema";
 
 /**
- * Insert company info if not exist
+ * Upsert company info if not exist
  *
  * @param userId
  */

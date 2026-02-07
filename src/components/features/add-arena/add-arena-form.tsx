@@ -26,11 +26,8 @@ import { TextareaField } from "@/components/ui/textarea-field";
 import { ArenaFormSchema } from "@/lib/validators/arena.schema";
 import { useMap } from "react-leaflet";
 import { PhoneInput } from "@/components/ui/phone-input";
-import {
-  CldImage,
-  CldUploadWidget,
-  CloudinaryUploadWidgetResults,
-} from "next-cloudinary";
+import { XCircleIcon, PlusIcon } from "@heroicons/react/24/outline";
+import { CldImage, CldUploadWidget } from "next-cloudinary";
 import type { LatLngExpression } from "leaflet";
 
 const SPORT_CATEGORIES = [
@@ -279,13 +276,14 @@ export const AddArenaForm = () => {
         />
 
         {/* Upload images */}
-        <div>
+        <div className="space-y-1 border border-gray-200 p-2 rounded-md">
           <Label className="mb-1">Arena Images</Label>
+
           {imageUrls.length > 0 && (
             // Preview images
-            <div>
+            <div className="flex flex-row gap-2 overflow-x-auto pt-2 ">
               {imageUrls.map((url, index) => (
-                <div key={index}>
+                <div key={index} className="shrink-0 relative w-50 h-50">
                   <CldImage
                     alt={`arena ${index + 1}`}
                     src={url}
@@ -293,16 +291,16 @@ export const AddArenaForm = () => {
                     height={200}
                     crop="fill"
                     gravity="auto"
-                    className="w-full h-full object-ceover"
+                    className="w-full h-full rounded-lg object-cover"
                   />
                   <button
                     type="button"
                     onClick={() =>
                       setImageUrls((prev) => prev.filter((_, i) => i !== index))
                     }
-                    className=""
+                    className="absolute -top-2 -right-2 z-10 text-black bg-white rounded-full cursor-pointer"
                   >
-                    x
+                    <XCircleIcon className="w-5 h-5" />
                   </button>
                 </div>
               ))}
@@ -321,9 +319,10 @@ export const AddArenaForm = () => {
               <button
                 type="button"
                 onClick={() => open()}
-                className="w-full h-32 border border-gray-300 rounded-lg text-sm text-gray-500"
+                className="flex justify-center items-center mx-auto rounded-lg text-base text-white bg-black px-2 py-1 cursor-pointer"
               >
-                + Add Image
+                <PlusIcon className="w-4 h-4" />
+                Add Image
               </button>
             )}
           </CldUploadWidget>
