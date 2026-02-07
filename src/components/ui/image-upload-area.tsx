@@ -130,7 +130,7 @@ export const ImageUploadArea: FC<ImageUploadAreaProps> = ({
   return (
     <div
       {...getRootProps()}
-      className={`border rounded-md p-4 cursor-pointer hover:border-gray-400 transition-colors ${isDragActive ? "border-black bg-gray-50" : "border-gray-300"}`}
+      className={`border rounded-md p-4 cursor-pointer hover:border-gray-400 transition-colors ${isDragActive ? "ring-[1px] ring-input bg-gray-50" : "border-gray-300"}`}
     >
       <input {...getInputProps()} />
       {imageUrls.length > 0 && (

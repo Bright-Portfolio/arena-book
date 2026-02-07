@@ -174,7 +174,7 @@ export const PhoneInput: FC<PhoneInputProps> = ({
         <input
           type="tel"
           value={value.phoneNo}
-          className="flex-1 px-2 py-1 w-full border border-gray-300 rounded-lg rounded-l-none outline-none focus:border-black"
+          className="flex-1 px-2 py-1 w-full border border-gray-300 rounded-lg rounded-l-none outline-none focus:ring-[1px] ring-input"
           placeholder="Enter phone number"
           onChange={handlePhoneChange}
         />
