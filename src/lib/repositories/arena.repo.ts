@@ -32,9 +32,8 @@ export async function insertArena(
         capacity,
         company_id
       ) VALUES (
-        $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13
+        $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14
       )
-        WHERE company_id = $14
       RETURNING *
     `,
     [
@@ -55,7 +54,5 @@ export async function insertArena(
     ],
   );
 
-  const firstRow = result.rows[0];
-  const parsed = CreateArenaOutputSchema.parse(firstRow);
-  return parsed;
+  return result.rows[0];
 }
