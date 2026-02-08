@@ -16,8 +16,8 @@ export async function POST(
       return NextResponse.json(
         {
           success: false,
-          error: validatedInput.error.issues,
-          data: null,
+          error: "validation_failed",
+          message: "Invalid input data",
         },
         { status: 400 },
       );
@@ -27,7 +27,9 @@ export async function POST(
     if (!result.success) {
       return NextResponse.json(
         {
-          error: result.error,
+          success: false,
+          error: "register_failed",
+          message: result.error || "Failed to register arena",
         },
         { status: 400 },
       );

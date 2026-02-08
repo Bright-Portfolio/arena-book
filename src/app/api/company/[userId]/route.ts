@@ -16,7 +16,14 @@ export async function POST(
     const userId = parseInt(userIdString, 10);
     const session = await auth();
     if (Number(session?.user.id) !== userId) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      return NextResponse.json(
+        {
+          success: false,
+          error: "forbidden",
+          message: "You are not authorized to perform this action",
+        },
+        { status: 403 },
+      );
     }
 
     const validatedInput = CreateCompanyInputSchema.safeParse({
@@ -26,7 +33,9 @@ export async function POST(
     if (!validatedInput.success) {
       return NextResponse.json(
         {
-          error: validatedInput.error.issues,
+          success: false,
+          error: "validation_failed",
+          message: "Invalid input data",
         },
         { status: 400 },
       );
@@ -35,14 +44,22 @@ export async function POST(
     const result = await registerOrUpdateCompany(userId, validatedInput.data);
     const validatedOutput = CreateCompanyOutputSchema.parse(result);
 
-    return NextResponse.json({ company: validatedOutput }, { status: 200 });
+    return NextResponse.json(
+      {
+        success: true,
+        data: validatedOutput,
+      },
+      { status: 200 },
+    );
   } catch (error) {
     console.error("Failed to register or update company:", error);
 
     if (error instanceof Error && error.message === "User not found") {
       return NextResponse.json(
         {
-          error: error.message,
+          success: false,
+          error: "not_found",
+          message: error.message,
         },
         { status: 404 },
       );
@@ -53,6 +70,7 @@ export async function POST(
 
     return NextResponse.json(
       {
+        success: false,
         error: errorMessage,
       },
       { status: 500 },

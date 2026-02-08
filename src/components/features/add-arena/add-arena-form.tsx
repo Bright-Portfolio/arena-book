@@ -23,12 +23,11 @@ import { usePlaceSearch } from "@/components/ui/place-autocomplete";
 import { CheckIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 import { FormField } from "@/components/ui/form-field";
 import { TextareaField } from "@/components/ui/textarea-field";
-import { ArenaFormSchema } from "@/lib/validators/arena.schema";
+import { ArenaFormData, ArenaFormSchema } from "@/lib/validators/arena.schema";
 import { useMap } from "react-leaflet";
 import { PhoneInput } from "@/components/ui/phone-input";
-import { XCircleIcon, PlusIcon } from "@heroicons/react/24/outline";
-import { CldImage, CldUploadWidget } from "next-cloudinary";
 import { ImageUploadArea } from "@/components/ui/image-upload-area";
+import { useParams } from "next/navigation";
 import type { LatLngExpression } from "leaflet";
 
 const SPORT_CATEGORIES = [
@@ -83,6 +82,7 @@ export const AddArenaForm = () => {
       phoneNo: "",
     },
   });
+  const { companyId } = useParams<{ companyId: string }>();
 
   const address = watch("address");
 
@@ -136,11 +136,30 @@ export const AddArenaForm = () => {
 
   const handlePhoneChange = () => {};
 
+  const onSubmit = async (data: ArenaFormData) => {
+    try {
+      const response = await fetch(`/api/arena/add/${companyId}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        const result = await response.json();
+        setError("root", { message: result.error || "Something went wrong" });
+        return;
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      setError("root", { message: "Network error. Please try again." } );
+    }
+  };
+
   return (
     <div className="mx-auto max-w-2xl p-4 bg-white overflow-y-auto">
       <h3 className="text-center text-lg font-semibold">Create Arena Form</h3>
       <form
-        // onSubmit={}
+        onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col justify-center items-stretch w-full space-y-4"
       >
         {/* Name */}
@@ -286,6 +305,13 @@ export const AddArenaForm = () => {
         <div className="space-y-1">
           <ImageUploadArea imageUrls={imageUrls} onChange={setImageUrls} />
         </div>
+
+        {/* Root error message */}
+        {errors.root && (
+          <h3 className="w-full text-center text-sm text-red-500">
+            {errors.root.message}
+          </h3>
+        )}
 
         {/* Save Button */}
         <button
