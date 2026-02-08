@@ -42,3 +42,18 @@ export async function upsertCompany(
 
   return result.rows[0];
 }
+
+export async function findCompanyByName(
+  companyName: string,
+): Promise<{ name: string } | null> {
+  const result = await pool.query<{ name: string }>(
+    `
+      SELECT name
+      FROM companies
+      WHERE name = $1
+    `,
+    [companyName],
+  );
+
+  return result.rows[0] || null;
+}

@@ -4,6 +4,7 @@ import {
   CreateCompanyInputSchema,
   CreateCompanyOutputSchema,
 } from "@/lib/validators/company.schema";
+import { auth } from "@/auth";
 
 export async function POST(
   request: Request,
@@ -13,6 +14,10 @@ export async function POST(
     const body = await request.json();
     const { userId: userIdString } = await params;
     const userId = parseInt(userIdString, 10);
+    const session = await auth();
+    if (!session || Number(session.user.id) !== userId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
 
     const validatedInput = CreateCompanyInputSchema.safeParse({
       ...body,

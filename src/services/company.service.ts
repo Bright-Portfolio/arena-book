@@ -1,5 +1,7 @@
-import { upsertCompany } from "@/lib/repositories/company.repo";
-import { findUserById } from "@/lib/repositories/user.repo";
+import {
+  findCompanyByName,
+  upsertCompany,
+} from "@/lib/repositories/company.repo";
 import type {
   CreateCompanyInput,
   CreateCompanyOutput,
@@ -9,9 +11,8 @@ export async function registerOrUpdateCompany(
   userId: number,
   data: CreateCompanyInput,
 ): Promise<CreateCompanyOutput> {
-  const user = await findUserById(userId);
-  if (!user) {
-    throw new Error("User not found");
-  }
+  const existing = await findCompanyByName(data.name);
+  if (existing) throw new Error("Company name already taken");
+
   return upsertCompany(userId, data);
 }
