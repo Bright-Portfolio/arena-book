@@ -7,7 +7,7 @@ import {
 
 export async function POST(
   request: Request,
-  { params }: { params: Promise<{ userId: string }> }
+  { params }: { params: Promise<{ userId: string }> },
 ) {
   try {
     const body = await request.json();
@@ -23,14 +23,11 @@ export async function POST(
         {
           error: validatedInput.error.issues,
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
-    const result = await registerOrUpdateCompany({
-      userId,
-      data: validatedInput.data,
-    });
+    const result = await registerOrUpdateCompany(userId, validatedInput.data);
     const validatedOutput = CreateCompanyOutputSchema.parse(result);
 
     return NextResponse.json({ company: validatedOutput }, { status: 200 });
@@ -42,7 +39,7 @@ export async function POST(
         {
           error: error.message,
         },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -53,7 +50,7 @@ export async function POST(
       {
         error: errorMessage,
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
