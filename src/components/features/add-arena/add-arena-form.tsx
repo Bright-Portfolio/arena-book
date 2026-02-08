@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -53,7 +53,11 @@ const SPORT_CATEGORIES = [
   },
 ];
 
-export const AddArenaForm = () => {
+interface AddArenaFormProps {
+  onSuccess: () => void;
+}
+
+export const AddArenaForm: FC<AddArenaFormProps> = ({ onSuccess }) => {
   const [selectedSport, setSelectedSport] = useState<string | null>(null);
   const [query, setQuery] = useState("");
   const [position, setPosition] = useState<LatLngExpression | null>(null);
@@ -134,14 +138,12 @@ export const AddArenaForm = () => {
     return null;
   }
 
-  const handlePhoneChange = () => {};
-
   const onSubmit = async (data: ArenaFormData) => {
     try {
       const response = await fetch(`/api/arena/add/${companyId}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ data, imageUrls }),
       });
 
       if (!response.ok) {
@@ -149,9 +151,11 @@ export const AddArenaForm = () => {
         setError("root", { message: result.error || "Something went wrong" });
         return;
       }
+
+      onSuccess();
     } catch (error) {
       console.error("Error submitting form:", error);
-      setError("root", { message: "Network error. Please try again." } );
+      setError("root", { message: "Network error. Please try again." });
     }
   };
 
@@ -163,30 +167,53 @@ export const AddArenaForm = () => {
         className="flex flex-col justify-center items-stretch w-full space-y-4"
       >
         {/* Name */}
-        <FormField label="Name" />
+        <FormField label="Name" {...register("name")} />
         {/* Description */}
-        <FormField label="Description" />
+        <FormField label="Description" {...register("description")} />
         {/* Price */}
-        <FormField label="Price per hour" type="number" min={0} />
+        <FormField
+          label="Price per hour"
+          type="number"
+          min={0}
+          {...register("price", { valueAsNumber: true })}
+        />
         {/* Maximum capacity */}
-        <FormField label="Maximum capacity" type="number" min={0} />
+        <FormField
+          label="Maximum capacity"
+          type="number"
+          min={0}
+          {...register("capacity", { valueAsNumber: true })}
+        />
 
         {/* Time picker */}
         <div className="flex flex-row justify-between items-center gap-2">
           <div className="flex flex-1 flex-col gap-1">
             <Label>Open-time</Label>
-            <Input type="time" defaultValue="09:00" className="" />
+            <Input
+              type="time"
+              defaultValue="09:00"
+              className=""
+              {...register("openTime")}
+            />
           </div>
           <div className="flex flex-1 flex-col gap-1">
             <Label>Close-time</Label>
-            <Input type="time" defaultValue="18:00" className="" />
+            <Input
+              type="time"
+              defaultValue="18:00"
+              className=""
+              {...register("closeTime")}
+            />
           </div>
         </div>
 
         {/* Categories */}
         <Combobox
           value={selectedSport}
-          onChange={setSelectedSport}
+          onChange={(value) => {
+            setSelectedSport(value);
+            setValue("category", value || "");
+          }}
           onClose={() => setQuery("")}
         >
           <div className="flex flex-col justify-start items-start gap-1">
@@ -316,6 +343,7 @@ export const AddArenaForm = () => {
         {/* Save Button */}
         <button
           type="submit"
+          disabled={isSubmitting}
           className="mx-auto px-2 py-1 rounded-lg text-white bg-black cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Save

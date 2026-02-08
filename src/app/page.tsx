@@ -14,6 +14,7 @@ export default function Home() {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const { data: session } = useSession();
+  const companyId = session?.user?.companyId;
   const router = useRouter();
 
   const handleBookClick = () => {
@@ -33,7 +34,7 @@ export default function Home() {
       return;
     }
 
-    router.push("/arena/add");
+    router.push(`/arena/${companyId}/add`);
     setShowRegisterModal(false);
   };
   return (
@@ -68,7 +69,9 @@ export default function Home() {
             onClose={() => setShowRegisterModal(false)}
             title="Company Register Form"
           >
-            <CompanyRegisterForm onSuccess={() => setShowRegisterModal(false)} />
+            <CompanyRegisterForm
+              onSuccess={() => setShowRegisterModal(false)}
+            />
           </Modal>
         </div>
       </main>
