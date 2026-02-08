@@ -15,8 +15,8 @@ export async function POST(
     const { userId: userIdString } = await params;
     const userId = parseInt(userIdString, 10);
     const session = await auth();
-    if (!session || Number(session.user.id) !== userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    if (Number(session?.user.id) !== userId) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
     const validatedInput = CreateCompanyInputSchema.safeParse({
