@@ -68,7 +68,7 @@ export default function Home() {
             onClose={() => setShowRegisterModal(false)}
             title="Company Register Form"
           >
-            <CompanyRegisterForm onSuccess={() => setShowRegisterModal(true)} />
+            <CompanyRegisterForm onSuccess={() => setShowRegisterModal(false)} />
           </Modal>
         </div>
       </main>
