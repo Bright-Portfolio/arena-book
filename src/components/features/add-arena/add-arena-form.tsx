@@ -143,9 +143,15 @@ export const AddArenaForm = () => {
         // onSubmit={}
         className="flex flex-col justify-center items-stretch w-full space-y-4"
       >
+        {/* Name */}
         <FormField label="Name" />
+        {/* Description */}
         <FormField label="Description" />
-        <FormField label="Price" type="number" />
+        {/* Price */}
+        <FormField label="Price per hour" type="number" min={0} />
+        {/* Maximum capacity */}
+        <FormField label="Maximum capacity" type="number" min={0} />
+
         {/* Time picker */}
         <div className="flex flex-row justify-between items-center gap-2">
           <div className="flex flex-1 flex-col gap-1">

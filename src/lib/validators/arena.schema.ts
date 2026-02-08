@@ -6,6 +6,7 @@ export const ArenaBaseSchema = phoneFieldSchema.extend({
   name: z.string().min(1, "arena name is required"),
   description: z.string().optional(),
   price: z.number().min(0, "price must be positive"),
+  capacity: z.number().int().min(1, "capacity must be at least 1").optional(),
   openTime: z.string().min(1, "open time is required"), // HH:mm format
   closeTime: z.string().min(1, "close time is required"), // HH:mm format
   category: z.string().min(1, "category is required"),
@@ -13,7 +14,6 @@ export const ArenaBaseSchema = phoneFieldSchema.extend({
   imageUrl: z.url().optional(),
   latitude: z.number().min(-90).max(90),
   longitude: z.number().min(-180).max(180),
-  capacity: z.number().int().positive().optional(),
 });
 
 // Form schema — superRefine applied last, only for useForm
