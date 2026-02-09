@@ -75,7 +75,8 @@ export const AddArenaForm: FC<AddArenaFormProps> = ({ onSuccess }) => {
     defaultValues: {
       name: "",
       description: "",
-      price: 0,
+      price: undefined,
+      capacity: undefined,
       openTime: "09:00",
       closeTime: "18:00",
       category: "",
@@ -146,7 +147,7 @@ export const AddArenaForm: FC<AddArenaFormProps> = ({ onSuccess }) => {
 
       if (!response.ok) {
         const result = await response.json();
-        setError("root", { message: result.error || "Something went wrong" });
+        setError("root", { message: result.message || "Something went wrong" });
         return;
       }
 
@@ -180,6 +181,7 @@ export const AddArenaForm: FC<AddArenaFormProps> = ({ onSuccess }) => {
         <FormField
           label="Price per hour"
           type="number"
+          placeholder={"0"}
           min={0}
           error={errors.price?.message}
           {...register("price", { valueAsNumber: true })}
@@ -188,7 +190,8 @@ export const AddArenaForm: FC<AddArenaFormProps> = ({ onSuccess }) => {
         <FormField
           label="Maximum capacity"
           type="number"
-          min={0}
+          placeholder={"0"}
+          min={1}
           error={errors.capacity?.message}
           {...register("capacity", { valueAsNumber: true })}
         />
@@ -204,7 +207,10 @@ export const AddArenaForm: FC<AddArenaFormProps> = ({ onSuccess }) => {
               className=""
               {...register("openTime")}
             />
-            <p className="text-sm text-red-500"> {errors.openTime?.message}</p>
+            <p className="text-sm text-red-500 leading-none">
+              {" "}
+              {errors.openTime?.message}
+            </p>
           </div>
           {/* close time */}
           <div className="flex flex-1 flex-col gap-1">
@@ -215,7 +221,10 @@ export const AddArenaForm: FC<AddArenaFormProps> = ({ onSuccess }) => {
               className=""
               {...register("closeTime")}
             />
-            <p className="text-sm text-red-500"> {errors.openTime?.message}</p>
+            <p className="text-sm text-red-500 leading-none">
+              {" "}
+              {errors.closeTime?.message}
+            </p>
           </div>
         </div>
 
@@ -224,14 +233,18 @@ export const AddArenaForm: FC<AddArenaFormProps> = ({ onSuccess }) => {
           value={selectedSport}
           onChange={(value) => {
             setSelectedSport(value);
-            setValue("category", value || "");
+            setValue("category", value || "", { shouldValidate: true });
           }}
           onClose={() => setQuery("")}
         >
           <div className="flex flex-col justify-start items-start gap-1">
             <Label>Categories</Label>
             <div className="relative w-full">
-              <div className="flex flex-row justify-between items-center px-3 py-1 w-full h-9 border border-input rounded-md transition-shadow focus-within:ring-[1px] focus-within:ring-ring/50">
+              <div
+                className={`flex flex-row justify-between items-center px-3 py-1 w-full h-9 border rounded-md transition-shadow focus-within:ring-[1px] focus-within:ring-ring/50
+                ${errors.category ? "border-red-500" : "border-input"}
+                `}
+              >
                 <ComboboxInput
                   onChange={(e) => setQuery(e.target.value)}
                   className="w-full outline-none text-sm"
@@ -267,6 +280,11 @@ export const AddArenaForm: FC<AddArenaFormProps> = ({ onSuccess }) => {
                 )}
               </ComboboxOptions>
             </div>
+            {errors.category && (
+              <p className="text-sm text-red-500 leading-none">
+                {errors.category.message}
+              </p>
+            )}
           </div>
         </Combobox>
 
@@ -326,6 +344,7 @@ export const AddArenaForm: FC<AddArenaFormProps> = ({ onSuccess }) => {
                 <PhoneInput
                   label="Arena phone number"
                   labelClassName="text-sm"
+                  error={errors.phoneNo?.message}
                   value={{
                     phoneCountryISO2: countryField.value,
                     phoneNo: phoneField.value,

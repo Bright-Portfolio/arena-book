@@ -6,7 +6,11 @@ export const ArenaBaseSchema = phoneFieldSchema.extend({
   name: z.string().min(1, "arena name is required"),
   description: z.string().optional(),
   price: z.number("price is required").min(0, "price can't be negative"),
-  capacity: z.number().int().min(1, "capacity must be at least 1").optional(),
+  capacity: z
+    .number("maximum capacity is required")
+    .int()
+    .min(1, "capacity must be at least 1")
+    .optional(),
   openTime: z.string().min(1, "open time is required"), // HH:mm format
   closeTime: z.string().min(1, "close time is required"), // HH:mm format
   category: z.string().min(1, "category is required"),

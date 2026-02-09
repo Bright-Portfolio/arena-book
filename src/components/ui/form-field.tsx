@@ -42,7 +42,10 @@ export const FormField: FC<FormFieldProps> = ({
         {...props}
       />
       {error && (
-        <p id={`${inputId}-error`} className="text-destructive text-sm">
+        <p
+          id={`${inputId}-error`}
+          className="text-destructive text-sm leading-none"
+        >
           {error}
         </p>
       )}
