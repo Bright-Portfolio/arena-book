@@ -19,7 +19,7 @@ export async function POST(request: Request) {
     }
 
     const userId = Number(session.user.id);
-    const user = await findUserById(userId); 
+    const user = await findUserById(userId);
     if (!user?.company_id) {
       return NextResponse.json(
         {

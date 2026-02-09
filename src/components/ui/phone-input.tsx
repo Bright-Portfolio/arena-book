@@ -131,7 +131,7 @@ export const PhoneInput: FC<PhoneInputProps> = ({
                   />
                 </ComboboxButton>
 
-                <ComboboxOptions className="absolute z-50 top-full left-0 mt-1 space-y-1 max-h-48 w-40 overflow-y-auto rounded-lg bg-white border border-gray-300 shadow-lg">
+                <ComboboxOptions className="absolute z-[60] top-full left-0 mt-1 space-y-1 max-h-48 w-40 overflow-y-auto rounded-lg bg-white border border-gray-300 shadow-lg">
                   <div
                     className="sticky top-0 bg-white border-b border-gray-200 p-2"
                     onMouseDown={(e) => e.stopPropagation()}

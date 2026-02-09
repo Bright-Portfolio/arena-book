@@ -142,7 +142,7 @@ export const AddArenaForm: FC<AddArenaFormProps> = ({ onSuccess }) => {
       const response = await fetch("/api/arenas", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ data, imageUrls }),
+        body: JSON.stringify({ ...data, imageUrls }),
       });
 
       if (!response.ok) {
@@ -288,50 +288,6 @@ export const AddArenaForm: FC<AddArenaFormProps> = ({ onSuccess }) => {
           </div>
         </Combobox>
 
-        {/* Address */}
-        <Controller
-          name="address"
-          control={control}
-          render={({ field, fieldState }) => (
-            <TextareaField
-              label="Address"
-              placeholder="Enter you areana address"
-              error={fieldState.error?.message}
-              {...field}
-            />
-          )}
-        />
-
-        {/* Map */}
-        <div className="w-full h-64 border border-gray-200 rounded-md overflow-hidden">
-          <Map
-            center={position ?? [0, 0]}
-            zoom={position ? 14 : 0}
-            className="!min-h-0"
-          >
-            <MapTileLayer />
-            <MapZoomControl />
-            <MapFlyTo position={position} />
-            <MapLocateControl />
-            {position && (
-              <MapMarker
-                position={position}
-                draggable
-                eventHandlers={{
-                  dragend: (e) => {
-                    const marker = e.target;
-                    const newPos = marker.getLatLng();
-                    setPosition([newPos.lat, newPos.lng]);
-                  },
-                }}
-              />
-            )}
-          </Map>
-          {error && (
-            <span className="pt-2 text-sm text-red-500">{error.message}</span>
-          )}
-        </div>
-
         {/* Phone input */}
         <Controller
           name="phoneCountryISO2"
@@ -358,6 +314,56 @@ export const AddArenaForm: FC<AddArenaFormProps> = ({ onSuccess }) => {
             />
           )}
         />
+
+        {/* Address */}
+        <Controller
+          name="address"
+          control={control}
+          render={({ field, fieldState }) => (
+            <TextareaField
+              label="Address"
+              placeholder="Enter you areana address"
+              error={fieldState.error?.message}
+              {...field}
+            />
+          )}
+        />
+
+        {/* Map */}
+        <div
+          className="w-full h-64 border rounded-md overflow-hidden
+         border-gray-200"
+        >
+          <Map
+            center={position ?? [0, 0]}
+            zoom={position ? 14 : 0}
+            className="!min-h-0"
+          >
+            <MapTileLayer />
+            <MapZoomControl />
+            <MapFlyTo position={position} />
+            <MapLocateControl />
+            {position && (
+              <MapMarker
+                position={position}
+                draggable
+                eventHandlers={{
+                  dragend: (e) => {
+                    const marker = e.target;
+                    const newPos = marker.getLatLng();
+                    setPosition([newPos.lat, newPos.lng]);
+                  },
+                }}
+              />
+            )}
+          </Map>
+
+          {error && (
+            <p className="pt-2 text-sm text-red-500 leading-none">
+              {error.message}
+            </p>
+          )}
+        </div>
 
         {/* Upload images */}
         <div className="space-y-1">

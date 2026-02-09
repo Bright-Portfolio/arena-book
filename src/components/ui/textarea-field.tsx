@@ -21,6 +21,7 @@ export const TextareaField: FC<TextareaFieldProps> = ({
         rows={3}
         placeholder={placeholder}
         className="max-h-20 resize-none overflow-y-auto scrollbar-hide"
+        aria-invalid={!!error}
         {...props}
       />
       {error && <FieldError>{error}</FieldError>}

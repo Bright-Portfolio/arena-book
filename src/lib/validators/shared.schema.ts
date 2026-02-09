@@ -6,6 +6,7 @@ export const phoneFieldSchema = z.object({
   phoneCountryISO2: z.string().length(2),
   phoneNo: z
     .string()
+    .min(1, { message: "phone number is required" })
     .regex(/^\d*$/, { message: "phone number must contain only digits" }),
 });
 

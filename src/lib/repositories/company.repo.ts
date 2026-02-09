@@ -15,16 +15,10 @@ export async function upsertCompany(
 ): Promise<CreateCompanyOutput> {
   const result = await pool.query(
     `
-    WITH update_role AS (
-      UPDATE users
-      SET role = 'owner'
-      WHERE id = $1
-      RETURNING id
-    ),
-    upsert_company AS (
-      INSERT INTO companies (owner_id, name, country_code, phone_no, address)
+    WITH upsert_company AS (
+    INSERT INTO companies (owner_id, name, country_code, phone_no, address)
       SELECT $1, $2, $3, $4, $5
-      FROM update_role
+      WHERE EXISTS (SELECT 1 FROM users WHERE id = $1)
       ON CONFLICT (owner_id)
       DO UPDATE SET
         name = EXCLUDED.name,
@@ -32,9 +26,10 @@ export async function upsertCompany(
         phone_no = EXCLUDED.phone_no,
         address = EXCLUDED.address
       RETURNING id, owner_id as "ownerId", name, country_code as "phoneCountryISO2", phone_no as "phoneNo", address
-    ),
-    update_company_id AS (
-      UPDATE users SET company_id = (SELECT id FROM upsert_company) WHERE id = $1
+    ),  
+    update_user AS (
+      UPDATE users SET role = 'owner', company_id = (SELECT id FROM upsert_company)
+      WHERE id = $1
     )
     SELECT * FROM upsert_company
       `,

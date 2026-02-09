@@ -14,8 +14,8 @@ export const ArenaBaseSchema = phoneFieldSchema.extend({
   openTime: z.string().min(1, "open time is required"), // HH:mm format
   closeTime: z.string().min(1, "close time is required"), // HH:mm format
   category: z.string().min(1, "category is required"),
-  address: z.string().optional(),
-  imageUrl: z.array(z.url()).optional(),
+  address: z.string().min(1, "address is required"),
+  imageUrls: z.array(z.url()).optional(),
   latitude: z.number().min(-90).max(90),
   longitude: z.number().min(-180).max(180),
 });
