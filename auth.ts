@@ -58,6 +58,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           token.id = String(dbUser.id);
           token.role = dbUser.role;
           token.email = dbUser.email;
+          token.companyId = dbUser.companyId ?? undefined;
         }
       }
 
@@ -79,6 +80,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       if (session.user) {
         session.user.role = token.role;
+        session.user.companyId = token.companyId;
       }
       return session;
     },

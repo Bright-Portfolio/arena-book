@@ -10,7 +10,7 @@ export async function findUserByEmail(
 ): Promise<CreateUserOutput | null> {
   // Find existing user
   const result = await pool.query(
-    `SELECT  id, email, password, name, image_url, role, auth_provider 
+    `SELECT  id, email, password, name, image_url, role, auth_provider, company_id AS "companyId"
     FROM users 
     WHERE email = $1`,
     [email],
