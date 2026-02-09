@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -52,11 +52,8 @@ const SPORT_CATEGORIES = [
   },
 ];
 
-interface AddArenaFormProps {
-  onSuccess?: () => void;
-}
 
-export const AddArenaForm: FC<AddArenaFormProps> = ({ onSuccess }) => {
+export const AddArenaForm = () => {
   const [selectedSport, setSelectedSport] = useState<string | null>(null);
   const [query, setQuery] = useState("");
   const [position, setPosition] = useState<LatLngExpression | null>(null);

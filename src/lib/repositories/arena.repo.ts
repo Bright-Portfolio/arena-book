@@ -1,13 +1,11 @@
 import pool from "@/lib/db";
 import {
-  CreateArenaOutput,
-  CreateArenaOutputSchema,
+  type CreateArenaOutput,
   type CreateArenaInput,
 } from "../validators/arena.schema";
 
 /**
- * Upsert arena info
- *
+ * Insert arena info to database
  */
 
 export async function insertArena(
@@ -55,4 +53,26 @@ export async function insertArena(
   );
 
   return result.rows[0];
+}
+
+/**
+ * Search arena info from database
+ */
+export async function searchArenas(
+  query: string,
+  category?: string,
+): Promise<CreateArenaOutput[]> {
+  const params = [`%${query}%`];
+  let sql = `
+    SELECT * FROM arenas 
+    WHERE (name ILIKE $1 OR address ILIKE $1 OR category ILIKE $1)
+  `;
+
+  if (category) {
+    params.push(category);
+    sql += ` AND category = $${params.length}`;
+  }
+
+  const result = await pool.query<CreateArenaOutput>(sql, params);
+  return result.rows;
 }
