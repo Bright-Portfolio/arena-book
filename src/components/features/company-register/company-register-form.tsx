@@ -35,15 +35,13 @@ export const CompanyRegisterForm: FC<CompanyRegisterFormProps> = ({
   const { data: session, update } = useSession();
 
   const onSubmit = async (data: CompanyFormData) => {
-    const userId = session?.user.id;
-
-    if (!userId) {
+    if (!session?.user.id) {
       console.error("User not authenticated");
       return;
     }
 
     try {
-      const response = await fetch(`/api/company/${userId}`, {
+      const response = await fetch("/api/companies", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),

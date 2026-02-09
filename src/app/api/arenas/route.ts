@@ -1,17 +1,43 @@
 import { NextResponse } from "next/server";
 import { registerArena } from "@/services/arena.service";
 import { CreateArenaInputSchema } from "@/lib/validators/arena.schema";
+import { auth } from "@/auth";
+import { findUserById } from "@/lib/repositories/user.repo";
 
-export async function POST(
-  request: Request,
-  { params }: { params: Promise<{ companyId: string }> },
-) {
+export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const { companyId: companyIdStr } = await params;
-    const comapnyId = parseInt(companyIdStr, 10);
+    const session = await auth();
+    if (!session?.user?.id) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "unauthorized",
+          message: "You must be logged in to perform this action",
+        },
+        { status: 401 },
+      );
+    }
 
-    const validatedInput = CreateArenaInputSchema.safeParse(body);
+    const userId = Number(session.user.id);
+    const user = await findUserById(userId);
+    if (!user?.company_id) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "forbidden",
+          message: "You must have a registered company to add an arena",
+        },
+        { status: 403 },
+      );
+    }
+
+    const companyId = user.company_id;
+    const body = await request.json();
+
+    const validatedInput = CreateArenaInputSchema.safeParse({
+      ...body,
+      companyId,
+    });
     if (!validatedInput.success) {
       return NextResponse.json(
         {
@@ -23,7 +49,7 @@ export async function POST(
       );
     }
 
-    const result = await registerArena(comapnyId, validatedInput.data);
+    const result = await registerArena(companyId, validatedInput.data);
     if (!result.success) {
       return NextResponse.json(
         {

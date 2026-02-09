@@ -6,25 +6,22 @@ import {
 } from "@/lib/validators/company.schema";
 import { auth } from "@/auth";
 
-export async function POST(
-  request: Request,
-  { params }: { params: Promise<{ userId: string }> },
-) {
+export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const { userId: userIdString } = await params;
-    const userId = parseInt(userIdString, 10);
     const session = await auth();
-    if (Number(session?.user.id) !== userId) {
+    if (!session?.user?.id) {
       return NextResponse.json(
         {
           success: false,
-          error: "forbidden",
-          message: "You are not authorized to perform this action",
+          error: "unauthorized",
+          message: "You must be logged in to perform this action",
         },
-        { status: 403 },
+        { status: 401 },
       );
     }
+
+    const userId = Number(session.user.id);
+    const body = await request.json();
 
     const validatedInput = CreateCompanyInputSchema.safeParse({
       ...body,

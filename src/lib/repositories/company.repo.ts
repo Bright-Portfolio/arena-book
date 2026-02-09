@@ -16,26 +16,27 @@ export async function upsertCompany(
   const result = await pool.query(
     `
     WITH update_role AS (
-      UPDATE users 
-      SET role = 'owner' 
+      UPDATE users
+      SET role = 'owner'
       WHERE id = $1
       RETURNING id
-    )
-    INSERT INTO companies (
-        owner_id,
-        name,
-        country_code,
-        phone_no,
-        address
-      ) SELECT $1, $2, $3, $4, $5
-      FROM update_role 
+    ),
+    upsert_company AS (
+      INSERT INTO companies (owner_id, name, country_code, phone_no, address)
+      SELECT $1, $2, $3, $4, $5
+      FROM update_role
       ON CONFLICT (owner_id)
       DO UPDATE SET
-      name = EXCLUDED.name,
-      country_code = EXCLUDED.country_code,
-      phone_no = EXCLUDED.phone_no,
-      address = EXCLUDED.address
+        name = EXCLUDED.name,
+        country_code = EXCLUDED.country_code,
+        phone_no = EXCLUDED.phone_no,
+        address = EXCLUDED.address
       RETURNING id, owner_id as "ownerId", name, country_code as "phoneCountryISO2", phone_no as "phoneNo", address
+    ),
+    update_company_id AS (
+      UPDATE users SET company_id = (SELECT id FROM upsert_company) WHERE id = $1
+    )
+    SELECT * FROM upsert_company
       `,
     [userId, data.name, data.phoneCountryISO2, data.phoneNo, data.address],
   );

@@ -13,8 +13,7 @@ import { Modal } from "@/components/ui/modal";
 export default function Home() {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
-  const { data: session } = useSession();
-  const companyId = session?.user?.companyId;
+  const { data: session, update } = useSession();
   const router = useRouter();
 
   const handleBookClick = () => {
@@ -34,8 +33,13 @@ export default function Home() {
       return;
     }
 
-    router.push(`/arena/${companyId}/add`);
+    router.push("/arena/add");
+  };
+
+  const handleCompanyRegisterSuccess = async () => {
     setShowRegisterModal(false);
+    await update();
+    router.push("/arena/add");
   };
   return (
     <div className="flex min-h-screen items-center justify-center">
@@ -69,9 +73,7 @@ export default function Home() {
             onClose={() => setShowRegisterModal(false)}
             title="Company Register Form"
           >
-            <CompanyRegisterForm
-              onSuccess={() => setShowRegisterModal(false)}
-            />
+            <CompanyRegisterForm onSuccess={handleCompanyRegisterSuccess} />
           </Modal>
         </div>
       </main>

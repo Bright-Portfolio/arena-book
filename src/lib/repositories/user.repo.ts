@@ -24,7 +24,7 @@ export async function findUserByEmail(
 export async function findUserById(userId: number) {
   const result = await pool.query(
     `
-    SELECT id, role
+    SELECT id, role, company_id
     FROM users
     WHERE id = $1`,
     [userId],

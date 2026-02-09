@@ -27,7 +27,6 @@ import { ArenaFormData, ArenaFormSchema } from "@/lib/validators/arena.schema";
 import { useMap } from "react-leaflet";
 import { PhoneInput } from "@/components/ui/phone-input";
 import { ImageUploadArea } from "@/components/ui/image-upload-area";
-import { useParams } from "next/navigation";
 import type { LatLngExpression } from "leaflet";
 
 const SPORT_CATEGORIES = [
@@ -54,7 +53,7 @@ const SPORT_CATEGORIES = [
 ];
 
 interface AddArenaFormProps {
-  onSuccess: () => void;
+  onSuccess?: () => void;
 }
 
 export const AddArenaForm: FC<AddArenaFormProps> = ({ onSuccess }) => {
@@ -72,6 +71,7 @@ export const AddArenaForm: FC<AddArenaFormProps> = ({ onSuccess }) => {
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: zodResolver(ArenaFormSchema),
+    mode: "onChange",
     defaultValues: {
       name: "",
       description: "",
@@ -86,8 +86,6 @@ export const AddArenaForm: FC<AddArenaFormProps> = ({ onSuccess }) => {
       phoneNo: "",
     },
   });
-  const { companyId } = useParams<{ companyId: string }>();
-
   const address = watch("address");
 
   const sportFiltered = SPORT_CATEGORIES.map((group) => ({
@@ -140,7 +138,7 @@ export const AddArenaForm: FC<AddArenaFormProps> = ({ onSuccess }) => {
 
   const onSubmit = async (data: ArenaFormData) => {
     try {
-      const response = await fetch(`/api/arena/add/${companyId}`, {
+      const response = await fetch("/api/arenas", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ data, imageUrls }),
@@ -152,7 +150,7 @@ export const AddArenaForm: FC<AddArenaFormProps> = ({ onSuccess }) => {
         return;
       }
 
-      onSuccess();
+      // onSuccess();
     } catch (error) {
       console.error("Error submitting form:", error);
       setError("root", { message: "Network error. Please try again." });
@@ -167,14 +165,23 @@ export const AddArenaForm: FC<AddArenaFormProps> = ({ onSuccess }) => {
         className="flex flex-col justify-center items-stretch w-full space-y-4"
       >
         {/* Name */}
-        <FormField label="Name" {...register("name")} />
+        <FormField
+          label="Name"
+          error={errors.name?.message}
+          {...register("name")}
+        />
         {/* Description */}
-        <FormField label="Description" {...register("description")} />
+        <FormField
+          label="Description"
+          error={errors.description?.message}
+          {...register("description")}
+        />
         {/* Price */}
         <FormField
           label="Price per hour"
           type="number"
           min={0}
+          error={errors.price?.message}
           {...register("price", { valueAsNumber: true })}
         />
         {/* Maximum capacity */}
@@ -182,11 +189,13 @@ export const AddArenaForm: FC<AddArenaFormProps> = ({ onSuccess }) => {
           label="Maximum capacity"
           type="number"
           min={0}
+          error={errors.capacity?.message}
           {...register("capacity", { valueAsNumber: true })}
         />
 
         {/* Time picker */}
         <div className="flex flex-row justify-between items-center gap-2">
+          {/* open time */}
           <div className="flex flex-1 flex-col gap-1">
             <Label>Open-time</Label>
             <Input
@@ -195,7 +204,9 @@ export const AddArenaForm: FC<AddArenaFormProps> = ({ onSuccess }) => {
               className=""
               {...register("openTime")}
             />
+            <p className="text-sm text-red-500"> {errors.openTime?.message}</p>
           </div>
+          {/* close time */}
           <div className="flex flex-1 flex-col gap-1">
             <Label>Close-time</Label>
             <Input
@@ -204,6 +215,7 @@ export const AddArenaForm: FC<AddArenaFormProps> = ({ onSuccess }) => {
               className=""
               {...register("closeTime")}
             />
+            <p className="text-sm text-red-500"> {errors.openTime?.message}</p>
           </div>
         </div>
 

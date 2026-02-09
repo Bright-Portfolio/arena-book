@@ -67,6 +67,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const dbUser = await findUserByEmail(token.email as string);
         if (dbUser) {
           token.role = dbUser.role;
+          token.companyId = dbUser.companyId ?? undefined;
         }
       }
 
