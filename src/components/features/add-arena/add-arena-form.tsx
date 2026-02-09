@@ -342,7 +342,14 @@ export const AddArenaForm: FC<AddArenaFormProps> = ({ onSuccess }) => {
             <MapTileLayer />
             <MapZoomControl />
             <MapFlyTo position={position} />
-            <MapLocateControl />
+            <MapLocateControl
+              onLocationFound={(location) => {
+                const pos = location.latlng;
+                setPosition([pos.lat, pos.lng]);
+                setValue("latitude", pos.lat);
+                setValue("longitude", pos.lng);
+              }}
+            />
             {position && (
               <MapMarker
                 position={position}
