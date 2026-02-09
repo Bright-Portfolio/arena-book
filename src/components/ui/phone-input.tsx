@@ -106,7 +106,7 @@ export const PhoneInput: FC<PhoneInputProps> = ({
       {label && (
         <label
           htmlFor="phone-input"
-          className={cn("text-xs text-black", labelClassName)}
+          className={cn("text-sm text-black", labelClassName)}
         >
           {label}
         </label>
@@ -174,13 +174,15 @@ export const PhoneInput: FC<PhoneInputProps> = ({
         <input
           type="tel"
           value={value.phoneNo}
-          className="flex-1 px-2 py-1 w-full border border-gray-300 rounded-lg rounded-l-none outline-none focus:ring-[1px] ring-input"
+          className={`flex-1 px-2 py-1 w-full border rounded-lg rounded-l-none outline-none focus:ring-[1px] ring-input 
+            ${error ? "border-red-500" : "border-gray-300"}
+            `}
           placeholder="Enter phone number"
           onChange={handlePhoneChange}
         />
       </div>
 
-      {error && <p className="">{error}</p>}
+      {error && <p className="text-sm text-red-500 leading-none">{error}</p>}
     </div>
   );
 };

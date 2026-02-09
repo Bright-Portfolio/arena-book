@@ -71,7 +71,7 @@ export const CompanyRegisterForm: FC<CompanyRegisterFormProps> = ({
         </h3>
       )}
       <div className="w-full">
-        <label htmlFor="company-name-input" className="text-xs text-black">
+        <label htmlFor="company-name-input" className="text-sm text-black">
           company name
         </label>
         <input
@@ -79,8 +79,13 @@ export const CompanyRegisterForm: FC<CompanyRegisterFormProps> = ({
           type="text"
           placeholder="Enter your company name"
           {...register("name")}
-          className="px-2 py-1 w-full border border-gray-300 rounded-lg outline-none focus:border-black"
+          className={`px-2 py-1 w-full border rounded-lg outline-none focus:border-black ${errors.name ? "border-red-500" : "border-gray-300"}`}
         />
+        {errors.name && (
+          <p className="text-sm text-red-500 leading-none">
+            {errors.name.message}
+          </p>
+        )}
       </div>
 
       <Controller
@@ -93,6 +98,7 @@ export const CompanyRegisterForm: FC<CompanyRegisterFormProps> = ({
             render={({ field: phoneField }) => (
               <PhoneInput
                 label="company phone number"
+                error={errors.phoneNo?.message}
                 value={{
                   phoneCountryISO2: countryField.value,
                   phoneNo: phoneField.value,
@@ -107,16 +113,21 @@ export const CompanyRegisterForm: FC<CompanyRegisterFormProps> = ({
         )}
       />
 
-      <div className="w-full">
-        <label htmlFor="address-input" className="text-xs text-black">
+      <div className="flex flex-col w-full">
+        <label htmlFor="address-input" className="text-sm text-black">
           address
         </label>
         <textarea
           id="address-input"
           placeholder="Enter your company address"
           {...register("address")}
-          className="px-2 py-1 w-full border border-gray-300 rounded-lg  focus:border-black resize-none outline-none"
+          className={`px-2 py-1 w-full border rounded-lg focus:border-black resize-none outline-none ${errors.address ? "border-red-500" : "border-gray-300"}`}
         />
+        {errors.address && (
+          <p className="text-sm text-red-500 leading-none">
+            {errors.address.message}
+          </p>
+        )}
       </div>
 
       <button
