@@ -91,6 +91,7 @@ export const AddArenaForm = () => {
 
         if (result.field) {
           setError(result.field, { message: result.message });
+          return;
         } else {
           setError("root", {
             message: result.message || "Something went wrong",
