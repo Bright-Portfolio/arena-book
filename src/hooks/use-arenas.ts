@@ -10,7 +10,7 @@ interface ArenaResponse {
 
 export function useArena(page = 1, limit = 10, category?: string) {
   return useQuery<ArenaResponse>({
-    queryKey: ["arenas"],
+    queryKey: ["arenas", page, category],
     queryFn: async () => {
       const params = new URLSearchParams({
         page: String(page),
