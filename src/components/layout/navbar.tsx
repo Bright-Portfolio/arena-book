@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { PlusIcon } from "@heroicons/react/24/outline";
+import { PlusIcon, HomeIcon } from "@heroicons/react/24/outline";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { AvatarButton } from "../ui/avatar-button";
 import { Modal } from "../ui/modal";
 import { AuthForm } from "../features/auth";
@@ -14,6 +14,7 @@ export const Navbar = () => {
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const { data: session, update } = useSession();
   const router = useRouter();
+  const pathname = usePathname();
 
   const handlePostClick = () => {
     if (!session) {
@@ -38,17 +39,31 @@ export const Navbar = () => {
   return (
     <>
       <nav className="fixed top-0 z-50 flex flex-row mx-auto p-4 w-full bg-transparent items-center justify-between">
+        {/* Home button */}
+        {pathname !== "/" && (
+          <button
+            type="button"
+            aria-label="home-button"
+            onClick={() => router.push("/")}
+            className="p-1 cursor-pointer"
+          >
+            <HomeIcon className="size-5 stroke-2" />
+          </button>
+        )}
+
         {/* Right side navigation */}
         <div className="flex justify-end items-center gap-2 w-full text-sm">
           {/* Arena Listing */}
-          <button
-            type="button"
-            onClick={handlePostClick}
-            className="flex flex-row justify-center items-center  gap-1 px-2 py-1.5 border border-gray-300 rounded-full text-sm cursor-pointer"
-          >
-            <PlusIcon className="w-5 h-5 stroke-2" />
-            Add arena
-          </button>
+          {session && (
+            <button
+              type="button"
+              onClick={handlePostClick}
+              className="flex flex-row justify-center items-center  gap-1 px-2 py-1.5 border border-gray-300 rounded-full text-sm cursor-pointer"
+            >
+              <PlusIcon className="w-5 h-5 stroke-2" />
+              Add arena
+            </button>
+          )}
           {session ? (
             <AvatarButton />
           ) : (
