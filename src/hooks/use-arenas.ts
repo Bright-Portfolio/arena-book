@@ -8,7 +8,7 @@ interface ArenaResponse {
   hasMore: boolean;
 }
 
-export function useArena(page = 1, limit = 10, category?: string) {
+export function useArenas(page = 1, limit = 10, category?: string) {
   return useQuery<ArenaResponse>({
     queryKey: ["arenas", page, category],
     queryFn: async () => {

@@ -18,29 +18,7 @@ import { TextareaField } from "@/components/ui/textarea-field";
 import { ArenaFormData, ArenaFormSchema } from "@/lib/validators/arena.schema";
 import { PhoneInput } from "@/components/ui/phone-input";
 import { ImageUploadArea } from "@/components/ui/image-upload-area";
-
-const SPORT_CATEGORIES = [
-  {
-    category: "Team Sports",
-    items: ["Football (Soccer)", "Futsal", "Volleyball", "Basketball"],
-  },
-  {
-    category: "Combat Sports",
-    items: ["Muay Thai", "Boxing", "MMA"],
-  },
-  {
-    category: "Racquet Sports",
-    items: ["Badminton", "Table Tennis", "Tennis"],
-  },
-  {
-    category: "Individual & Fitness",
-    items: ["Running", "Cycling", "Swimming", "Gym / Fitness"],
-  },
-  {
-    category: "Precision & Leisure",
-    items: ["Golf"],
-  },
-];
+import { SPORT_CATEGORIES } from "@/lib/constants/sports";
 
 export const AddArenaForm = () => {
   const [selectedSport, setSelectedSport] = useState<string | null>(null);
