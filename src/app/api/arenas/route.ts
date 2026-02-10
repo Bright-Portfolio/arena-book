@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
-import { registerArena } from "@/services/arena.service";
+import { NextRequest, NextResponse } from "next/server";
+import { getArenas, registerArena } from "@/services/arena.service";
 import { CreateArenaInputSchema } from "@/lib/validators/arena.schema";
 import { auth } from "@/auth";
 import { findCompanyByOwnerId } from "@/lib/repositories/company.repo";
@@ -80,6 +80,36 @@ export async function POST(request: Request) {
         data: null,
       },
       { status: 500 },
+    );
+  }
+}
+
+export async function GET(request: NextRequest) {
+  try {
+    const searchParams = request.nextUrl.searchParams;
+    const page = Number(searchParams.get("page") ?? 1);
+    const limit = Number(searchParams.get("limit") ?? 10);
+    const category = searchParams.get("categpry") ?? undefined;
+
+    const result = await getArenas(page, limit, category);
+
+    return NextResponse.json({
+      success: true,
+      data: result.data,
+      totalCount: result.totalCount,
+      hasMore: result.hasMore,
+    });
+  } catch (error) {
+    const errorMessage =
+      error instanceof Error ? error.message : "Internal server error";
+    return NextResponse.json(
+      {
+        success: false,
+        error: errorMessage,
+      },
+      {
+        status: 500,
+      },
     );
   }
 }

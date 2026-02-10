@@ -1,5 +1,6 @@
 import {
   findArenaByName,
+  findArenas,
   insertArena,
   searchArenas,
 } from "@/lib/repositories/arena.repo";
@@ -34,6 +35,17 @@ export async function registerArena(
     success: true,
     data: result,
   };
+}
+
+export async function getArenas(
+  page: number,
+  limit: number,
+  category?: string,
+) {
+  const { data, totalCount } = await findArenas(page, limit, category);
+  const hasMore = page * limit < totalCount;
+
+  return { data, totalCount, hasMore };
 }
 
 // Search arenas with category (will add the filter func in the future)
