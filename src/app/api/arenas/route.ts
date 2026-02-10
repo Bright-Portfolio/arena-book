@@ -56,6 +56,7 @@ export async function POST(request: Request) {
           success: false,
           error: "register_failed",
           message: result.error || "Failed to register arena",
+          field: result.field,
         },
         { status: 400 },
       );

@@ -23,14 +23,12 @@ export async function insertArena(
         category,
         address,
         image_urls,
-        latitude,
-        longitude,
         phone_country_code,
         phone_no,
         capacity,
         company_id
       ) VALUES (
-        $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14
+        $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12
       )
       RETURNING *
     `,
@@ -43,8 +41,6 @@ export async function insertArena(
       data.category,
       data.address,
       data.imageUrls,
-      data.latitude,
-      data.longitude,
       data.phoneCountryISO2,
       data.phoneNo,
       data.capacity,
@@ -53,6 +49,16 @@ export async function insertArena(
   );
 
   return result.rows[0];
+}
+
+export async function findArenaByName(
+  name: string,
+): Promise<{ name: string } | null> {
+  const result = await pool.query<{ name: string }>(
+    `SELECT name FROM arenas WHERE name = $1`,
+    [name],
+  );
+  return result.rows[0] || null;
 }
 
 /**

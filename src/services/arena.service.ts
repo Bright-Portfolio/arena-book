@@ -1,13 +1,16 @@
-import { insertArena, searchArenas } from "@/lib/repositories/arena.repo";
+import {
+  findArenaByName,
+  insertArena,
+  searchArenas,
+} from "@/lib/repositories/arena.repo";
 import {
   CreateArenaInput,
   CreateArenaOutput,
 } from "@/lib/validators/arena.schema";
-import { findCompanyById } from "@/lib/repositories/company.repo";
-
 export interface RegisterArenaResult {
   success: boolean;
   error?: string;
+  field?: string;
   data: CreateArenaOutput | null;
 }
 
@@ -16,13 +19,15 @@ export async function registerArena(
   companyId: number,
   data: CreateArenaInput,
 ): Promise<RegisterArenaResult> {
-  const company = await findCompanyById(companyId);
-  if (!company)
+  const existing = await findArenaByName(data.name);
+  if (existing)
     return {
       success: false,
-      error: "Company not found",
+      error: "Arena name already taken",
+      field: "name",
       data: null,
     };
+
   const result = await insertArena(companyId, data);
 
   return {

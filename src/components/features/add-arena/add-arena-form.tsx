@@ -88,8 +88,15 @@ export const AddArenaForm = () => {
 
       if (!response.ok) {
         const result = await response.json();
-        setError("root", { message: result.message || "Something went wrong" });
-        return;
+
+        if (result.field) {
+          setError(result.field, { message: result.message });
+        } else {
+          setError("root", {
+            message: result.message || "Something went wrong",
+          });
+          return;
+        }
       }
 
       // onSuccess();

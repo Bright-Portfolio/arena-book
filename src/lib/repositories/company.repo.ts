@@ -67,13 +67,3 @@ export async function findCompanyByOwnerId(userId: number) {
   return result.rows[0] || null;
 }
 
-export async function findCompanyById(companyId: number) {
-  const result = await pool.query(
-    `
-      SELECT * FROM companies WHERE id = $1
-    `,
-    [companyId],
-  );
-
-  return result.rows[0];
-}
