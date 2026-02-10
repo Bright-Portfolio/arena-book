@@ -25,7 +25,7 @@ export async function insertArena(
         image_urls,
         latitude,
         longitude,
-        country_code,
+        phone_country_code,
         phone_no,
         capacity,
         company_id

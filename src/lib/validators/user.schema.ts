@@ -8,7 +8,6 @@ export const CreateUserInputSchema = z.object({
   password: z.string().optional(),
   name: z.string().optional(),
   imageUrl: z.string().optional(),
-  companyId: z.number().optional(),
   authProvider: z.enum(["credentials", "google"]),
 });
 
@@ -20,7 +19,6 @@ export type CreateUserOutput = {
   password: string | null;
   name: string;
   imageUrl: string | null;
-  companyId: number | null;
   role: UserRole;
   authProvider: AuthProviderType;
 };

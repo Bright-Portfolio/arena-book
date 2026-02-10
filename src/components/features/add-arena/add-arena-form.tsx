@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,23 +11,13 @@ import {
   ComboboxOption,
   ComboboxOptions,
 } from "@headlessui/react";
-import {
-  Map,
-  MapTileLayer,
-  MapMarker,
-  MapZoomControl,
-  MapLocateControl,
-} from "@/components/ui/map";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { usePlaceSearch } from "@/components/ui/place-autocomplete";
 import { CheckIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 import { FormField } from "@/components/ui/form-field";
 import { TextareaField } from "@/components/ui/textarea-field";
 import { ArenaFormData, ArenaFormSchema } from "@/lib/validators/arena.schema";
-import { useMap } from "react-leaflet";
 import { PhoneInput } from "@/components/ui/phone-input";
 import { ImageUploadArea } from "@/components/ui/image-upload-area";
-import type { LatLngExpression } from "leaflet";
 
 const SPORT_CATEGORIES = [
   {
@@ -52,18 +42,15 @@ const SPORT_CATEGORIES = [
   },
 ];
 
-
 export const AddArenaForm = () => {
   const [selectedSport, setSelectedSport] = useState<string | null>(null);
   const [query, setQuery] = useState("");
-  const [position, setPosition] = useState<LatLngExpression | null>(null);
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const {
     handleSubmit,
     register,
     setError,
     control,
-    watch,
     setValue,
     formState: { errors, isSubmitting },
   } = useForm({
@@ -78,13 +65,11 @@ export const AddArenaForm = () => {
       closeTime: "18:00",
       category: "",
       address: "",
-      latitude: 0,
-      longitude: 0,
       phoneCountryISO2: "TH",
       phoneNo: "",
+      imageUrls: [] as string[],
     },
   });
-  const address = watch("address");
 
   const sportFiltered = SPORT_CATEGORIES.map((group) => ({
     ...group,
@@ -92,47 +77,6 @@ export const AddArenaForm = () => {
       item.toLocaleLowerCase().includes(query.toLowerCase()),
     ),
   }));
-
-  const formatedAdress = (address ?? "").trim().replace(/\s+/g, "");
-
-  // Auto search from address field
-  const { results, error } = usePlaceSearch({
-    query: formatedAdress ?? "",
-    debounceMs: 800,
-    limit: 1,
-  });
-
-  //
-  useEffect(() => {
-    if (results.length > 0) {
-      const [lng, lat] = results[0].geometry.coordinates;
-      setPosition([lat, lng]);
-      setValue("latitude", lat);
-      setValue("longitude", lng);
-    }
-  }, [results, setValue]);
-
-  // reset map when address field was clear
-  useEffect(() => {
-    if (address === "") {
-      setPosition(null);
-    }
-  }, [address]);
-
-  // Fly to the location when the address field have value
-  function MapFlyTo({ position }: { position: LatLngExpression | null }) {
-    const map = useMap();
-
-    useEffect(() => {
-      if (position) {
-        map.flyTo(position, 16);
-      } else {
-        map.flyTo([0, 0], 0);
-      }
-    }, [map, position]);
-
-    return null;
-  }
 
   const onSubmit = async (data: ArenaFormData) => {
     try {
@@ -326,52 +270,12 @@ export const AddArenaForm = () => {
           )}
         />
 
-        {/* Map */}
-        <div
-          className="w-full h-64 border rounded-md overflow-hidden
-         border-gray-200"
-        >
-          <Map
-            center={position ?? [0, 0]}
-            zoom={position ? 14 : 0}
-            className="!min-h-0"
-          >
-            <MapTileLayer />
-            <MapZoomControl />
-            <MapFlyTo position={position} />
-            <MapLocateControl
-              onLocationFound={(location) => {
-                const pos = location.latlng;
-                setPosition([pos.lat, pos.lng]);
-                setValue("latitude", pos.lat);
-                setValue("longitude", pos.lng);
-              }}
-            />
-            {position && (
-              <MapMarker
-                position={position}
-                draggable
-                eventHandlers={{
-                  dragend: (e) => {
-                    const marker = e.target;
-                    const newPos = marker.getLatLng();
-                    setPosition([newPos.lat, newPos.lng]);
-                  },
-                }}
-              />
-            )}
-          </Map>
-
-          {error && (
-            <p className="pt-2 text-sm text-red-500 leading-none">
-              {error.message}
-            </p>
-          )}
-        </div>
-
         {/* Upload images */}
         <div className="space-y-1">
-          <ImageUploadArea imageUrls={imageUrls} onChange={setImageUrls} />
+          <ImageUploadArea
+            imageUrls={imageUrls}
+            onChange={(urls) => setImageUrls(urls)}
+          />
         </div>
 
         {/* Root error message */}

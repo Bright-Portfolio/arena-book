@@ -16,8 +16,6 @@ export const ArenaBaseSchema = phoneFieldSchema.extend({
   category: z.string().min(1, "category is required"),
   address: z.string().min(1, "address is required"),
   imageUrls: z.array(z.url()).optional(),
-  latitude: z.number().min(-90).max(90),
-  longitude: z.number().min(-180).max(180),
 });
 
 // Form schema — superRefine applied last, only for useForm

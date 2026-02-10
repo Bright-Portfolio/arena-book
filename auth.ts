@@ -9,6 +9,7 @@ import { LoginSchema } from "./src/lib/validators/auth.schema";
 import type { Session } from "next-auth";
 import type { JWT } from "next-auth/jwt";
 import { findUserByEmail } from "@/lib/repositories/user.repo";
+import { findCompanyByOwnerId } from "@/lib/repositories/company.repo";
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
@@ -58,7 +59,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           token.id = String(dbUser.id);
           token.role = dbUser.role;
           token.email = dbUser.email;
-          token.companyId = dbUser.companyId ?? undefined;
+          const company = await findCompanyByOwnerId(dbUser.id);
+          token.companyId = company?.id ?? undefined;
         }
       }
 
@@ -67,7 +69,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const dbUser = await findUserByEmail(token.email as string);
         if (dbUser) {
           token.role = dbUser.role;
-          token.companyId = dbUser.companyId ?? undefined;
+          const company = await findCompanyByOwnerId(dbUser.id);
+          token.companyId = company?.id ?? undefined;
         }
       }
 

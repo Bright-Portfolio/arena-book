@@ -10,8 +10,8 @@ export async function findUserByEmail(
 ): Promise<CreateUserOutput | null> {
   // Find existing user
   const result = await pool.query(
-    `SELECT  id, email, password, name, image_url, role, auth_provider, company_id AS "companyId"
-    FROM users 
+    `SELECT  id, email, password, name, image_url, role, auth_provider
+    FROM users
     WHERE email = $1`,
     [email],
   );
@@ -24,7 +24,7 @@ export async function findUserByEmail(
 export async function findUserById(userId: number) {
   const result = await pool.query(
     `
-    SELECT id, role, company_id
+    SELECT id, role
     FROM users
     WHERE id = $1`,
     [userId],
