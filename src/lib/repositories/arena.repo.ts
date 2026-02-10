@@ -40,7 +40,7 @@ export async function insertArena(
       data.closeTime,
       data.category,
       data.address,
-      data.imageUrls,
+      JSON.stringify(data.imageUrls ?? []),
       data.phoneCountryISO2,
       data.phoneNo,
       data.capacity,
@@ -83,11 +83,28 @@ export async function findArenas(
 
   params.push(limit, offset);
   const sql = `
-    SELECT * FROM arenas
+    SELECT
+      id,
+      name,
+      description,
+      price,
+      capacity,
+      open_time AS "openTime",
+      close_time AS "closeTime",
+      category,
+      address,
+      image_urls AS "imageUrls",
+      phone_country_code AS "phoneCountryISO2",
+      phone_no AS "phoneNo",
+      company_id AS "companyId",
+      created_at AS "createdAt",
+      updated_at AS "updatedAt",
+      deleted_at AS "deletedAt"
+    FROM arenas
     ${where}
     ORDER BY created_at DESC
     LIMIT $${params.length - 1} OFFSET $${params.length}
-  `
+  `;
 
   const result = await pool.query(sql, params);
 
