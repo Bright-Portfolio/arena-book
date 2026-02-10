@@ -1,4 +1,4 @@
-import { insertArena } from "@/lib/repositories/arena.repo";
+import { insertArena, searchArenas } from "@/lib/repositories/arena.repo";
 import {
   CreateArenaInput,
   CreateArenaOutput,
@@ -11,6 +11,7 @@ export interface RegisterArenaResult {
   data: CreateArenaOutput | null;
 }
 
+// Create new arena
 export async function registerArena(
   companyId: number,
   data: CreateArenaInput,
@@ -30,3 +31,12 @@ export async function registerArena(
   };
 }
 
+// Search arenas with category (will add the filter func in the future)
+export async function searchArenasWithCategory(
+  query: string,
+  category?: string,
+): Promise<CreateArenaOutput[]> {
+  const result = await searchArenas(query, category);
+
+  return result;
+}
