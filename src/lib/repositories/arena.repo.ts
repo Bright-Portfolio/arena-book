@@ -62,6 +62,49 @@ export async function findArenaByName(
 }
 
 /**
+ * Find arenas by category
+ */
+export async function findArenas(
+  page: number,
+  limit: number,
+  category?: string,
+) {
+  const offset = (page - 1) * limit;
+
+  const params: (string | number)[] = [];
+  let sql = `SELECT * FROM arenas`;
+
+  if (category) {
+    params.push(category);
+    sql += `WHERE category = $${params.length}`;
+  }
+
+  params.push(limit);
+  sql += `ORDER BY created_at DESC LIMIT $${params.length}`;
+
+  params.push(offset);
+  sql += `OFFSET $${params.length}`;
+
+  const result = await pool.query(sql, params);
+
+  const countParams: string[] = [];
+  let countSql = `SELECT COUNT(*) FROM arenas`;
+
+  if (category) {
+    countParams.push(category);
+    countSql += `WHERE category = $1`;
+  }
+
+  const countResult = await pool.query(countSql, countParams);
+  const totalCount = Number(countResult.rows[0].count);
+
+  return {
+    data: result.rows,
+    totalCount,
+  };
+}
+
+/**
  * Search arena info from database
  */
 export async function searchArenas(
