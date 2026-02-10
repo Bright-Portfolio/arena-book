@@ -72,27 +72,31 @@ export async function findArenas(
   const offset = (page - 1) * limit;
 
   const params: (string | number)[] = [];
-  let sql = `SELECT * FROM arenas`;
+  const conditions: string[] = [];
 
   if (category) {
     params.push(category);
-    sql += `WHERE category = $${params.length}`;
+    conditions.push(`category = $${params.length}`);
   }
 
-  params.push(limit);
-  sql += `ORDER BY created_at DESC LIMIT $${params.length}`;
+  const where = conditions.length ? `WHERE ${conditions.join(" AND ")}` : "";
 
-  params.push(offset);
-  sql += `OFFSET $${params.length}`;
+  params.push(limit, offset);
+  const sql = `
+    SELECT * FROM arenas
+    ${where}
+    ORDER BY created_at DESC
+    LIMIT $${params.length - 1}
+  `
 
   const result = await pool.query(sql, params);
 
   const countParams: string[] = [];
-  let countSql = `SELECT COUNT(*) FROM arenas`;
+  let countSql = ` SELECT COUNT(*) FROM arenas`;
 
   if (category) {
     countParams.push(category);
-    countSql += `WHERE category = $1`;
+    countSql += ` WHERE category = $1`;
   }
 
   const countResult = await pool.query(countSql, countParams);

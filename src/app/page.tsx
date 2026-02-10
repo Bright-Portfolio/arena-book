@@ -8,7 +8,7 @@ export default function HomePage() {
   const router = useRouter();
 
   const handleBookClick = () => {
-    router.push("/search");
+    router.push("/explore");
   }
 
   return (
