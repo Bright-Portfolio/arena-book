@@ -86,7 +86,7 @@ export async function findArenas(
     SELECT * FROM arenas
     ${where}
     ORDER BY created_at DESC
-    LIMIT $${params.length - 1}
+    LIMIT $${params.length - 1} OFFSET $${params.length}
   `
 
   const result = await pool.query(sql, params);

@@ -10,6 +10,7 @@ import {
   ListboxOptions,
 } from "@headlessui/react";
 import { CheckIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
+import { ArenaCard } from "@/components/features/arena-card/arena-card";
 
 export default function ExplorePage() {
   const [page, setPage] = useState(1);
@@ -67,15 +68,14 @@ export default function ExplorePage() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {data.data.map((arena) => (
-            <div
+            <ArenaCard
               key={arena.id}
-              className="border rounded-lg p-4 space-y-1 hover:shadow-md transition-shadow"
-            >
-              <h2 className="font-semibold text-lg">{arena.name}</h2>
-              <p className="text-sm text-gray-500">{arena.category}</p>
-              <p className="text-sm">{arena.address}</p>
-              <p className="text-sm font-medium">฿{arena.price}/hr</p>
-            </div>
+              name={arena.name}
+              category={arena.category}
+              address={arena.address}
+              price={arena.price}
+              imageUrl={arena.imageUrls?.[0]}
+            />
           ))}
         </div>
       )}
