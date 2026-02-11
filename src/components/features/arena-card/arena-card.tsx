@@ -36,7 +36,7 @@ export const ArenaCard = ({
       <div className="relative z-0 h-32 w-full rounded-sm bg-gray-100 overflow-hidden">
         {showEditButton && (
           <Menu as="div" className="relative flex justify-end">
-            <MenuButton className="z-50 cursor-pointer p-1">
+            <MenuButton className="z-50 cursor-pointer p-1 outline-none">
               <EllipsisVerticalIcon className="size-6 stroke-2 text-gray-300" />
             </MenuButton>
             <MenuItems
