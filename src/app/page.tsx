@@ -9,27 +9,26 @@ export default function HomePage() {
 
   const handleBookClick = () => {
     router.push("/explore");
-  }
+  };
 
   return (
-    <div className="flex min-h-screen items-center justify-center">
-      <main className="flex min-h-screen w-full flex-col items-center justify-between">
-        <div className="relative flex flex-col items-center justify-between w-full h-screen pt-20 pb-4 pr-4 pl-4">
-          {/* Slide Banner Background image */}
-          <BannerSlider />
-          {/* booking button */}
-          <button
-            type="button"
-            onClick={handleBookClick}
-            className="inline-flex flex-row items-center gap-2 px-2 py-1.5 border border-gray-300 rounded-full text-white bg-black cursor-pointer"
-          >
-            Book Now
-            <div className="p-2 rounded-full bg-white">
-              <ArrowUpRightIcon className="w-3 h-3 stroke-2 text-black" />
-            </div>
-          </button>
+    <div
+      className="relative flex flex-col items-center justify-start gap-4
+         w-full h-screen pb-4 pr-4 pl-4"
+    >
+      {/* Slide Banner Background image */}
+      <BannerSlider />
+      {/* booking button */}
+      <button
+        type="button"
+        onClick={handleBookClick}
+        className="inline-flex flex-row items-center gap-2 px-2 py-1.5 border border-gray-300 rounded-full text-white bg-black cursor-pointer"
+      >
+        Book Now
+        <div className="p-2 rounded-full bg-white">
+          <ArrowUpRightIcon className="w-3 h-3 stroke-2 text-black" />
         </div>
-      </main>
+      </button>
     </div>
   );
 }

@@ -126,6 +126,15 @@ export async function findArenas(
 }
 
 /**
+ * Update arena info
+ */
+export async function updateArena(arenaId: number) {
+  const result = await pool.query(`
+      
+    `)
+}
+
+/**
  * Search arena info from database
  */
 export async function searchArenas(

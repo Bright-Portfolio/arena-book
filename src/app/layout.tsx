@@ -39,7 +39,7 @@ export default function RootLayout({
         <SessionProvider>
           <QueryProvider>
             <Navbar />
-            {children}
+            <main className="pt-16">{children}</main>
           </QueryProvider>
         </SessionProvider>
       </body>
