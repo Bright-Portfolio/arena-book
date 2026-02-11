@@ -19,22 +19,27 @@ import { ArenaFormData, ArenaFormSchema } from "@/lib/validators/arena.schema";
 import { PhoneInput } from "@/components/ui/phone-input";
 import { ImageUploadArea } from "@/components/ui/image-upload-area";
 import { SPORT_CATEGORIES } from "@/lib/constants/sports";
+import { useRouter } from "next/navigation";
 
-export const AddArenaForm = () => {
-  const [selectedSport, setSelectedSport] = useState<string | null>(null);
+interface AddArenaFormProps {
+  arenaId?: number;
+  initialData?: ArenaFormData;
+}
+
+export const AddArenaForm = ({ arenaId, initialData }: AddArenaFormProps) => {
+  const isEditMode = !!arenaId;
   const [query, setQuery] = useState("");
-  const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const [isUploading, setIsUploading] = useState(false);
   const {
     handleSubmit,
     register,
     setError,
     control,
-    setValue,
     formState: { errors, isSubmitting },
-  } = useForm({
+  } = useForm<ArenaFormData>({
     resolver: zodResolver(ArenaFormSchema),
     mode: "onChange",
-    defaultValues: {
+    defaultValues: initialData ?? {
       name: "",
       description: "",
       price: undefined,
@@ -45,7 +50,7 @@ export const AddArenaForm = () => {
       address: "",
       phoneCountryISO2: "TH",
       phoneNo: "",
-      imageUrls: [] as string[],
+      imageUrls: [],
     },
   });
 
@@ -56,12 +61,17 @@ export const AddArenaForm = () => {
     ),
   }));
 
+  const router = useRouter();
+
   const onSubmit = async (data: ArenaFormData) => {
     try {
-      const response = await fetch("/api/arenas", {
-        method: "POST",
+      const url = isEditMode ? `/api/arenas/${arenaId}` : "/api/arenas";
+      const method = isEditMode ? "PUT" : "POST";
+
+      const response = await fetch(url, {
+        method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...data, imageUrls }),
+        body: JSON.stringify(data),
       });
 
       if (!response.ok) {
@@ -78,7 +88,7 @@ export const AddArenaForm = () => {
         }
       }
 
-      // onSuccess();
+      router.push("/manage");
     } catch (error) {
       console.error("Error submitting form:", error);
       setError("root", { message: "Network error. Please try again." });
@@ -87,7 +97,9 @@ export const AddArenaForm = () => {
 
   return (
     <div className="mx-auto max-w-2xl p-4 bg-white overflow-y-auto">
-      <h3 className="text-center text-lg font-semibold">Create Arena Form</h3>
+      <h3 className="text-center text-lg font-semibold">
+        {isEditMode ? "Edit Arena" : "Create Arena"}
+      </h3>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col justify-center items-stretch w-full space-y-4"
@@ -156,64 +168,67 @@ export const AddArenaForm = () => {
         </div>
 
         {/* Categories */}
-        <Combobox
-          value={selectedSport}
-          onChange={(value) => {
-            setSelectedSport(value);
-            setValue("category", value || "", { shouldValidate: true });
-          }}
-          onClose={() => setQuery("")}
-        >
-          <div className="flex flex-col justify-start items-start gap-1">
-            <Label>Categories</Label>
-            <div className="relative w-full">
-              <div
-                className={`flex flex-row justify-between items-center px-3 py-1 w-full h-9 border rounded-md transition-shadow focus-within:ring-[1px] focus-within:ring-ring/50
-                ${errors.category ? "border-red-500" : "border-input"}
-                `}
-              >
-                <ComboboxInput
-                  onChange={(e) => setQuery(e.target.value)}
-                  className="w-full outline-none text-sm"
-                  placeholder="Select a sport"
-                />
-                <ComboboxButton className="p-1 cursor-pointer group">
-                  <ChevronDownIcon className="w-4 h-4 transition-transform group-data-open:rotate-180" />
-                </ComboboxButton>
-              </div>
-              <ComboboxOptions
-                transition
-                className="absolute z-[60] top-full left-0 mt-1 space-y-0.5 w-full h-40 p-1 bg-white border rounded-md shadow-lg overflow-y-auto transition duration-300 origin-top data-closed:scale-y-95 data-closed:opacity-0"
-              >
-                {sportFiltered.map((group) =>
-                  group.items.length > 0 ? (
-                    <div key={group.category} className="flex flex-col gap-1">
-                      <div className="text-gray-400 font-semibold">
-                        {group.category}
-                      </div>
+        <Controller
+          name="category"
+          control={control}
+          render={({ field, fieldState }) => (
+            <Combobox
+              value={field.value}
+              onChange={(value) => field.onChange(value || "")}
+              onClose={() => setQuery("")}
+            >
+              <div className="flex flex-col justify-start items-start gap-1">
+                <Label>Categories</Label>
+                <div className="relative w-full">
+                  <div
+                    className={`flex flex-row justify-between items-center px-3 py-1 w-full h-9 border rounded-md transition-shadow focus-within:ring-[1px] focus-within:ring-ring/50
+                    ${fieldState.error ? "border-red-500" : "border-input"}
+                    `}
+                  >
+                    <ComboboxInput
+                      onChange={(e) => setQuery(e.target.value)}
+                      className="w-full outline-none text-sm"
+                      placeholder="Select a sport"
+                    />
+                    <ComboboxButton className="p-1 cursor-pointer group">
+                      <ChevronDownIcon className="w-4 h-4 transition-transform group-data-open:rotate-180" />
+                    </ComboboxButton>
+                  </div>
+                  <ComboboxOptions
+                    transition
+                    className="absolute z-[60] top-full left-0 mt-1 space-y-0.5 w-full h-40 p-1 bg-white border rounded-md shadow-lg overflow-y-auto transition duration-300 origin-top data-closed:scale-y-95 data-closed:opacity-0"
+                  >
+                    {sportFiltered.map((group) =>
+                      group.items.length > 0 ? (
+                        <div key={group.category} className="flex flex-col gap-1">
+                          <div className="text-gray-400 font-semibold">
+                            {group.category}
+                          </div>
 
-                      {group.items.map((item) => (
-                        <ComboboxOption
-                          key={item}
-                          value={item}
-                          className="group flex flex-row justify-between items-center gap-1 p-1 text-sm rounded-md text-black cursor-pointer hover:bg-gray-100 data-selected:bg-gray-200"
-                        >
-                          {item}
-                          <CheckIcon className="invisible group-data-selected:visible size-4" />
-                        </ComboboxOption>
-                      ))}
-                    </div>
-                  ) : null,
+                          {group.items.map((item) => (
+                            <ComboboxOption
+                              key={item}
+                              value={item}
+                              className="group flex flex-row justify-between items-center gap-1 p-1 text-sm rounded-md text-black cursor-pointer hover:bg-gray-100 data-selected:bg-gray-200"
+                            >
+                              {item}
+                              <CheckIcon className="invisible group-data-selected:visible size-4" />
+                            </ComboboxOption>
+                          ))}
+                        </div>
+                      ) : null,
+                    )}
+                  </ComboboxOptions>
+                </div>
+                {fieldState.error && (
+                  <p className="text-sm text-red-500 leading-none">
+                    {fieldState.error.message}
+                  </p>
                 )}
-              </ComboboxOptions>
-            </div>
-            {errors.category && (
-              <p className="text-sm text-red-500 leading-none">
-                {errors.category.message}
-              </p>
-            )}
-          </div>
-        </Combobox>
+              </div>
+            </Combobox>
+          )}
+        />
 
         {/* Phone input */}
         <Controller
@@ -257,12 +272,19 @@ export const AddArenaForm = () => {
         />
 
         {/* Upload images */}
-        <div className="space-y-1">
-          <ImageUploadArea
-            imageUrls={imageUrls}
-            onChange={(urls) => setImageUrls(urls)}
-          />
-        </div>
+        <Controller
+          name="imageUrls"
+          control={control}
+          render={({ field }) => (
+            <div className="space-y-1">
+              <ImageUploadArea
+                imageUrls={field.value ?? []}
+                onChange={(urls) => field.onChange(urls)}
+                onUploadingChange={setIsUploading}
+              />
+            </div>
+          )}
+        />
 
         {/* Root error message */}
         {errors.root && (
@@ -274,7 +296,7 @@ export const AddArenaForm = () => {
         {/* Save Button */}
         <button
           type="submit"
-          disabled={isSubmitting}
+          disabled={isSubmitting || isUploading}
           className="mx-auto px-2 py-1 rounded-lg text-white bg-black cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Save

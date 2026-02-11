@@ -1,12 +1,15 @@
 import {
+  findArenaById,
   findArenaByName,
   findArenas,
   insertArena,
+  updateArena as repoUpdateArena,
 } from "@/lib/repositories/arena.repo";
 import {
   CreateArenaInput,
   CreateArenaOutput,
 } from "@/lib/validators/arena.schema";
+
 export interface RegisterArenaResult {
   success: boolean;
   error?: string;
@@ -50,4 +53,34 @@ export async function getArenas(
   const hasMore = page * limit < totalCount;
 
   return { data, totalCount, hasMore };
+}
+
+export async function getArenaById(
+  id: number,
+): Promise<CreateArenaOutput | null> {
+  return findArenaById(id);
+}
+
+export async function updateArena(
+  companyId: number,
+  arenaId: number,
+  data: CreateArenaInput,
+): Promise<RegisterArenaResult> {
+  const arena = await findArenaById(arenaId);
+  if (!arena || arena.companyId !== companyId) {
+    return { success: false, error: "Arena not found", data: null };
+  }
+
+  const existing = await findArenaByName(data.name);
+  if (existing && existing.name.toLowerCase() !== arena.name.toLowerCase()) {
+    return {
+      success: false,
+      error: "Arena name already taken",
+      field: "name",
+      data: null,
+    };
+  }
+
+  const result = await repoUpdateArena(arenaId, data);
+  return { success: true, data: result };
 }

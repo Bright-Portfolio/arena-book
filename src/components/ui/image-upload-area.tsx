@@ -22,6 +22,7 @@ import { uploadToCloudinary } from "@/lib/cloudinary";
 interface ImageUploadAreaProps {
   imageUrls: string[];
   onChange: (urls: string[]) => void;
+  onUploadingChange?: (isUploading: boolean) => void;
 }
 
 // Sortable thumnail item
@@ -85,6 +86,7 @@ const SortableItem = ({
 export const ImageUploadArea: FC<ImageUploadAreaProps> = ({
   imageUrls,
   onChange,
+  onUploadingChange,
 }) => {
   const [isUploading, setIsUploading] = useState(false);
 
@@ -94,6 +96,7 @@ export const ImageUploadArea: FC<ImageUploadAreaProps> = ({
     accept: { "image/*": [".png", ".jpg", ".jpeg", ".gif", ".webp"] },
     onDrop: async (files) => {
       setIsUploading(true);
+      onUploadingChange?.(true);
       try {
         const urls = await Promise.all(files.map(uploadToCloudinary));
         onChange([...imageUrls, ...urls]);
@@ -101,6 +104,7 @@ export const ImageUploadArea: FC<ImageUploadAreaProps> = ({
         console.error(error);
       } finally {
         setIsUploading(false);
+        onUploadingChange?.(false);
       }
     },
   });

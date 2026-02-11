@@ -30,7 +30,23 @@ export async function insertArena(
       ) VALUES (
         $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12
       )
-      RETURNING *
+      RETURNING
+        id,
+        name,
+        description,
+        price,
+        capacity,
+        open_time AS "openTime",
+        close_time AS "closeTime",
+        category,
+        address,
+        image_urls AS "imageUrls",
+        phone_country_code AS "phoneCountryISO2",
+        phone_no AS "phoneNo",
+        company_id AS "companyId",
+        created_at AS "createdAt",
+        updated_at AS "updatedAt",
+        deleted_at AS "deletedAt"
     `,
     [
       data.name,
@@ -147,10 +163,93 @@ export async function findArenas(
 }
 
 /**
+ * Find arena by id
+ */
+export async function findArenaById(
+  id: number,
+): Promise<CreateArenaOutput | null> {
+  const result = await pool.query<CreateArenaOutput>(
+    `
+    SELECT
+      id,
+      name,
+      description,
+      price,
+      capacity,
+      open_time AS "openTime",
+      close_time AS "closeTime",
+      category,
+      address,
+      image_urls AS "imageUrls",
+      phone_country_code AS "phoneCountryISO2",
+      phone_no AS "phoneNo",
+      company_id AS "companyId",
+      created_at AS "createdAt",
+      updated_at AS "updatedAt",
+      deleted_at AS "deletedAt"
+    FROM arenas
+    WHERE id = $1
+    `,
+    [id],
+  );
+  return result.rows[0] || null;
+}
+
+/**
  * Update arena info
  */
-// export async function updateArena(arenaId: number) {
-//   const result = await pool.query(`
-
-//     `)
-// }
+export async function updateArena(
+  arenaId: number,
+  data: CreateArenaInput,
+): Promise<CreateArenaOutput> {
+  const result = await pool.query<CreateArenaOutput>(
+    `
+    UPDATE arenas SET
+      name = $1,
+      description = $2,
+      price = $3,
+      open_time = $4,
+      close_time = $5,
+      category = $6,
+      address = $7,
+      image_urls = $8,
+      phone_country_code = $9,
+      phone_no = $10,
+      capacity = $11,
+      updated_at = NOW()
+    WHERE id = $12
+    RETURNING
+      id,
+      name,
+      description,
+      price,
+      capacity,
+      open_time AS "openTime",
+      close_time AS "closeTime",
+      category,
+      address,
+      image_urls AS "imageUrls",
+      phone_country_code AS "phoneCountryISO2",
+      phone_no AS "phoneNo",
+      company_id AS "companyId",
+      created_at AS "createdAt",
+      updated_at AS "updatedAt",
+      deleted_at AS "deletedAt"
+    `,
+    [
+      data.name,
+      data.description,
+      data.price,
+      data.openTime,
+      data.closeTime,
+      data.category,
+      data.address,
+      JSON.stringify(data.imageUrls ?? []),
+      data.phoneCountryISO2,
+      data.phoneNo,
+      data.capacity,
+      arenaId,
+    ],
+  );
+  return result.rows[0];
+}

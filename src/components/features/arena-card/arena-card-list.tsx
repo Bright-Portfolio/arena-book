@@ -36,6 +36,7 @@ export const ArenaCardList = ({ arenas, isLoading }: ArenaCardListProps) => {
       {arenas.map((arena) => (
         <ArenaCard
           key={arena.id}
+          id={arena.id}
           name={arena.name}
           category={arena.category}
           address={arena.address}

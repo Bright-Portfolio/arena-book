@@ -1,9 +1,13 @@
 import Image from "next/image";
 import {
   ArrowUpRightIcon,
+  EllipsisVerticalIcon,
 } from "@heroicons/react/24/outline";
+import { usePathname, useRouter } from "next/navigation";
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 
 interface ArenaCardProps {
+  id: number;
   name: string;
   category: string;
   address: string;
@@ -12,19 +16,57 @@ interface ArenaCardProps {
 }
 
 export const ArenaCard = ({
+  id,
   name,
   category,
   address,
   price,
   imageUrl,
 }: ArenaCardProps) => {
+  const pathname = usePathname();
+  const router = useRouter();
+  const showEditButton = pathname.includes("/manage");
+
   const handleBookClick = () => {};
 
   return (
-    <div className="pb-1.5 border rounded-lg overflow-hidden hover:shadow-md transition-shadow">
-      <div className="relative h-32 w-full bg-gray-100">
+    <div className="py-1.5 px-0.5 border rounded-lg overflow-hidden hover:shadow-md transition-shadow">
+      {showEditButton && (
+        <Menu as="div" className="relative flex justify-end">
+          <MenuButton className="cursor-pointer p-1">
+            <EllipsisVerticalIcon className="size-5 stroke-2 text-gray-400" />
+          </MenuButton>
+          <MenuItems className="absolute right-0 z-50 mt-1 w-32 rounded-md border bg-white p-1 shadow-lg">
+            <MenuItem>
+              <button
+                type="button"
+                onClick={() => router.push(`/arena/edit?id=${id}`)}
+                className="w-full rounded-sm px-2 py-1.5 text-left text-sm data-focus:bg-gray-100"
+              >
+                Edit
+              </button>
+            </MenuItem>
+            <MenuItem>
+              <button
+                type="button"
+                className="w-full rounded-sm px-2 py-1.5 text-left text-sm text-red-600 data-focus:bg-gray-100"
+              >
+                Delete
+              </button>
+            </MenuItem>
+          </MenuItems>
+        </Menu>
+      )}
+
+      <div className="relative h-32 w-full rounded-sm bg-gray-100 overflow-hidden">
         {imageUrl ? (
-          <Image src={imageUrl} alt={name} fill sizes="(min-width: 640px) 448px, 100vw" className="object-cover" />
+          <Image
+            src={imageUrl}
+            alt={name}
+            fill
+            sizes="(min-width: 640px) 448px, 100vw"
+            className="object-cover"
+          />
         ) : (
           <div className="bg-gray-50 object-cover" />
         )}
