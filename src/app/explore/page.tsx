@@ -10,7 +10,7 @@ import {
   ListboxOptions,
 } from "@headlessui/react";
 import { CheckIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
-import { ArenaCard } from "@/components/features/arena-card/arena-card";
+import { ArenaCardList } from "@/components/features/arena-card/arena-card-list";
 
 export default function ExplorePage() {
   const [page, setPage] = useState(1);
@@ -61,24 +61,7 @@ export default function ExplorePage() {
       </Listbox>
 
       {/* Arena list */}
-      {isLoading ? (
-        <p className="text-gray-500">Loading arenas...</p>
-      ) : !data?.arenas.length ? (
-        <p className="text-gray-500">No arenas found.</p>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {data.arenas.map((arena) => (
-            <ArenaCard
-              key={arena.id}
-              name={arena.name}
-              category={arena.category}
-              address={arena.address}
-              price={arena.price}
-              imageUrl={arena.imageUrls?.[0]}
-            />
-          ))}
-        </div>
-      )}
+      <ArenaCardList arenas={data?.arenas ?? []} isLoading={isLoading} />
 
       {/* Pagination */}
       {data && (
