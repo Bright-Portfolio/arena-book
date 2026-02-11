@@ -1,7 +1,6 @@
 import Image from "next/image";
 import {
   ArrowUpRightIcon,
-  EllipsisVerticalIcon,
 } from "@heroicons/react/24/outline";
 
 interface ArenaCardProps {

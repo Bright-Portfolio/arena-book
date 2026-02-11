@@ -2,8 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import type { CreateArenaOutput } from "@/lib/validators/arena.schema";
 
 interface ArenaResponse {
-  success: boolean;
-  data: CreateArenaOutput[];
+  arenas: CreateArenaOutput[];
   totalCount: number;
   hasMore: boolean;
 }
@@ -20,7 +19,14 @@ export function useArenas(page = 1, limit = 10, category?: string) {
 
       const res = await fetch(`/api/arenas?${params}`);
       if (!res.ok) throw new Error("Failed to fecth arenas");
-      return res.json();
+
+      const json = await res.json();
+
+      return {
+        arenas: json.data as CreateArenaOutput[],
+        totalCount: json.totalCount,
+        hasMore: json.hasMore,
+      };
     },
   });
 }

@@ -63,11 +63,11 @@ export default function ExplorePage() {
       {/* Arena list */}
       {isLoading ? (
         <p className="text-gray-500">Loading arenas...</p>
-      ) : !data?.data.length ? (
+      ) : !data?.arenas.length ? (
         <p className="text-gray-500">No arenas found.</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {data.data.map((arena) => (
+          {data.arenas.map((arena) => (
             <ArenaCard
               key={arena.id}
               name={arena.name}
