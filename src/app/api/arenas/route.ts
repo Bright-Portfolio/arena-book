@@ -91,7 +91,7 @@ export async function GET(request: NextRequest) {
     const limit = Number(searchParams.get("limit") ?? 10);
     const category = searchParams.get("category") ?? undefined;
 
-    const result = await getArenas(page, limit, category);
+    const result = await getArenas(page, limit, undefined, category);
 
     return NextResponse.json({
       success: true,

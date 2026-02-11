@@ -1,5 +1,4 @@
 import {
-  findArenaByCompanyId,
   findArenaByName,
   findArenas,
   insertArena,
@@ -40,22 +39,15 @@ export async function registerArena(
 export async function getArenas(
   page: number,
   limit: number,
+  companyId?: number,
   category?: string,
 ): Promise<{
   data: CreateArenaOutput[];
   totalCount: number;
   hasMore: boolean;
 }> {
-  const { data, totalCount } = await findArenas(page, limit, category);
+  const { data, totalCount } = await findArenas(page, limit, companyId, category);
   const hasMore = page * limit < totalCount;
 
   return { data, totalCount, hasMore };
-}
-
-export async function getArenasByCompanyId(
-  companyId: number,
-): Promise<CreateArenaOutput[]> {
-  const result = await findArenaByCompanyId(companyId);
-
-  return result;
 }

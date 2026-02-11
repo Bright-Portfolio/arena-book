@@ -7,8 +7,9 @@ export default function ManagePage() {
   const { data, isLoading } = useManageArenas();
 
   return (
-    <div className="mx-auto max-w-4xl">
-      <ArenaCardList arenas={data ?? []} isLoading={isLoading} />
+    <div className="mx-auto max-w-4xl space-y-6">
+      <h1 className="text-2xl font-bold">Your Arenas</h1>
+      <ArenaCardList arenas={data?.arenas ?? []} isLoading={isLoading} />
     </div>
   );
 }

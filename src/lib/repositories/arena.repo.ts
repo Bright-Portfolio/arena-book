@@ -67,6 +67,7 @@ export async function findArenaByName(
 export async function findArenas(
   page: number,
   limit: number,
+  companyId?: number,
   category?: string,
 ) {
   const offset = (page - 1) * limit;
@@ -77,6 +78,11 @@ export async function findArenas(
   if (category) {
     params.push(category);
     conditions.push(`category = $${params.length}`);
+  }
+
+  if (companyId) {
+    params.push(companyId);
+    conditions.push(`company_id = $${params.length}`);
   }
 
   const where = conditions.length ? `WHERE ${conditions.join(" AND ")}` : "";
@@ -108,51 +114,36 @@ export async function findArenas(
 
   const result = await pool.query(sql, params);
 
-  const countParams: string[] = [];
-  let countSql = ` SELECT COUNT(*) FROM arenas`;
+  // Count query reuses the same conditions
+  const countParams: (string | number)[] = [];
+  const countConditions: string[] = [];
 
   if (category) {
     countParams.push(category);
-    countSql += ` WHERE category = $1`;
+    countConditions.push(`category = $${countParams.length}`);
   }
 
-  const countResult = await pool.query(countSql, countParams);
+  if (companyId) {
+    countParams.push(companyId);
+    countConditions.push(`company_id = $${countParams.length}`);
+  }
+
+  const countWhere = countConditions.length
+    ? `WHERE ${countConditions.join(" AND ")}`
+    : "";
+
+  const countResult = await pool.query(
+    `
+     SELECT COUNT(*) FROM arenas ${countWhere}
+     `,
+    countParams,
+  );
   const totalCount = Number(countResult.rows[0].count);
 
   return {
     data: result.rows,
     totalCount,
   };
-}
-
-export async function findArenaByCompanyId(companyId: number) {
-  const result = await pool.query(
-    `
-    SELECT 
-      id,
-      name,
-      description,
-      price,
-      capacity,
-      open_time AS "openTime",
-      close_time AS "closeTime",
-      category,
-      address,
-      image_urls AS "imageUrls",
-      phone_country_code AS "phoneCountryISO2",
-      phone_no AS "phoneNo",
-      company_id AS "companyId",
-      created_at AS "createdAt",
-      updated_at AS "updatedAt",
-      deleted_at AS "deletedAt"
-    FROM arenas
-    WHERE company_id = $1
-    ORDER BY created_at DESC
-    `,
-    [companyId],
-  );
-
-  return result.rows;
 }
 
 /**
