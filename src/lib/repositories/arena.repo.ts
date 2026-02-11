@@ -128,30 +128,10 @@ export async function findArenas(
 /**
  * Update arena info
  */
-export async function updateArena(arenaId: number) {
-  const result = await pool.query(`
-      
-    `)
-}
+// export async function updateArena(arenaId: number) {
+//   const result = await pool.query(`
 
-/**
- * Search arena info from database
- */
-export async function searchArenas(
-  query: string,
-  category?: string,
-): Promise<CreateArenaOutput[]> {
-  const params = [`%${query}%`];
-  let sql = `
-    SELECT * FROM arenas 
-    WHERE (name ILIKE $1 OR address ILIKE $1 OR category ILIKE $1)
-  `;
+//     `)
+// }
 
-  if (category) {
-    params.push(category);
-    sql += ` AND category = $${params.length}`;
-  }
 
-  const result = await pool.query<CreateArenaOutput>(sql, params);
-  return result.rows;
-}

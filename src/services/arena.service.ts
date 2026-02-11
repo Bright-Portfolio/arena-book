@@ -2,7 +2,6 @@ import {
   findArenaByName,
   findArenas,
   insertArena,
-  searchArenas,
 } from "@/lib/repositories/arena.repo";
 import {
   CreateArenaInput,
@@ -48,12 +47,4 @@ export async function getArenas(
   return { data, totalCount, hasMore };
 }
 
-// Search arenas with category (will add the filter func in the future)
-export async function searchArenasWithCategory(
-  query: string,
-  category?: string,
-): Promise<CreateArenaOutput[]> {
-  const result = await searchArenas(query, category);
 
-  return result;
-}
