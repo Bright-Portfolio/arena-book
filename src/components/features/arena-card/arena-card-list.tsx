@@ -12,9 +12,10 @@ interface Arena {
 interface ArenaCardListProps {
   arenas: Arena[];
   isLoading: boolean;
+  onDelete?: (id: number) => void;
 }
 
-export const ArenaCardList = ({ arenas, isLoading }: ArenaCardListProps) => {
+export const ArenaCardList = ({ arenas, isLoading, onDelete }: ArenaCardListProps) => {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-[200px] py-4">
@@ -42,6 +43,7 @@ export const ArenaCardList = ({ arenas, isLoading }: ArenaCardListProps) => {
           address={arena.address}
           price={arena.price}
           imageUrl={arena.imageUrls?.[0]}
+          onDelete={onDelete}
         />
       ))}
     </div>

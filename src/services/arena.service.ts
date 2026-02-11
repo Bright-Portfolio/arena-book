@@ -3,6 +3,7 @@ import {
   findArenaByName,
   findArenas,
   insertArena,
+  softDeleteArena,
   updateArena as repoUpdateArena,
 } from "@/lib/repositories/arena.repo";
 import {
@@ -83,4 +84,17 @@ export async function updateArena(
 
   const result = await repoUpdateArena(arenaId, data);
   return { success: true, data: result };
+}
+
+export async function deleteArena(
+  companyId: number,
+  arenaId: number,
+): Promise<{ success: boolean; error?: string }> {
+  const arena = await findArenaById(arenaId);
+  if (!arena || arena.companyId !== companyId) {
+    return { success: false, error: "Arena not found" };
+  }
+
+  await softDeleteArena(arenaId);
+  return { success: true };
 }

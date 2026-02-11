@@ -13,6 +13,7 @@ interface ArenaCardProps {
   address: string;
   price: number;
   imageUrl?: string;
+  onDelete?: (id: number) => void;
 }
 
 export const ArenaCard = ({
@@ -22,6 +23,7 @@ export const ArenaCard = ({
   address,
   price,
   imageUrl,
+  onDelete,
 }: ArenaCardProps) => {
   const pathname = usePathname();
   const router = useRouter();
@@ -53,6 +55,7 @@ export const ArenaCard = ({
               <MenuItem>
                 <button
                   type="button"
+                  onClick={() => onDelete?.(id)}
                   className="w-full rounded-sm px-2 py-1.5 text-left text-sm text-red-600 data-focus:bg-gray-100"
                 >
                   Delete

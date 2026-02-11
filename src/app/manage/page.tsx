@@ -3,6 +3,10 @@
 import { useState } from "react";
 import { SPORTS } from "@/lib/constants/sports";
 import {
+  Dialog,
+  DialogBackdrop,
+  DialogPanel,
+  DialogTitle,
   Listbox,
   ListboxButton,
   ListboxOption,
@@ -15,8 +19,30 @@ import { useManageArenas } from "@/hooks/use-manage-arenas";
 export default function ManagePage() {
   const [page, setPage] = useState(1);
   const [category, setCategory] = useState<string | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<{ id: number; name: string } | null>(null);
+  const [deletedId, setDeletedId] = useState<number | null>(null);
 
   const { data, isLoading } = useManageArenas(page, 10, category ?? undefined);
+  const visibleArenas = data?.arenas.filter((a) => a.id !== deletedId) ?? [];
+
+  const handleDeleteConfirm = async () => {
+    if (!deleteTarget) return;
+    const { id } = deleteTarget;
+
+    setDeletedId(id);
+    setDeleteTarget(null);
+
+    try {
+      const res = await fetch(`/api/arenas/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "soft-delete" }),
+      });
+      if (!res.ok) throw new Error("Failed to delete arena");
+    } catch {
+      setDeletedId(null);
+    }
+  };
 
   return (
     <div className="mx-auto max-w-4xl space-y-6">
@@ -61,7 +87,43 @@ export default function ManagePage() {
       </Listbox>
 
       {/* Arena list */}
-      <ArenaCardList arenas={data?.arenas ?? []} isLoading={isLoading} />
+      <ArenaCardList
+        arenas={visibleArenas}
+        isLoading={isLoading}
+        onDelete={(id) => {
+          const arena = data?.arenas.find((a) => a.id === id);
+          if (arena) setDeleteTarget({ id, name: arena.name });
+        }}
+      />
+
+      {/* Delete confirmation dialog */}
+      <Dialog open={!!deleteTarget} onClose={() => setDeleteTarget(null)} className="relative z-50">
+        <DialogBackdrop className="fixed inset-0 bg-black/30" />
+        <div className="fixed inset-0 flex items-center justify-center p-4">
+          <DialogPanel className="w-full max-w-sm rounded-lg bg-white p-6 shadow-xl">
+            <DialogTitle className="text-lg font-semibold">Delete Arena</DialogTitle>
+            <p className="mt-2 text-sm text-gray-600">
+              Are you sure you want to delete <span className="font-medium">{deleteTarget?.name}</span>? This action cannot be undone.
+            </p>
+            <div className="mt-4 flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => setDeleteTarget(null)}
+                className="rounded-md border px-3 py-1.5 text-sm hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleDeleteConfirm}
+                className="rounded-md bg-red-600 px-3 py-1.5 text-sm text-white hover:bg-red-700"
+              >
+                Delete
+              </button>
+            </div>
+          </DialogPanel>
+        </div>
+      </Dialog>
 
       {/* Pagination */}
       {data && (

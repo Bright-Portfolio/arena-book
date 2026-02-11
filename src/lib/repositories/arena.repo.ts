@@ -71,7 +71,7 @@ export async function findArenaByName(
   name: string,
 ): Promise<{ name: string } | null> {
   const result = await pool.query<{ name: string }>(
-    `SELECT name FROM arenas WHERE name ILIKE $1`,
+    `SELECT name FROM arenas WHERE name ILIKE $1 AND deleted_at IS NULL`,
     [name],
   );
   return result.rows[0] || null;
@@ -89,7 +89,7 @@ export async function findArenas(
   const offset = (page - 1) * limit;
 
   const params: (string | number)[] = [];
-  const conditions: string[] = [];
+  const conditions: string[] = ["deleted_at IS NULL"];
 
   if (category) {
     params.push(category);
@@ -132,7 +132,7 @@ export async function findArenas(
 
   // Count query reuses the same conditions
   const countParams: (string | number)[] = [];
-  const countConditions: string[] = [];
+  const countConditions: string[] = ["deleted_at IS NULL"];
 
   if (category) {
     countParams.push(category);
@@ -252,4 +252,13 @@ export async function updateArena(
     ],
   );
   return result.rows[0];
+}
+
+/**
+ * Soft delete arena by setting deleted_at
+ */
+export async function softDeleteArena(arenaId: number): Promise<void> {
+  await pool.query(`UPDATE arenas SET deleted_at = NOW() WHERE id = $1`, [
+    arenaId,
+  ]);
 }
