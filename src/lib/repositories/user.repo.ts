@@ -8,7 +8,6 @@ import type {
 export async function findUserByEmail(
   email: string,
 ): Promise<CreateUserOutput | null> {
-  // Find existing user
   const result = await pool.query(
     `SELECT  id, email, password, name, image_url, role, auth_provider
     FROM users

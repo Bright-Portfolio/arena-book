@@ -56,26 +56,28 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
 
     async jwt({ token, user, trigger }) {
-      if (user && user.email) {
-        // Get the actual database ID on initial sign-in
-        const dbUser = await findUserByEmail(user.email);
-        if (dbUser) {
-          token.id = String(dbUser.id);
-          token.role = dbUser.role;
-          token.email = dbUser.email;
-          const company = await findCompanyByOwnerId(dbUser.id);
-          token.companyId = company?.id ?? undefined;
+      try {
+        if (user && user.email) {
+          const dbUser = await findUserByEmail(user.email);
+          if (dbUser) {
+            token.id = String(dbUser.id);
+            token.role = dbUser.role;
+            token.email = dbUser.email;
+            const company = await findCompanyByOwnerId(dbUser.id);
+            token.companyId = company?.id ?? undefined;
+          }
         }
-      }
 
-      // Refresh role from database when session is updated
-      if (trigger === "update" && token.email) {
-        const dbUser = await findUserByEmail(token.email as string);
-        if (dbUser) {
-          token.role = dbUser.role;
-          const company = await findCompanyByOwnerId(dbUser.id);
-          token.companyId = company?.id ?? undefined;
+        if (trigger === "update" && token.email) {
+          const dbUser = await findUserByEmail(token.email as string);
+          if (dbUser) {
+            token.role = dbUser.role;
+            const company = await findCompanyByOwnerId(dbUser.id);
+            token.companyId = company?.id ?? undefined;
+          }
         }
+      } catch (error) {
+        console.error("[Auth] JWT callback error:", error);
       }
 
       return token;
