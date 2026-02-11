@@ -18,7 +18,7 @@ export const ArenaCardList = ({ arenas, isLoading }: ArenaCardListProps) => {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-[200px] py-4">
-        <p className="text-gray-500">Loading arenas...</p>
+        <p className="text-gray-500">Loading...</p>
       </div>
     );
   }
