@@ -49,7 +49,7 @@ export const AvatarButton = () => {
             }
             className="w-full px-2 py-1 text-start rounded-md data-focus:bg-gray-200"
           >
-            sign out
+            Sign out
           </button>
         </MenuItem>
       </MenuItems>

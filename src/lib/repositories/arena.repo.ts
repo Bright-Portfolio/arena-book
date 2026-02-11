@@ -55,7 +55,7 @@ export async function findArenaByName(
   name: string,
 ): Promise<{ name: string } | null> {
   const result = await pool.query<{ name: string }>(
-    `SELECT name FROM arenas WHERE name = $1`,
+    `SELECT name FROM arenas WHERE name ILIKE $1`,
     [name],
   );
   return result.rows[0] || null;
@@ -125,6 +125,7 @@ export async function findArenas(
   };
 }
 
+export async function findArenaByCompanyId(params: type) {}
 /**
  * Update arena info
  */
@@ -133,5 +134,3 @@ export async function findArenas(
 
 //     `)
 // }
-
-
