@@ -43,6 +43,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ],
   // 3. Create call back Signin and turn it inti JWT token,
   callbacks: {
+    authorized({ auth }) {
+      return !!auth?.user;
+    },
+
     async signIn({ user, account }) {
       //Auto-create user for Google OAuth if not exist
       if (account?.provider === "google" && user.email && user.name) {

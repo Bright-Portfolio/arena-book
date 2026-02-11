@@ -3,7 +3,6 @@ import { UserIcon } from "@heroicons/react/24/outline";
 import { signOut, useSession } from "next-auth/react";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import Link from "next/link";
-import { ButtonGroup } from "./button-group";
 
 export const AvatarButton = () => {
   const { data: session } = useSession();
@@ -33,7 +32,7 @@ export const AvatarButton = () => {
       >
         <MenuItem>
           <Link
-            href="/arena/manage"
+            href="/manage"
             className="w-full px-2 py-1 rounded-md data-focus:bg-gray-200"
           >
             Manage arena

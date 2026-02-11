@@ -125,7 +125,36 @@ export async function findArenas(
   };
 }
 
-export async function findArenaByCompanyId(params: type) {}
+export async function findArenaByCompanyId(companyId: number) {
+  const result = await pool.query(
+    `
+    SELECT 
+      id,
+      name,
+      description,
+      price,
+      capacity,
+      open_time AS "openTime",
+      close_time AS "closeTime",
+      category,
+      address,
+      image_urls AS "imageUrls",
+      phone_country_code AS "phoneCountryISO2",
+      phone_no AS "phoneNo",
+      company_id AS "companyId",
+      created_at AS "createdAt",
+      updated_at AS "updatedAt",
+      deleted_at AS "deletedAt"
+    FROM arenas
+    WHERE company_id = $1
+    ORDER BY created_at DESC
+    `,
+    [companyId],
+  );
+
+  return result.rows;
+}
+
 /**
  * Update arena info
  */
