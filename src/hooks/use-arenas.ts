@@ -1,14 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import type { CreateArenaOutput } from "@/lib/validators/arena.schema";
 
-interface ArenaResponse {
+interface ArenasResponse {
   arenas: CreateArenaOutput[];
   totalCount: number;
   hasMore: boolean;
 }
 
 export function useArenas(page = 1, limit = 10, category?: string) {
-  return useQuery<ArenaResponse>({
+  return useQuery<ArenasResponse>({
     queryKey: ["arenas", page, category],
     queryFn: async () => {
       const params = new URLSearchParams({

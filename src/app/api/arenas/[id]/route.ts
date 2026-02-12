@@ -8,20 +8,10 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const session = await auth();
-    const companyId = session?.user?.companyId;
-
-    if (!companyId) {
-      return NextResponse.json(
-        { success: false, error: "forbidden", message: "No company found" },
-        { status: 403 },
-      );
-    }
-
     const { id } = await params;
     const arena = await getArenaById(Number(id));
 
-    if (!arena || arena.companyId !== companyId) {
+    if (!arena) {
       return NextResponse.json(
         { success: false, error: "not_found", message: "Arena not found" },
         { status: 404 },
