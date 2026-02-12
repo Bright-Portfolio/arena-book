@@ -10,6 +10,10 @@ import {
   ComboboxInput,
   ComboboxOption,
   ComboboxOptions,
+  Dialog,
+  DialogBackdrop,
+  DialogPanel,
+  DialogTitle,
 } from "@headlessui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CheckIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
@@ -30,11 +34,13 @@ export const AddArenaForm = ({ arenaId, initialData }: AddArenaFormProps) => {
   const isEditMode = !!arenaId;
   const [query, setQuery] = useState("");
   const [isUploading, setIsUploading] = useState(false);
+  const [showDiscard, setShowDiscard] = useState(false);
   const {
     handleSubmit,
     register,
     setError,
     control,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<ArenaFormData>({
     resolver: zodResolver(ArenaFormSchema),
@@ -293,15 +299,64 @@ export const AddArenaForm = ({ arenaId, initialData }: AddArenaFormProps) => {
           </h3>
         )}
 
-        {/* Save Button */}
-        <button
-          type="submit"
-          disabled={isSubmitting || isUploading}
-          className="mx-auto px-2 py-1 rounded-lg text-white bg-black cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          Save
-        </button>
+        {/* Buttons */}
+        <div className="flex justify-center gap-3">
+          {isEditMode && (
+            <button
+              type="button"
+              onClick={() => setShowDiscard(true)}
+              className="px-2 py-1 rounded-lg border hover:bg-gray-50 cursor-pointer"
+            >
+              Discard
+            </button>
+          )}
+          <button
+            type="submit"
+            disabled={isSubmitting || isUploading}
+            className="px-2 py-1 rounded-lg text-white bg-black cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Save
+          </button>
+        </div>
       </form>
+
+      {/* Discard confirmation dialog */}
+      <Dialog
+        open={showDiscard}
+        onClose={() => setShowDiscard(false)}
+        className="relative z-50"
+      >
+        <DialogBackdrop className="fixed inset-0 bg-black/30" />
+        <div className="fixed inset-0 flex items-center justify-center p-4">
+          <DialogPanel className="w-full max-w-sm rounded-lg bg-white p-6 shadow-xl">
+            <DialogTitle className="text-lg font-semibold">
+              Discard Changes
+            </DialogTitle>
+            <p className="mt-2 text-sm text-gray-600">
+              Are you sure you want to discard all changes?
+            </p>
+            <div className="mt-4 flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => setShowDiscard(false)}
+                className="rounded-md border px-3 py-1.5 text-sm hover:bg-gray-50 cursor-pointer"
+              >
+                Keep Editing
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  reset();
+                  setShowDiscard(false);
+                }}
+                className="rounded-md bg-red-600 px-3 py-1.5 text-sm text-white hover:bg-red-700 cursor-pointer"
+              >
+                Discard
+              </button>
+            </div>
+          </DialogPanel>
+        </div>
+      </Dialog>
     </div>
   );
 };
