@@ -20,6 +20,7 @@ export async function PATCH(
     }
 
     const userId = Number(session.user.id);
+    const companyId = session.user.companyId;
     const { id } = await params;
     const body = await request.json();
 
@@ -30,7 +31,7 @@ export async function PATCH(
       );
     }
 
-    const result = await cancelBooking(userId, Number(id));
+    const result = await cancelBooking(userId, Number(id), companyId);
 
     if (!result.success) {
       const status = result.error === "Booking not found" ? 404 : 400;

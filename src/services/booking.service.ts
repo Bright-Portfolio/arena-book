@@ -187,16 +187,21 @@ export async function getCompanyBookings(
 export async function cancelBooking(
   userId: number,
   bookingId: number,
+  companyId?: number,
 ): Promise<BookingResult> {
   const booking = await findBookingById(bookingId);
   if (!booking) {
     return { success: false, error: "Booking not found", data: null };
   }
 
-  if (booking.userId !== userId) {
+  const isBooker = booking.userId === userId;
+  const arena = await findArenaById(booking.arenaId);
+  const isArenaOwner = !!companyId && arena?.companyId === companyId;
+
+  if (!isBooker && !isArenaOwner) {
     return {
       success: false,
-      error: "You can only cancel your own bookings",
+      error: "Not authorized to cancel this booking",
       data: null,
     };
   }
