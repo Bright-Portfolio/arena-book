@@ -48,7 +48,7 @@ export const ArenaCard = ({
               <MenuItem>
                 <button
                   type="button"
-                  onClick={() => router.push(`/arena/edit?id=${id}`)}
+                  onClick={() => router.push(`/arena/edit/${id}`)}
                   className="w-full rounded-sm px-2 py-1.5 text-left text-sm data-focus:bg-gray-100"
                 >
                   Edit

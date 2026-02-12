@@ -6,7 +6,7 @@ export function useCancelBooking() {
   return useMutation({
     mutationFn: async (bookingId: number) => {
       const res = await fetch(`/api/bookings/${bookingId}`, {
-        method: "POST",
+        method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ action: "cancel" }),
       });
