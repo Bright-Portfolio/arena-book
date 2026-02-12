@@ -92,16 +92,18 @@ export const ArenaCard = ({
         </div>
 
         {/* Booking button */}
-        <button
-          type="button"
-          onClick={handleBookClick}
-          className="inline-flex flex-row items-center gap-1.5 px-1.5 py-1 text-xs border border-gray-300 rounded-full text-white bg-black cursor-pointer"
-        >
-          Book Now
-          <div className="p-1.5 rounded-full bg-white">
-            <ArrowUpRightIcon className="w-2.5 h-2.5 stroke-2 text-black" />
-          </div>
-        </button>
+        {!showEditButton && (
+          <button
+            type="button"
+            onClick={handleBookClick}
+            className="inline-flex flex-row items-center gap-1.5 px-1.5 py-1 text-xs border border-gray-300 rounded-full text-white bg-black cursor-pointer"
+          >
+            Book Now
+            <div className="p-1.5 rounded-full bg-white">
+              <ArrowUpRightIcon className="w-2.5 h-2.5 stroke-2 text-black" />
+            </div>
+          </button>
+        )}
       </div>
     </div>
   );
