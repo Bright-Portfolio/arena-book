@@ -12,6 +12,7 @@ interface ArenaCardProps {
   category: string;
   address: string;
   price: number;
+  capacity?: number;
   imageUrl?: string;
   onDelete?: (id: number) => void;
 }
@@ -22,6 +23,7 @@ export const ArenaCard = ({
   category,
   address,
   price,
+  capacity,
   imageUrl,
   onDelete,
 }: ArenaCardProps) => {
@@ -83,6 +85,9 @@ export const ArenaCard = ({
           <h2 className="font-semibold text-base">{name}</h2>
           <p className="text-xs text-gray-500">{category}</p>
           <p className="text-xs">{address}</p>
+          {capacity && (
+            <p className="text-xs text-gray-500">Up to {capacity} people</p>
+          )}
           <p className="text-xs font-medium">฿{price}/hr</p>
         </div>
 

@@ -6,6 +6,7 @@ interface Arena {
   category: string;
   address: string;
   price: number;
+  capacity?: number;
   imageUrls?: string[];
 }
 
@@ -42,6 +43,7 @@ export const ArenaCardList = ({ arenas, isLoading, onDelete }: ArenaCardListProp
           category={arena.category}
           address={arena.address}
           price={arena.price}
+          capacity={arena.capacity}
           imageUrl={arena.imageUrls?.[0]}
           onDelete={onDelete}
         />

@@ -19,11 +19,10 @@ interface BoookingFormProps {
   price: number;
 }
 
-export const BoookingForm: FC<BoookingFormProps> = ({ arenaId, price }) => {
+export const BookingForm: FC<BoookingFormProps> = ({ arenaId, price }) => {
   const { data: session } = useSession();
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedSlots, setSelectedSlots] = useState<number[]>([]);
-  const [showSuccess, setShowSuccess] = useState(false);
   const router = useRouter();
 
   const { data, isLoading } = useAvailableSlots(arenaId, selectedDate);
@@ -110,9 +109,7 @@ export const BoookingForm: FC<BoookingFormProps> = ({ arenaId, price }) => {
                     "rounded-md px-2 py-1.5 text-sm transition-colors",
                     !slot.isAvailable &&
                       "bg-gray-100 text-gray-400 line-through cursor-not-allowed",
-                    slot.isAvailable &&
-                      isSelected &&
-                      "bg-black text-white",
+                    slot.isAvailable && isSelected && "bg-black text-white",
                     slot.isAvailable &&
                       !isSelected &&
                       "border hover:bg-gray-50 cursor-pointer",

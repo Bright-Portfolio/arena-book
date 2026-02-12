@@ -1,13 +1,13 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AddArenaForm } from "@/components/features/add-arena/add-arena-form";
 import type { ArenaFormData } from "@/lib/validators/arena.schema";
 
 export default function EditArenaPage() {
-  const searchParams = useSearchParams();
-  const id = Number(searchParams.get("id"));
+  const { id } = useParams<{ id: string }>();
+  const arenaIdNum = Number(id);
 
   const [initialData, setInitialData] = useState<ArenaFormData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -71,7 +71,7 @@ export default function EditArenaPage() {
 
   return (
     <div className="mx-auto w-full h-screen">
-      <AddArenaForm arenaId={id} initialData={initialData} />
+      <AddArenaForm arenaId={arenaIdNum} initialData={initialData} />
     </div>
   );
 }
