@@ -6,7 +6,11 @@ import { useAvailableSlots } from "@/hooks/use-available-slots";
 import { useCreateBooking } from "@/hooks/use-create-booking";
 import { Spinner } from "@/components/ui/spinner";
 import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { CalendarIcon } from "lucide-react";
 import clsx from "clsx";
 import {
@@ -79,7 +83,7 @@ export const BookingForm: FC<BoookingFormProps> = ({ arenaId, price }) => {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="w-full h-full space-y-4">
       {/* Date picker */}
       <Popover>
         <PopoverTrigger asChild>
@@ -92,18 +96,23 @@ export const BookingForm: FC<BoookingFormProps> = ({ arenaId, price }) => {
           >
             <CalendarIcon className="size-4" />
             {selectedDate
-              ? new Date(selectedDate + "T00:00:00").toLocaleDateString("en-GB", {
-                  day: "numeric",
-                  month: "long",
-                  year: "numeric",
-                })
+              ? new Date(selectedDate + "T00:00:00").toLocaleDateString(
+                  "en-GB",
+                  {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                  },
+                )
               : "Select a date"}
           </button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="start">
           <Calendar
             mode="single"
-            selected={selectedDate ? new Date(selectedDate + "T00:00:00") : undefined}
+            selected={
+              selectedDate ? new Date(selectedDate + "T00:00:00") : undefined
+            }
             onSelect={(date) => {
               if (date) {
                 const yyyy = date.getFullYear();
@@ -127,7 +136,7 @@ export const BookingForm: FC<BoookingFormProps> = ({ arenaId, price }) => {
             <Spinner className="size-6" />
           </div>
         ) : (
-          <div className="grid grid-cols-4 gap-2">
+          <div className="flex flex-wrap gap-2">
             {data?.slots.map((slot) => {
               const isSelected = selectedSlots.includes(slot.startHour);
 

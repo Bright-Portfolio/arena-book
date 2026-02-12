@@ -58,8 +58,8 @@ export default function ArenaDetailPage() {
 
             <div className="flex flex-col gap-1 text-sm">
               <p>
-                <span className="font-medium">Hours:</span> {arena.openTime} -{" "}
-                {arena.closeTime}
+                <span className="font-medium">Hours:</span>{" "}
+                {arena.openTime.slice(0, 5)} - {arena.closeTime.slice(0, 5)}
               </p>
               <p>
                 <span className="font-medium">Price:</span> ฿{arena.price}/hr
@@ -75,7 +75,7 @@ export default function ArenaDetailPage() {
         </div>
 
         {/* Booking form */}
-        <div className="flex-1 min-w-0">
+        <div className="flex-1 min-w-0 ">
           <h2 className="mb-4 text-lg font-semibold">Book this arena</h2>
           <BookingForm arenaId={arena.id} price={arena.price} />
         </div>
