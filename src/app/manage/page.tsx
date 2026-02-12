@@ -15,6 +15,7 @@ import {
 import { CheckIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 import { ArenaCardList } from "@/components/features/arena-card/arena-card-list";
 import { useManageArenas } from "@/hooks/use-manage-arenas";
+import { useDeleteArena } from "@/hooks/use-delete-arena";
 
 export default function ManagePage() {
   const [page, setPage] = useState(1);
@@ -23,26 +24,24 @@ export default function ManagePage() {
   const [deletedId, setDeletedId] = useState<number | null>(null);
 
   const { data, isLoading } = useManageArenas(page, 10, category ?? undefined);
+  const { mutate: deleteArena } = useDeleteArena();
   const visibleArenas = data?.arenas.filter((a) => a.id !== deletedId) ?? [];
 
-  const handleDeleteConfirm = async () => {
+  function handleDeleteConfirm() {
     if (!deleteTarget) return;
     const { id } = deleteTarget;
 
+    // Optimistic: hide the card immediately
     setDeletedId(id);
     setDeleteTarget(null);
 
-    try {
-      const res = await fetch(`/api/arenas/${id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "soft-delete" }),
-      });
-      if (!res.ok) throw new Error("Failed to delete arena");
-    } catch {
-      setDeletedId(null);
-    }
-  };
+    deleteArena(id, {
+      onError: () => {
+        // Revert optimistic update on failure
+        setDeletedId(null);
+      },
+    });
+  }
 
   return (
     <div className="mx-auto max-w-4xl space-y-6">
