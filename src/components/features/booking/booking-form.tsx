@@ -5,6 +5,9 @@ import { useSession } from "next-auth/react";
 import { useAvailableSlots } from "@/hooks/use-available-slots";
 import { useCreateBooking } from "@/hooks/use-create-booking";
 import { Spinner } from "@/components/ui/spinner";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { CalendarIcon } from "lucide-react";
 import clsx from "clsx";
 import {
   Dialog,
@@ -77,17 +80,45 @@ export const BookingForm: FC<BoookingFormProps> = ({ arenaId, price }) => {
 
   return (
     <div className="space-y-4">
-      {/* Date input */}
-      <input
-        type="date"
-        value={selectedDate}
-        min={new Date().toISOString().split("T")[0]}
-        onChange={(e) => {
-          setSelectedDate(e.target.value);
-          setSelectedSlots([]);
-        }}
-        className="w-full rounded-md border px-3 py-2 text-sm"
-      />
+      {/* Date picker */}
+      <Popover>
+        <PopoverTrigger asChild>
+          <button
+            type="button"
+            className={clsx(
+              "w-full flex items-center gap-2 rounded-md border px-3 py-2 text-sm cursor-pointer",
+              !selectedDate && "text-gray-400",
+            )}
+          >
+            <CalendarIcon className="size-4" />
+            {selectedDate
+              ? new Date(selectedDate + "T00:00:00").toLocaleDateString("en-GB", {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
+                })
+              : "Select a date"}
+          </button>
+        </PopoverTrigger>
+        <PopoverContent className="w-auto p-0" align="start">
+          <Calendar
+            mode="single"
+            selected={selectedDate ? new Date(selectedDate + "T00:00:00") : undefined}
+            onSelect={(date) => {
+              if (date) {
+                const yyyy = date.getFullYear();
+                const mm = String(date.getMonth() + 1).padStart(2, "0");
+                const dd = String(date.getDate()).padStart(2, "0");
+                setSelectedDate(`${yyyy}-${mm}-${dd}`);
+              } else {
+                setSelectedDate("");
+              }
+              setSelectedSlots([]);
+            }}
+            disabled={{ before: new Date() }}
+          />
+        </PopoverContent>
+      </Popover>
 
       {/* Slot grid */}
       {selectedDate &&

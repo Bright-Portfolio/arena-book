@@ -47,7 +47,7 @@ export default function ManagePage() {
   }
 
   return (
-    <div className="mx-auto max-w-4xl space-y-6 p-4">
+    <div className="mx-auto max-w-4xl h-full space-y-6 p-4">
       <h1 className="text-2xl font-bold">Your Arenas</h1>
 
       {/* Category filter dropdown */}

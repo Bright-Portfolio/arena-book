@@ -16,7 +16,11 @@ interface ArenaCardListProps {
   onDelete?: (id: number) => void;
 }
 
-export const ArenaCardList = ({ arenas, isLoading, onDelete }: ArenaCardListProps) => {
+export const ArenaCardList = ({
+  arenas,
+  isLoading,
+  onDelete,
+}: ArenaCardListProps) => {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-[200px] py-4">
