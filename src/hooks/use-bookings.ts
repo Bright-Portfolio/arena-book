@@ -22,7 +22,7 @@ export function useBookings(page = 1, limit = 10) {
       const json = await res.json();
 
       return {
-        bookings: json.data,
+        bookings: json.data as BookingWithArena[],
         totalCount: json.totalCount,
         hasMore: json.hasMore,
       };

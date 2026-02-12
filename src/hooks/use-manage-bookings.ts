@@ -22,7 +22,7 @@ export function useManageBookings(page = 1, limit = 10) {
       const json = await res.json();
 
       return {
-        bookings: json.data,
+        bookings: json.data as (BookingWithArena & { userName: string })[],
         totalCount: json.totalCount,
         hasMore: json.hasMore,
       };
