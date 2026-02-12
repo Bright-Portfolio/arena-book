@@ -20,7 +20,10 @@ import { useDeleteArena } from "@/hooks/use-delete-arena";
 export default function ManagePage() {
   const [page, setPage] = useState(1);
   const [category, setCategory] = useState<string | null>(null);
-  const [deleteTarget, setDeleteTarget] = useState<{ id: number; name: string } | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<{
+    id: number;
+    name: string;
+  } | null>(null);
   const [deletedId, setDeletedId] = useState<number | null>(null);
 
   const { data, isLoading } = useManageArenas(page, 10, category ?? undefined);
@@ -44,7 +47,7 @@ export default function ManagePage() {
   }
 
   return (
-    <div className="mx-auto max-w-4xl space-y-6">
+    <div className="mx-auto max-w-4xl space-y-6 p-4">
       <h1 className="text-2xl font-bold">Your Arenas</h1>
 
       {/* Category filter dropdown */}
@@ -96,13 +99,21 @@ export default function ManagePage() {
       />
 
       {/* Delete confirmation dialog */}
-      <Dialog open={!!deleteTarget} onClose={() => setDeleteTarget(null)} className="relative z-50">
+      <Dialog
+        open={!!deleteTarget}
+        onClose={() => setDeleteTarget(null)}
+        className="relative z-50"
+      >
         <DialogBackdrop className="fixed inset-0 bg-black/30" />
         <div className="fixed inset-0 flex items-center justify-center p-4">
           <DialogPanel className="w-full max-w-sm rounded-lg bg-white p-6 shadow-xl">
-            <DialogTitle className="text-lg font-semibold">Delete Arena</DialogTitle>
+            <DialogTitle className="text-lg font-semibold">
+              Delete Arena
+            </DialogTitle>
             <p className="mt-2 text-sm text-gray-600">
-              Are you sure you want to delete <span className="font-medium">{deleteTarget?.name}</span>? This action cannot be undone.
+              Are you sure you want to delete{" "}
+              <span className="font-medium">{deleteTarget?.name}</span>? This
+              action cannot be undone.
             </p>
             <div className="mt-4 flex justify-end gap-3">
               <button

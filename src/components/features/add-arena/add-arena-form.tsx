@@ -41,7 +41,7 @@ export const AddArenaForm = ({ arenaId, initialData }: AddArenaFormProps) => {
     setError,
     control,
     reset,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, dirtyFields },
   } = useForm<ArenaFormData>({
     resolver: zodResolver(ArenaFormSchema),
     mode: "onChange",
@@ -301,7 +301,7 @@ export const AddArenaForm = ({ arenaId, initialData }: AddArenaFormProps) => {
 
         {/* Buttons */}
         <div className="flex justify-center gap-3">
-          {isEditMode && (
+          {isEditMode && Object.keys(dirtyFields).length > 0 && (
             <button
               type="button"
               onClick={() => setShowDiscard(true)}

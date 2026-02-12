@@ -39,7 +39,7 @@ export default function RootLayout({
         <SessionProvider>
           <QueryProvider>
             <Navbar />
-            <main className="pt-16">{children}</main>
+            <main className="w-full h-screen pt-16">{children}</main>
           </QueryProvider>
         </SessionProvider>
       </body>

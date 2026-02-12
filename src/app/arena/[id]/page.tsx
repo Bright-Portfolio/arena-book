@@ -27,7 +27,7 @@ export default function ArenaDetailPage() {
   }
 
   return (
-    <div className="mx-auto max-w-4xl p-4">
+    <div className="mx-auto max-w-4xl h-full p-4">
       <div className="flex flex-col lg:flex-row gap-6">
         {/* Arena details */}
         <div className="flex-1 space-y-4">
@@ -75,7 +75,7 @@ export default function ArenaDetailPage() {
         </div>
 
         {/* Booking form */}
-        <div className="flex-1">
+        <div className="flex-1 min-w-0">
           <h2 className="mb-4 text-lg font-semibold">Book this arena</h2>
           <BookingForm arenaId={arena.id} price={arena.price} />
         </div>
