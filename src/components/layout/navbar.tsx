@@ -39,7 +39,7 @@ export const Navbar = () => {
 
   return (
     <>
-      <nav className="fixed top-0 z-50 flex flex-row mx-auto p-4 w-full bg-transparent items-center justify-between">
+      <nav className="fixed top-0 z-50 flex flex-row mx-auto p-4 w-full bg-white items-center justify-between">
         {/* Home button */}
         {pathname !== "/" && (
           <button

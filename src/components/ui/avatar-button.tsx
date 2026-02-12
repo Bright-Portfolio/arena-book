@@ -28,7 +28,7 @@ export const AvatarButton = () => {
 
       <MenuItems
         anchor="bottom end"
-        className="flex flex-col mt-1 gap-0.5 p-1 text-sm border boredr-gray-400 rounded-md bg-white"
+        className="flex flex-col z-50 mt-1 gap-0.5 p-1 text-sm border boredr-gray-400 rounded-md bg-white"
       >
         <MenuItem>
           <Link
