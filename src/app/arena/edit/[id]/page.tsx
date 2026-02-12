@@ -6,16 +6,16 @@ import { AddArenaForm } from "@/components/features/add-arena/add-arena-form";
 import type { ArenaFormData } from "@/lib/validators/arena.schema";
 
 export default function EditArenaPage() {
-  const { id } = useParams<{ id: string }>();
-  const arenaIdNum = Number(id);
-
   const [initialData, setInitialData] = useState<ArenaFormData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { id } = useParams<{ id: string }>();
+  const arenaIdNum = Number(id);
 
+  
   useEffect(() => {
-    if (!id) {
-      setError("No arena ID provided");
+    if (!id || isNaN(Number(id))) {
+      setError("Invalid arena ID");
       setIsLoading(false);
       return;
     }
@@ -29,7 +29,7 @@ export default function EditArenaPage() {
         }
         const json = await res.json();
         const arena = json.data;
-
+        
         setInitialData({
           name: arena.name,
           description: arena.description ?? "",
@@ -49,10 +49,10 @@ export default function EditArenaPage() {
         setIsLoading(false);
       }
     }
-
+    
     fetchArena();
   }, [id]);
-
+  
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-[200px]">

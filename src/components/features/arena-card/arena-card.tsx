@@ -31,7 +31,7 @@ export const ArenaCard = ({
   const router = useRouter();
   const showEditButton = pathname.includes("/manage");
 
-  const handleBookClick = () => {};
+  const handleBookClick = () => router.push(`/arena/${id}`);
 
   return (
     <div className="pb-1.5 border rounded-lg overflow-hidden hover:shadow-md transition-shadow">
@@ -95,7 +95,7 @@ export const ArenaCard = ({
         <button
           type="button"
           onClick={handleBookClick}
-          className="inline-flex flex-row items-center gap-1.5 px-2 py-1 text-xs border border-gray-300 rounded-full text-white bg-black cursor-pointer"
+          className="inline-flex flex-row items-center gap-1.5 px-1.5 py-1 text-xs border border-gray-300 rounded-full text-white bg-black cursor-pointer"
         >
           Book Now
           <div className="p-1.5 rounded-full bg-white">

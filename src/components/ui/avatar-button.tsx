@@ -32,12 +32,34 @@ export const AvatarButton = () => {
       >
         <MenuItem>
           <Link
-            href="/manage"
+            href="/bookings"
             className="w-full px-2 py-1 rounded-md data-focus:bg-gray-200"
           >
-            Manage arena
+            My Bookings
           </Link>
         </MenuItem>
+
+        {session?.user?.role === "owner" && (
+          <>
+            <MenuItem>
+              <Link
+                href="/manage"
+                className="w-full px-2 py-1 rounded-md data-focus:bg-gray-200"
+              >
+                Manage arena
+              </Link>
+            </MenuItem>
+
+            <MenuItem>
+              <Link
+                href="/manage/bookings"
+                className="w-full px-2 py-1 rounded-md data-focus:bg-gray-200"
+              >
+                Manage Bookings
+              </Link>
+            </MenuItem>
+          </>
+        )}
 
         <MenuItem>
           <button
