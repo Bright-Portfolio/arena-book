@@ -17,14 +17,26 @@ export default function ManageBookingsPage() {
   const { data: session } = useSession();
   const [page, setPage] = useState(1);
   const [cancelTarget, setCancelTarget] = useState<number | null>(null);
+  const [canceledId, setCanceledId] = useState<number | null>();
 
   const { data, isLoading } = useManageBookings(page, 10);
   const { mutate: cancelBooking } = useCancelBooking();
 
+  const optimisticBookings =
+    data?.bookings.map((b) =>
+      b.id === canceledId ? { ...b, status: "cancelled" as const } : b,
+    ) ?? [];
+
   function handleCancelConfirm() {
     if (!cancelTarget) return;
-    cancelBooking(cancelTarget);
+
+    setCanceledId(cancelTarget);
     setCancelTarget(null);
+
+    cancelBooking(cancelTarget, {
+      onSuccess: () => setCancelTarget(null),
+      onError: () => setCanceledId(null),
+    });
   }
 
   if (session?.user?.role !== "owner") {
@@ -57,7 +69,7 @@ export default function ManageBookingsPage() {
       <h1 className="text-2xl font-bold">Manage Bookings</h1>
 
       <div>
-        {data.bookings.map((booking) => (
+        {optimisticBookings.map((booking) => (
           <BookingList
             key={booking.id}
             booking={booking}
