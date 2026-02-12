@@ -13,6 +13,7 @@ export const Navbar = () => {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const { data: session, update } = useSession();
+  const isOwner = session?.user?.role === ("owner" as const);
   const router = useRouter();
   const pathname = usePathname();
 
@@ -61,7 +62,7 @@ export const Navbar = () => {
               className="flex flex-row justify-center items-center  gap-1 px-2 py-1.5 border border-gray-300 rounded-full text-sm cursor-pointer"
             >
               <PlusIcon className="w-5 h-5 stroke-2" />
-              Add arena
+              {isOwner ? "Create arena" : "Register company"}
             </button>
           )}
           {session ? (
