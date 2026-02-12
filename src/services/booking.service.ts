@@ -98,16 +98,28 @@ export async function createBooking(
   const endHour = startHour + hours;
 
   if (startHour < openHour || endHour > closeHour) {
-    return { success: false, error: "Slot is outside operating hours", data: null };
+    return {
+      success: false,
+      error: "Slot is outside operating hours",
+      data: null,
+    };
   }
 
   // 3. Construct timestamps
-  const startAt = new Date(`${dateStr}T${String(startHour).padStart(2, "0")}:00:00`);
-  const endAt = new Date(`${dateStr}T${String(endHour).padStart(2, "0")}:00:00`);
+  const startAt = new Date(
+    `${dateStr}T${String(startHour).padStart(2, "0")}:00:00`,
+  );
+  const endAt = new Date(
+    `${dateStr}T${String(endHour).padStart(2, "0")}:00:00`,
+  );
 
   // 4. Validate not in the past
   if (startAt <= new Date()) {
-    return { success: false, error: "Cannot book a slot in the past", data: null };
+    return {
+      success: false,
+      error: "Cannot book a slot in the past",
+      data: null,
+    };
   }
 
   // 5. Check for conflicts
@@ -120,7 +132,13 @@ export async function createBooking(
   const totalPrice = arena.price * hours;
 
   // 7. Insert booking
-  const booking = await insertBooking(userId, arenaId, startAt, endAt, totalPrice);
+  const booking = await insertBooking(
+    userId,
+    arenaId,
+    startAt,
+    endAt,
+    totalPrice,
+  );
 
   return { success: true, data: booking };
 }
@@ -154,7 +172,11 @@ export async function getCompanyBookings(
   totalCount: number;
   hasMore: boolean;
 }> {
-  const { data, totalCount } = await findBookingsByCompanyId(companyId, page, limit);
+  const { data, totalCount } = await findBookingsByCompanyId(
+    companyId,
+    page,
+    limit,
+  );
   const hasMore = page * limit < totalCount;
   return { data, totalCount, hasMore };
 }
@@ -172,11 +194,19 @@ export async function cancelBooking(
   }
 
   if (booking.userId !== userId) {
-    return { success: false, error: "You can only cancel your own bookings", data: null };
+    return {
+      success: false,
+      error: "You can only cancel your own bookings",
+      data: null,
+    };
   }
 
   if (booking.status === "cancelled") {
-    return { success: false, error: "Booking is already cancelled", data: null };
+    return {
+      success: false,
+      error: "Booking is already cancelled",
+      data: null,
+    };
   }
 
   const updated = await updateBookingStatus(bookingId, "cancelled");
