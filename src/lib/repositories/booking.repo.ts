@@ -80,7 +80,9 @@ export async function insertBooking(
 /**
  * Find booking by bookingId
  */
-export async function findBookingById(id: number): Promise<BookingOutput | null> {
+export async function findBookingById(
+  id: number,
+): Promise<BookingOutput | null> {
   const result = await pool.query<BookingOutput>(
     `
             SELECT
@@ -129,7 +131,7 @@ export async function findBookingsByUserId(
         FROM bookings b
         JOIN arenas a ON a.id = b.arena_id
         WHERE b.user_id = $1
-        ORDER BY b.start_at DESC
+        ORDER BY b.created_at DESC
         LIMIT $2 OFFSET $3
     `,
     [userId, limit, offset],
@@ -181,7 +183,7 @@ export async function findBookingsByCompanyId(
         JOIN arenas a ON a.id = b.arena_id
         JOIN users u ON u.id = b.user_id
         WHERE a.company_id = $1
-        ORDER BY b.start_at DESC
+        ORDER BY b.created_at DESC
         LIMIT $2 OFFSET $3
     `,
     [companyId, limit, offset],
