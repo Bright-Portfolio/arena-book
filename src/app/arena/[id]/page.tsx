@@ -12,7 +12,7 @@ export default function ArenaDetailPage() {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center min-h-[300px]">
+      <div className="flex justify-center items-center min-h-full">
         <Spinner className="size-6" />
       </div>
     );
@@ -20,17 +20,17 @@ export default function ArenaDetailPage() {
 
   if (isError || !arena) {
     return (
-      <div className="flex justify-center items-center min-h-[300px]">
+      <div className="flex justify-center items-center min-h-full">
         <p className="text-sm text-gray-500">Arena not found</p>
       </div>
     );
   }
 
   return (
-    <div className="mx-auto max-w-4xl h-full p-4">
+    <div className="mx-auto max-w-4xl min-h-full p-4">
       <div className="flex flex-col lg:flex-row gap-6">
         {/* Arena details */}
-        <div className="flex-1 space-y-4">
+        <div className="flex-1 min-w-0 space-y-4">
           {arena.imageUrls?.[0] && (
             <div className="relative h-64 w-full overflow-hidden rounded-lg">
               <Image

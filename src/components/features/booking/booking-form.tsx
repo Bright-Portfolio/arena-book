@@ -132,7 +132,7 @@ export const BookingForm: FC<BoookingFormProps> = ({ arenaId, price }) => {
       {/* Slot grid */}
       {selectedDate &&
         (isLoading ? (
-          <div className="flex justify-center py-4">
+          <div className="flex justify-center items-center py-4">
             <Spinner className="size-6" />
           </div>
         ) : (
