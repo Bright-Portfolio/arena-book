@@ -31,7 +31,7 @@ export default function ManageBookingsPage() {
 
   if (session?.user?.role !== "owner") {
     return (
-      <div className="flex justify-center items-center min-h-[300px]">
+      <div className="flex justify-center items-center min-h-full">
         <p className="text-sm text-gray-500">Unauthorized</p>
       </div>
     );
@@ -39,7 +39,7 @@ export default function ManageBookingsPage() {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center min-h-[300px]">
+      <div className="flex justify-center items-center min-h-full">
         <Spinner className="size-6" />
       </div>
     );
@@ -47,7 +47,7 @@ export default function ManageBookingsPage() {
 
   if (!data?.bookings.length) {
     return (
-      <div className="mx-auto max-w-4xl p-4">
+      <div className="mx-auto max-w-4xl p-4 min-h-full">
         <h1 className="text-2xl font-bold">Manage Bookings</h1>
         <p className="mt-4 text-sm text-gray-500">No bookings yet</p>
       </div>
@@ -55,7 +55,7 @@ export default function ManageBookingsPage() {
   }
 
   return (
-    <div className="mx-auto max-w-4xl p-4 space-y-6">
+    <div className="mx-auto max-w-4xl p-4 min-h-full space-y-6">
       <h1 className="text-2xl font-bold">Manage Bookings</h1>
 
       <div>

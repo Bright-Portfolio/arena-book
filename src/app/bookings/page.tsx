@@ -29,7 +29,7 @@ export default function MyBookingsPage() {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center min-h-[300px]">
+      <div className="flex justify-center items-center w-full h-screen">
         <Spinner className="size-6" />
       </div>
     );
@@ -37,7 +37,7 @@ export default function MyBookingsPage() {
 
   if (!data?.bookings.length) {
     return (
-      <div className="mx-auto max-w-4xl p-4">
+      <div className="justify-center items-center mx-auto max-w-4xl p-4 w-full h-screen">
         <h1 className="text-2xl font-bold">My Bookings</h1>
         <p className="mt-4 text-sm text-gray-500">No bookings yet</p>
       </div>
@@ -45,7 +45,7 @@ export default function MyBookingsPage() {
   }
 
   return (
-    <div className="mx-auto max-w-4xl p-4 space-y-6">
+    <div className="mx-auto max-w-4xl p-4 space-y-6 min-h-full">
       <h1 className="text-2xl font-bold">My Bookings</h1>
 
       {/* Booking list */}

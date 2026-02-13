@@ -43,9 +43,9 @@ export async function getAvailableSlots(
   const takenHours = new Set<number>();
   for (const booking of existingBookings) {
     const start = new Date(booking.startAt).getHours();
-    const end = new Date(booking.endAt).getHours();
+    const bookingEnd = new Date(booking.endAt).getHours() || 24;
     // Mark all hours in the booking range as taken
-    for (let h = start; h < end; h++) {
+    for (let h = start; h < bookingEnd; h++) {
       takenHours.add(h);
     }
   }
@@ -55,10 +55,13 @@ export async function getAvailableSlots(
   const today = now.toISOString().split("T")[0];
   const isToday = dateStr === today;
   const currentHour = now.getHours();
+  // Openning 24Hrs
+  const is24Hrs = openHour === closeHour;
+  const endHour = is24Hrs ? 24 : closeHour;
 
   // Generate slots
   const slots: Slot[] = [];
-  for (let hour = openHour; hour < closeHour; hour++) {
+  for (let hour = openHour; hour < endHour; hour++) {
     const startTime = String(hour).padStart(2, "0") + ":00";
     const endTime = String(hour + 1).padStart(2, "0") + ":00";
 
@@ -96,8 +99,9 @@ export async function createBooking(
   const [openHour] = arena.openTime.split(":").map(Number);
   const [closeHour] = arena.closeTime.split(":").map(Number);
   const endHour = startHour + hours;
+  const is24Hrs = openHour === closeHour;
 
-  if (startHour < openHour || endHour > closeHour) {
+  if (!is24Hrs && (startHour < openHour || endHour > closeHour)) {
     return {
       success: false,
       error: "Slot is outside operating hours",
