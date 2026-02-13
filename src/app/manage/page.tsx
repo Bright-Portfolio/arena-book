@@ -24,26 +24,14 @@ export default function ManagePage() {
     id: number;
     name: string;
   } | null>(null);
-  const [deletedId, setDeletedId] = useState<number | null>(null);
-
   const { data, isLoading } = useManageArenas(page, 10, category ?? undefined);
   const { mutate: deleteArena } = useDeleteArena();
-  const visibleArenas = data?.arenas.filter((a) => a.id !== deletedId) ?? [];
+  const visibleArenas = data?.arenas ?? [];
 
   function handleDeleteConfirm() {
     if (!deleteTarget) return;
-    const { id } = deleteTarget;
-
-    // Optimistic: hide the card immediately
-    setDeletedId(id);
     setDeleteTarget(null);
-
-    deleteArena(id, {
-      onError: () => {
-        // Revert optimistic update on failure
-        setDeletedId(null);
-      },
-    });
+    deleteArena(deleteTarget.id);
   }
 
   return (
