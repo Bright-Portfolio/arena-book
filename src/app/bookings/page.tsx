@@ -15,25 +15,16 @@ import {
 export default function MyBookingsPage() {
   const [page, setPage] = useState(1);
   const [cancelTarget, setCancelTarget] = useState<number | null>(null);
-  const [cancelledId, setCancelledId] = useState<number | null>(null);
 
   const { data, isLoading } = useBookings(page, 10);
   const { mutate: cancelBooking } = useCancelBooking();
 
-  const optimisticBookings = data?.bookings.map((b) =>
-    b.id === cancelledId ? { ...b, status: "cancelled" as const } : b
-  ) ?? [];
-
   function handleCancelConfirm() {
     if (!cancelTarget) return;
 
-    setCancelledId(cancelTarget);
     setCancelTarget(null);
 
-    cancelBooking(cancelTarget, {
-      onSuccess: () => setCancelledId(null),
-      onError: () => setCancelledId(null),
-    });
+    cancelBooking(cancelTarget);
   }
 
   if (isLoading) {
@@ -59,7 +50,7 @@ export default function MyBookingsPage() {
 
       {/* Booking list */}
       <div>
-        {optimisticBookings.map((booking) => (
+        {data.bookings.map((booking) => (
           <BookingList
             key={booking.id}
             booking={booking}
