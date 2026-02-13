@@ -136,7 +136,7 @@ export const BookingForm: FC<BoookingFormProps> = ({ arenaId, price }) => {
             <Spinner className="size-6" />
           </div>
         ) : (
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap justify-center items-center gap-2">
             {data?.slots.map((slot) => {
               const isSelected = selectedSlots.includes(slot.startHour);
 
