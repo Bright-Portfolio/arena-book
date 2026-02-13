@@ -43,9 +43,9 @@ export async function getAvailableSlots(
   const takenHours = new Set<number>();
   for (const booking of existingBookings) {
     const start = new Date(booking.startAt).getHours();
-    const bookingEnd = new Date(booking.endAt).getHours() || 24;
+    const end = new Date(booking.endAt).getHours() || 24;
     // Mark all hours in the booking range as taken
-    for (let h = start; h < bookingEnd; h++) {
+    for (let h = start; h < end; h++) {
       takenHours.add(h);
     }
   }
