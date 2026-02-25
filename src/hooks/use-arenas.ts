@@ -18,7 +18,7 @@ export function useArenas(page = 1, limit = 10, category?: string) {
       if (category) params.set("category", category);
 
       const res = await fetch(`/api/arenas?${params}`);
-      if (!res.ok) throw new Error("Failed to fecth arenas");
+      if (!res.ok) throw new Error("Failed to fetch arenas");
 
       const json = await res.json();
 

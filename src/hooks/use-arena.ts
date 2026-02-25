@@ -9,7 +9,7 @@ export function useArena(id: number) {
     queryKey: ["arena", id],
     queryFn: async () => {
       const res = await fetch(`/api/arenas/${id}`);
-      if (!res.ok) throw new Error("Failed to fecth arena");
+      if (!res.ok) throw new Error("Failed to fetch arena");
 
       const json = await res.json();
       return json.data;
