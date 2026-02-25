@@ -24,7 +24,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       // 1. Define the form fields
       credentials: {
         email: { label: "Email", type: "email" },
-        password: { label: "Passsword", type: "password" },
+        password: { label: "Password", type: "password" },
       },
 
       //2. The authorize function
