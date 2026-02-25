@@ -270,7 +270,7 @@ export const AddArenaForm = ({ arenaId, initialData }: AddArenaFormProps) => {
           render={({ field, fieldState }) => (
             <TextareaField
               label="Address"
-              placeholder="Enter you areana address"
+              placeholder="Enter you arena address"
               error={fieldState.error?.message}
               {...field}
             />

@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import type { CreateArenaOutput } from "@/lib/validators/arena.schema";
 
 /**
- * For a fethcing a single arena result
+ * For a fetching a single arena result
  */
 export function useArena(id: number) {
   return useQuery<CreateArenaOutput>({
