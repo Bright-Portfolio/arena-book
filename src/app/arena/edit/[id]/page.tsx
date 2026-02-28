@@ -2,6 +2,7 @@
 
 import { useParams } from "next/navigation";
 import { AddArenaForm } from "@/components/features/add-arena/add-arena-form";
+import { Spinner } from "@/components/ui/spinner";
 import { useArena } from "@/hooks/use-arena";
 
 export default function EditArenaPage() {
@@ -12,7 +13,7 @@ export default function EditArenaPage() {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-[200px]">
-        <p className="text-gray-500">Loading...</p>
+        <Spinner className="size-6"/>
       </div>
     );
   }

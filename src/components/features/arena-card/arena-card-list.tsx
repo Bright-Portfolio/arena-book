@@ -1,4 +1,5 @@
 import { ArenaCard } from "./arena-card";
+import { Spinner } from "@/components/ui/spinner";
 
 interface Arena {
   id: number;
@@ -21,17 +22,17 @@ export const ArenaCardList = ({
   isLoading,
   onDelete,
 }: ArenaCardListProps) => {
-  if (isLoading) {
+  if (!isLoading) {
     return (
-      <div className="flex justify-center items-center min-h-[200px] py-4">
-        <p className="text-gray-500">Loading...</p>
+      <div className="flex justify-center items-center flex-1">
+        <Spinner className="size-6" />
       </div>
     );
   }
 
   if (!arenas.length) {
     return (
-      <div className="flex justify-center items-center min-h-[200px] py-4">
+      <div className="flex justify-center items-center flex-1">
         <p className="text-gray-500">No arenas found.</p>
       </div>
     );
