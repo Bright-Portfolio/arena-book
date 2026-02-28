@@ -17,7 +17,7 @@ export function useCancelBooking() {
       return json.data;
     },
     onMutate: async (bookingId: number) => {
-      // Cancel old refetches to prevent overwrite by stale data
+      // Cancel old re-fetches to prevent overwrite by stale data
       await queryClient.cancelQueries({ queryKey: ["bookings"] });
       await queryClient.cancelQueries({ queryKey: ["manage-bookings"] });
 
