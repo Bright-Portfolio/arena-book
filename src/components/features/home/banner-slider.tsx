@@ -48,9 +48,9 @@ export const BannerSlider = () => {
   }, [nextSlide, currentSlide]);
 
   return (
-    <div className="relative w-full max-w-7xl aspect-[16/9] rounded-xl overflow-hidden group">
+    <div className="relative w-full flex-1 min-h-0 md:max-h-[60vh] rounded-xl overflow-hidden group">
       {/* Slider container */}
-      <div className="flex flex-row h-full transition-all duration-500 ease-in-out">
+      <div className="absolute inset-0 flex flex-row transition-all duration-500 ease-in-out">
         {bannerSlides.map((slider) => (
           <div
             key={slider.id}

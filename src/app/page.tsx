@@ -13,8 +13,8 @@ export default function HomePage() {
 
   return (
     <div
-      className="relative flex flex-col items-center justify-start gap-4
-         w-full pb-4 pr-4 pl-4"
+      className="relative flex flex-1 flex-col items-center justify-center gap-4
+         w-full px-4 md:px-20"
     >
       {/* Slide Banner Background image */}
       <BannerSlider />
