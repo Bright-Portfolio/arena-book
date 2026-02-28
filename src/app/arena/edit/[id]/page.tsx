@@ -12,7 +12,7 @@ export default function EditArenaPage() {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center min-h-[200px]">
+      <div className="flex justify-center items-center flex-1">
         <Spinner className="size-6"/>
       </div>
     );
@@ -20,7 +20,7 @@ export default function EditArenaPage() {
 
   if (error || !arena) {
     return (
-      <div className="flex justify-center items-center min-h-[200px]">
+      <div className="flex justify-center items-center flex-1">
         <p className="text-red-500">{error?.message ?? "Arena not found"}</p>
       </div>
     );
@@ -41,7 +41,7 @@ export default function EditArenaPage() {
   };
 
   return (
-    <div className="mx-auto w-full h-screen">
+    <div className="mx-auto w-full">
       <AddArenaForm arenaId={arenaIdNum} initialData={initialData} />
     </div>
   );

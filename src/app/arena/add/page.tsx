@@ -4,7 +4,7 @@ export default function addArenaPage() {
 
 
   return (
-    <div className="mx-auto w-full h-screen">
+    <div className="mx-auto w-full flex-1">
       <AddArenaForm />
     </div>
   );

@@ -22,7 +22,7 @@ export const ArenaCardList = ({
   isLoading,
   onDelete,
 }: ArenaCardListProps) => {
-  if (!isLoading) {
+  if (isLoading) {
     return (
       <div className="flex justify-center items-center flex-1">
         <Spinner className="size-6" />
