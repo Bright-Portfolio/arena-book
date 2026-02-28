@@ -102,7 +102,7 @@ export const AddArenaForm = ({ arenaId, initialData }: AddArenaFormProps) => {
   };
 
   return (
-    <div className="mx-auto max-w-2xl p-4 bg-white overflow-y-auto">
+    <div className="mx-auto max-w-2xl">
       <h3 className="text-center text-lg font-semibold">
         {isEditMode ? "Edit Arena" : "Create Arena"}
       </h3>

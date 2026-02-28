@@ -41,7 +41,7 @@ export default function EditArenaPage() {
   };
 
   return (
-    <div className="mx-auto w-full">
+    <div className="mx-auto max-w-4xl w-full p-4 flex-1">
       <AddArenaForm arenaId={arenaIdNum} initialData={initialData} />
     </div>
   );
