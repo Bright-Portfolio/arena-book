@@ -166,7 +166,6 @@ export async function findArenas(
  * Find arena by id
  */
 
-//Note: add condition check where deleted_at not = null
 export async function findArenaById(
   id: number,
 ): Promise<CreateArenaOutput | null> {
@@ -190,7 +189,7 @@ export async function findArenaById(
       updated_at AS "updatedAt",
       deleted_at AS "deletedAt"
     FROM arenas
-    WHERE id = $1
+    WHERE id = $1 AND deleted_at IS NULL
     `,
     [id],
   );
@@ -219,7 +218,7 @@ export async function updateArena(
       phone_no = $10,
       capacity = $11,
       updated_at = NOW()
-    WHERE id = $12
+    WHERE id = $12 AND deleted_at IS NULL
     RETURNING
       id,
       name,
