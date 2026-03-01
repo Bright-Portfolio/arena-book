@@ -69,9 +69,9 @@ export async function insertArena(
 
 export async function findArenaByName(
   name: string,
-): Promise<{ name: string } | null> {
-  const result = await pool.query<{ name: string }>(
-    `SELECT name FROM arenas WHERE name ILIKE $1 AND deleted_at IS NULL`,
+): Promise<{ id: number; name: string } | null> {
+  const result = await pool.query<{ id: number; name: string }>(
+    `SELECT id, name FROM arenas WHERE name ILIKE $1 AND deleted_at IS NULL`,
     [name],
   );
   return result.rows[0] || null;
@@ -165,6 +165,8 @@ export async function findArenas(
 /**
  * Find arena by id
  */
+
+//Note: add condition check where deleted_at not = null
 export async function findArenaById(
   id: number,
 ): Promise<CreateArenaOutput | null> {

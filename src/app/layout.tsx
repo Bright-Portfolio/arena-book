@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { SessionProvider } from "next-auth/react";
 import { Navbar } from "@/components/layout";
-import { testConnection } from "../lib/db";
 import "./globals.css";
 import { QueryProvider } from "@/components/provider/query-provider";
 
@@ -25,8 +24,6 @@ export const metadata: Metadata = {
   ],
 };
 
-//test database connection
-testConnection();
 
 export default function RootLayout({
   children,

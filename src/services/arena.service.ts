@@ -72,8 +72,9 @@ export async function updateArena(
     return { success: false, error: "Arena not found", data: null };
   }
 
+  // Note: change to findArenaById more unique to prevent wrong arena update
   const existing = await findArenaByName(data.name);
-  if (existing && existing.name.toLowerCase() !== arena.name.toLowerCase()) {
+  if (existing && existing.id !== arena.id) {
     return {
       success: false,
       error: "Arena name already taken",

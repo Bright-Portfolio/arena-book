@@ -7,6 +7,7 @@ import type {
   CreateCompanyOutput,
 } from "@/lib/validators/company.schema";
 
+//Note: Check does this func use for update company or nor if not change the name
 export async function registerOrUpdateCompany(
   userId: number,
   data: CreateCompanyInput,

@@ -55,7 +55,7 @@ export async function getAvailableSlots(
   const today = now.toISOString().split("T")[0];
   const isToday = dateStr === today;
   const currentHour = now.getHours();
-  // Openning 24Hrs
+  // Opening 24Hrs
   const is24Hrs = openHour === closeHour;
   const endHour = is24Hrs ? 24 : closeHour;
 

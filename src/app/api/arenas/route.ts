@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { getArenas, registerArena } from "@/services/arena.service";
 import { CreateArenaInputSchema } from "@/lib/validators/arena.schema";
 import { auth } from "@/auth";
-import { findCompanyByOwnerId } from "@/lib/repositories/company.repo";
 
 export async function POST(request: Request) {
   try {
@@ -18,9 +17,8 @@ export async function POST(request: Request) {
       );
     }
 
-    const userId = Number(session.user.id);
-    const company = await findCompanyByOwnerId(userId);
-    if (!company) {
+    const companyId = session?.user?.companyId;
+    if (!companyId) {
       return NextResponse.json(
         {
           success: false,
@@ -31,7 +29,6 @@ export async function POST(request: Request) {
       );
     }
 
-    const companyId = company.id;
     const body = await request.json();
 
     const validatedInput = CreateArenaInputSchema.safeParse({
