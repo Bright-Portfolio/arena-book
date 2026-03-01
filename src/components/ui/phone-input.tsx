@@ -13,8 +13,6 @@ import {
   CheckIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
-import dynamic from "next/dynamic";
-import { hasFlag } from "country-flag-icons";
 import {
   getCountryCallingCode,
   getCountries,
@@ -47,26 +45,9 @@ const getCountryName = (code: CountryCode): string => {
   }
 };
 
-const flagCache = new Map<string, React.ComponentType<{ className?: string }>>();
-
-const CountryFlag: FC<{ code: CountryCode; className?: string }> = ({
-  code,
-  className,
-}) => {
-  if (!hasFlag(code)) return null;
-
-  if (!flagCache.has(code)) {
-    flagCache.set(
-      code,
-      dynamic(() =>
-        import("country-flag-icons/react/3x2").then((mod) => mod[code]),
-      ),
-    );
-  }
-
-  const Flag = flagCache.get(code)!;
-  return <Flag className={className} />;
-};
+// Converts ISO country code to flag emoji (e.g. "US" → 🇺🇸)
+const toEmojiFlag = (code: string) =>
+  String.fromCodePoint(...[...code].map((c) => 127397 + c.charCodeAt(0)));
 
 export const PhoneInput: FC<PhoneInputProps> = ({
   label,
@@ -147,7 +128,7 @@ export const PhoneInput: FC<PhoneInputProps> = ({
             <>
               <div className="relative">
                 <ComboboxButton className="flex justify-between items-center gap-1 px-2 py-1 border border-gray-300 border-r-0 text-sm text-nowrap rounded-lg rounded-r-none outline-none cursor-pointer data-focus:border-black data-focus:border-r data-active:shadow-inner transition-all duration-75">
-                  <CountryFlag code={selected.code} className="w-6 h-6" />
+                  <span className="text-lg">{toEmojiFlag(selected.code)}</span>
                   <span>+{selected.callingCode}</span>
                   <ChevronDownIcon
                     className={`w-4 h-4 text-gray-300 transition ${
@@ -156,7 +137,7 @@ export const PhoneInput: FC<PhoneInputProps> = ({
                   />
                 </ComboboxButton>
 
-                <ComboboxOptions className="absolute z-[60] top-full left-0 mt-1 w-40 rounded-lg bg-white border border-gray-300 shadow-lg">
+                <ComboboxOptions transition className="absolute z-[60] top-full left-0 mt-1 w-40 rounded-lg bg-white border border-gray-300 shadow-lg transition-all duration-300 origin-top data-closed:scale-y-95 data-closed:opacity-0">
                   <div
                     className="sticky top-0 bg-white border-b border-gray-200 p-2"
                     onMouseDown={(e) => e.stopPropagation()}
@@ -188,7 +169,7 @@ export const PhoneInput: FC<PhoneInputProps> = ({
                               className="group absolute w-full flex flex-row justify-start items-center gap-2 px-2 py-1 cursor-pointer hover:bg-gray-100 data-focus:bg-gray-100"
                               style={{ top: virtualRow.start, height: virtualRow.size }}
                             >
-                              <CountryFlag code={country.code} className="w-6 h-4" />
+                              <span>{toEmojiFlag(country.code)}</span>
                               <span className="text-sm flex-1">
                                 ({country.code}) +{country.callingCode}
                               </span>
