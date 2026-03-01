@@ -1,6 +1,7 @@
 "use client";
 
 import { FC } from "react";
+import { useVirtualizer } from "@tanstack/react-virtual";
 import {
   Combobox,
   ComboboxButton,
@@ -12,7 +13,8 @@ import {
   CheckIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
-import * as Flags from "country-flag-icons/react/3x2";
+import dynamic from "next/dynamic";
+import { hasFlag } from "country-flag-icons";
 import {
   getCountryCallingCode,
   getCountries,
@@ -21,11 +23,11 @@ import {
 import { useMemo, useState } from "react";
 import { cn } from "@/lib/utils";
 
+
 interface Country {
   code: CountryCode;
   name: string;
   callingCode: string;
-  flag: React.ComponentType<{ className?: string }> | null;
 }
 
 interface PhoneInputProps {
@@ -36,20 +38,34 @@ interface PhoneInputProps {
   labelClassName?: string;
 }
 
+const regionNames = new Intl.DisplayNames(["en"], { type: "region" });
 const getCountryName = (code: CountryCode): string => {
   try {
-    const regionNames = new Intl.DisplayNames(["en"], { type: "region" });
     return regionNames.of(code) || code;
   } catch {
     return code;
   }
 };
 
-const getCountryFlag = (code: CountryCode) => {
-  if (code in Flags) {
-    return Flags[code as keyof typeof Flags];
+const flagCache = new Map<string, React.ComponentType<{ className?: string }>>();
+
+const CountryFlag: FC<{ code: CountryCode; className?: string }> = ({
+  code,
+  className,
+}) => {
+  if (!hasFlag(code)) return null;
+
+  if (!flagCache.has(code)) {
+    flagCache.set(
+      code,
+      dynamic(() =>
+        import("country-flag-icons/react/3x2").then((mod) => mod[code]),
+      ),
+    );
   }
-  return null;
+
+  const Flag = flagCache.get(code)!;
+  return <Flag className={className} />;
 };
 
 export const PhoneInput: FC<PhoneInputProps> = ({
@@ -66,7 +82,6 @@ export const PhoneInput: FC<PhoneInputProps> = ({
       code,
       name: getCountryName(code),
       callingCode: getCountryCallingCode(code),
-      flag: getCountryFlag(code),
     }));
   }, []);
 
@@ -101,6 +116,16 @@ export const PhoneInput: FC<PhoneInputProps> = ({
     onChange({ ...value, phoneCountryISO2: country.code });
   };
 
+  //Tanstack Virtualizer
+  const [listEl, setListEl] = useState<HTMLDivElement | null>(null);
+
+  const virtualizer = useVirtualizer({
+    count: filteredCountries.length,
+    getScrollElement: () => listEl,
+    estimateSize: () => 32,
+    overscan: 20,
+  });
+
   return (
     <div className="flex- flex-col justify-start items-center w-full">
       {label && (
@@ -122,7 +147,7 @@ export const PhoneInput: FC<PhoneInputProps> = ({
             <>
               <div className="relative">
                 <ComboboxButton className="flex justify-between items-center gap-1 px-2 py-1 border border-gray-300 border-r-0 text-sm text-nowrap rounded-lg rounded-r-none outline-none cursor-pointer data-focus:border-black data-focus:border-r data-active:shadow-inner transition-all duration-75">
-                  {selected.flag && <selected.flag className="w-6 h-6" />}
+                  <CountryFlag code={selected.code} className="w-6 h-6" />
                   <span>+{selected.callingCode}</span>
                   <ChevronDownIcon
                     className={`w-4 h-4 text-gray-300 transition ${
@@ -131,7 +156,7 @@ export const PhoneInput: FC<PhoneInputProps> = ({
                   />
                 </ComboboxButton>
 
-                <ComboboxOptions className="absolute z-[60] top-full left-0 mt-1 space-y-1 max-h-48 w-40 overflow-y-auto rounded-lg bg-white border border-gray-300 shadow-lg">
+                <ComboboxOptions className="absolute z-[60] top-full left-0 mt-1 w-40 rounded-lg bg-white border border-gray-300 shadow-lg">
                   <div
                     className="sticky top-0 bg-white border-b border-gray-200 p-2"
                     onMouseDown={(e) => e.stopPropagation()}
@@ -152,23 +177,31 @@ export const PhoneInput: FC<PhoneInputProps> = ({
                       No countries found
                     </div>
                   ) : (
-                    filteredCountries.map((country) => (
-                      <ComboboxOption
-                        key={country.code}
-                        value={country}
-                        className="group flex flex-row justify-start items-center gap-2 px-2 py-1 cursor-pointer hover:bg-gray-100 data-focus:bg-gray-100"
-                      >
-                        {country.flag && <country.flag className="w-6 h-4" />}
-                        <span className="text-sm flex-1">
-                          ({country.code}) +{country.callingCode}
-                        </span>
-                        <CheckIcon className="invisible  w-3 h-3 stroke-2 text-black group-data-selected:visible" />
-                      </ComboboxOption>
-                    ))
+                    <div ref={setListEl} className="max-h-48 overflow-y-auto">
+                      <div style={{ height: virtualizer.getTotalSize(), position: "relative" }}>
+                        {virtualizer.getVirtualItems().map((virtualRow) => {
+                          const country = filteredCountries[virtualRow.index];
+                          return (
+                            <ComboboxOption
+                              key={country.code}
+                              value={country}
+                              className="group absolute w-full flex flex-row justify-start items-center gap-2 px-2 py-1 cursor-pointer hover:bg-gray-100 data-focus:bg-gray-100"
+                              style={{ top: virtualRow.start, height: virtualRow.size }}
+                            >
+                              <CountryFlag code={country.code} className="w-6 h-4" />
+                              <span className="text-sm flex-1">
+                                ({country.code}) +{country.callingCode}
+                              </span>
+                              <CheckIcon className="invisible w-3 h-3 stroke-2 text-black group-data-selected:visible" />
+                            </ComboboxOption>
+                          );
+                        })}
+                      </div>
+                    </div>
                   )}
                 </ComboboxOptions>
               </div>
-            </>
+              </>
           )}
         </Combobox>
         <input

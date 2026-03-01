@@ -44,7 +44,7 @@ export const AddArenaForm = ({ arenaId, initialData }: AddArenaFormProps) => {
     formState: { errors, isSubmitting, dirtyFields },
   } = useForm<ArenaFormData>({
     resolver: zodResolver(ArenaFormSchema),
-    mode: "onChange",
+    mode: "onTouched",
     defaultValues: initialData ?? {
       name: "",
       description: "",
