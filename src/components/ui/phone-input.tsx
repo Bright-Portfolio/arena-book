@@ -105,6 +105,7 @@ export const PhoneInput: FC<PhoneInputProps> = ({
     getScrollElement: () => listEl,
     estimateSize: () => 32,
     overscan: 20,
+    useFlushSync: false
   });
 
   return (
