@@ -24,6 +24,7 @@ import { PhoneInput } from "@/components/ui/phone-input";
 import { ImageUploadArea } from "@/components/ui/image-upload-area";
 import { SPORT_CATEGORIES } from "@/lib/constants/sports";
 import { useRouter } from "next/navigation";
+import { useCreateArena } from "@/hooks/use-create-arena";
 
 interface AddArenaFormProps {
   arenaId?: number;
@@ -41,7 +42,7 @@ export const AddArenaForm = ({ arenaId, initialData }: AddArenaFormProps) => {
     setError,
     control,
     reset,
-    formState: { errors, isSubmitting, dirtyFields },
+    formState: { errors, dirtyFields },
   } = useForm<ArenaFormData>({
     resolver: zodResolver(ArenaFormSchema),
     mode: "onTouched",
@@ -68,37 +69,18 @@ export const AddArenaForm = ({ arenaId, initialData }: AddArenaFormProps) => {
   }));
 
   const router = useRouter();
+  const { mutate, isPending } = useCreateArena();
 
-  const onSubmit = async (data: ArenaFormData) => {
-    try {
-      const url = isEditMode ? `/api/arenas/${arenaId}` : "/api/arenas";
-      const method = isEditMode ? "PUT" : "POST";
-
-      const response = await fetch(url, {
-        method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-
-      if (!response.ok) {
-        const result = await response.json();
-
-        if (result.field) {
-          setError(result.field, { message: result.message });
-          return;
-        } else {
-          setError("root", {
-            message: result.message || "Something went wrong",
-          });
-          return;
-        }
-      }
-
-      router.push("/manage");
-    } catch (error) {
-      console.error("Error submitting form:", error);
-      setError("root", { message: "Network error. Please try again." });
-    }
+  const onSubmit = (data: ArenaFormData) => {
+    mutate(
+      { data, arenaId },
+      {
+        onSuccess: () => router.push("/manage"),
+        onError: (error) => {
+          setError("root", { message: error.message });
+        },
+      },
+    );
   };
 
   return (
@@ -312,7 +294,7 @@ export const AddArenaForm = ({ arenaId, initialData }: AddArenaFormProps) => {
           )}
           <button
             type="submit"
-            disabled={isSubmitting || isUploading}
+            disabled={isPending || isUploading}
             className="px-2 py-1 rounded-lg text-white bg-black cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Save
