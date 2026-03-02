@@ -13,7 +13,7 @@ export async function upsertCompany(
   userId: number,
   data: CreateCompanyInput,
 ): Promise<CreateCompanyOutput> {
-  const result = await pool.query(
+  const result = await pool.query<CreateCompanyOutput>(
     `
     WITH upsert_company AS (
     INSERT INTO companies (owner_id, name, phone_country_code, phone_no, address)
@@ -41,12 +41,12 @@ export async function upsertCompany(
 
 export async function findCompanyByName(
   companyName: string,
-): Promise<{ name: string } | null> {
-  const result = await pool.query<{ name: string }>(
+): Promise<{ name: string; ownerId: number } | null> {
+  const result = await pool.query<{ name: string; ownerId: number }>(
     `
-      SELECT name
+      SELECT name, owner_id AS "ownerId"
       FROM companies
-      WHERE name = $1
+      WHERE name = $1 AND deleted_at IS NULL
     `,
     [companyName],
   );
@@ -54,8 +54,8 @@ export async function findCompanyByName(
   return result.rows[0] || null;
 }
 
-export async function findCompanyByOwnerId(userId: number) {
-  const result = await pool.query(
+export async function findCompanyByOwnerId(userId: number): Promise<CreateCompanyOutput | null> {
+  const result = await pool.query<CreateCompanyOutput>(
     `
       SELECT id, owner_id AS "ownerId", name, phone_country_code AS "phoneCountryISO2", phone_no AS "phoneNo", address
       FROM companies
@@ -66,4 +66,3 @@ export async function findCompanyByOwnerId(userId: number) {
 
   return result.rows[0] || null;
 }
-

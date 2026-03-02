@@ -13,7 +13,8 @@ export async function registerOrUpdateCompany(
   data: CreateCompanyInput,
 ): Promise<CreateCompanyOutput> {
   const existing = await findCompanyByName(data.name);
-  if (existing) throw new Error("Company name already taken");
+  if (existing && existing.ownerId !== userId)
+    throw new Error("Company name already taken");
 
   return upsertCompany(userId, data);
 }
