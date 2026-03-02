@@ -59,7 +59,7 @@ export default function ManagePage() {
       />
 
       {/* Pagination */}
-      {data && (
+      {data && visibleArenas.length > 0 && (
         <Pagination
           page={page}
           hasMore={data.hasMore}

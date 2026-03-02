@@ -29,7 +29,7 @@ export default function ExplorePage() {
       <ArenaCardList arenas={data?.arenas ?? []} isLoading={isLoading} />
 
       {/* Pagination */}
-      {data && (
+      {data && data.arenas.length > 0 && (
         <Pagination
           page={page}
           hasMore={data.hasMore}
