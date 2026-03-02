@@ -16,6 +16,7 @@ import { CheckIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 import { ArenaCardList } from "@/components/features/arena-card/arena-card-list";
 import { useManageArenas } from "@/hooks/use-manage-arenas";
 import { useDeleteArena } from "@/hooks/use-delete-arena";
+import { Pagination } from "@/components/ui/pagination";
 
 export default function ManagePage() {
   const [page, setPage] = useState(1);
@@ -125,23 +126,11 @@ export default function ManagePage() {
 
       {/* Pagination */}
       {data && (
-        <div className="flex items-center justify-center gap-4">
-          <button
-            onClick={() => setPage((p) => Math.max(1, p - 1))}
-            disabled={page <= 1}
-            className="rounded-md border px-3 py-1.5 text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-accent"
-          >
-            Previous
-          </button>
-          <span className="text-sm text-gray-600">Page {page}</span>
-          <button
-            onClick={() => setPage((p) => p + 1)}
-            disabled={!data.hasMore}
-            className="rounded-md border px-3 py-1.5 text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-accent"
-          >
-            Next
-          </button>
-        </div>
+        <Pagination
+          page={page}
+          hasMore={data.hasMore}
+          onPageChange={setPage}
+        />
       )}
     </div>
   );
