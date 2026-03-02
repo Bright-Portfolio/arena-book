@@ -3,10 +3,6 @@
 import { useState } from "react";
 import { SPORTS } from "@/lib/constants/sports";
 import {
-  Dialog,
-  DialogBackdrop,
-  DialogPanel,
-  DialogTitle,
   Listbox,
   ListboxButton,
   ListboxOption,
@@ -17,6 +13,7 @@ import { ArenaCardList } from "@/components/features/arena-card/arena-card-list"
 import { useManageArenas } from "@/hooks/use-manage-arenas";
 import { useDeleteArena } from "@/hooks/use-delete-arena";
 import { Pagination } from "@/components/ui/pagination";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 
 export default function ManagePage() {
   const [page, setPage] = useState(1);
@@ -88,41 +85,14 @@ export default function ManagePage() {
       />
 
       {/* Delete confirmation dialog */}
-      <Dialog
+      <ConfirmDialog
         open={!!deleteTarget}
         onClose={() => setDeleteTarget(null)}
-        className="relative z-50"
-      >
-        <DialogBackdrop className="fixed inset-0 bg-black/30" />
-        <div className="fixed inset-0 flex items-center justify-center p-4">
-          <DialogPanel className="w-full max-w-sm rounded-lg bg-white p-6 shadow-xl">
-            <DialogTitle className="text-lg font-semibold">
-              Delete Arena
-            </DialogTitle>
-            <p className="mt-2 text-sm text-gray-600">
-              Are you sure you want to delete{" "}
-              <span className="font-medium">{deleteTarget?.name}</span>? This
-              action cannot be undone.
-            </p>
-            <div className="mt-4 flex justify-end gap-3">
-              <button
-                type="button"
-                onClick={() => setDeleteTarget(null)}
-                className="rounded-md border px-3 py-1.5 text-sm hover:bg-gray-50"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                onClick={handleDeleteConfirm}
-                className="rounded-md bg-red-600 px-3 py-1.5 text-sm text-white hover:bg-red-700"
-              >
-                Delete
-              </button>
-            </div>
-          </DialogPanel>
-        </div>
-      </Dialog>
+        onConfirm={handleDeleteConfirm}
+        title="Delete Arena"
+        description={`Are you sure you want to delete ${deleteTarget?.name}? This action cannot be undone.`}
+        confirmLabel="Delete"
+      />
 
       {/* Pagination */}
       {data && (

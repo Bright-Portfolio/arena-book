@@ -6,13 +6,8 @@ import { useManageBookings } from "@/hooks/use-manage-bookings";
 import { useCancelBooking } from "@/hooks/use-cancel-booking";
 import { BookingList } from "@/components/features/booking/booking-list";
 import { Spinner } from "@/components/ui/spinner";
-import {
-  Dialog,
-  DialogBackdrop,
-  DialogPanel,
-  DialogTitle,
-} from "@headlessui/react";
 import { Pagination } from "@/components/ui/pagination";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 
 export default function ManageBookingsPage() {
   const { data: session } = useSession();
@@ -71,40 +66,15 @@ export default function ManageBookingsPage() {
       </div>
 
       {/* Cancel confirmation dialog */}
-      <Dialog
+      <ConfirmDialog
         open={!!cancelTarget}
         onClose={() => setCancelTarget(null)}
-        className="relative z-50"
-      >
-        <DialogBackdrop className="fixed inset-0 bg-black/30" />
-        <div className="fixed inset-0 flex items-center justify-center p-4">
-          <DialogPanel className="w-full max-w-sm rounded-lg bg-white p-6 shadow-xl">
-            <DialogTitle className="text-lg font-semibold">
-              Cancel Booking
-            </DialogTitle>
-            <p className="mt-2 text-sm text-gray-600">
-              Are you sure you want to cancel this booking? This action cannot
-              be undone.
-            </p>
-            <div className="mt-4 flex justify-end gap-3">
-              <button
-                type="button"
-                onClick={() => setCancelTarget(null)}
-                className="rounded-md border px-3 py-1.5 text-sm hover:bg-gray-50 cursor-pointer"
-              >
-                Keep Booking
-              </button>
-              <button
-                type="button"
-                onClick={handleCancelConfirm}
-                className="rounded-md bg-red-600 px-3 py-1.5 text-sm text-white hover:bg-red-700 cursor-pointer"
-              >
-                Cancel Booking
-              </button>
-            </div>
-          </DialogPanel>
-        </div>
-      </Dialog>
+        onConfirm={handleCancelConfirm}
+        title="Cancel Booking"
+        description="Are you sure you want to cancel this booking? This action cannot be undone."
+        cancelLabel="Keep Booking"
+        confirmLabel="Cancel Booking"
+      />
 
       {/* Pagination */}
       <Pagination
