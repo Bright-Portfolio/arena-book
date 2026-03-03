@@ -48,7 +48,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json(
       { success: true, data: result.data },
-      { status: 200 },
+      { status: 201 },
     );
   } catch (error) {
     console.error("Failed to create booking:", error);

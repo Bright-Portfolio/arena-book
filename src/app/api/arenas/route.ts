@@ -64,7 +64,7 @@ export async function POST(request: Request) {
         success: true,
         data: result.data,
       },
-      { status: 200 },
+      { status: 201 },
     );
   } catch (error) {
     console.error("Failed to register arena:", error);

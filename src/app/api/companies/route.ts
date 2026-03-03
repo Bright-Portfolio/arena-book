@@ -46,7 +46,7 @@ export async function POST(request: Request) {
         success: true,
         data: validatedOutput,
       },
-      { status: 200 },
+      { status: 201 },
     );
   } catch (error) {
     console.error("Failed to register or update company:", error);

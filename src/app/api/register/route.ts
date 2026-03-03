@@ -34,7 +34,7 @@ export async function POST(req: Request) {
           {
             error: error.message,
           },
-          { status: 400 }
+          { status: 409 }
         );
       }
     }
